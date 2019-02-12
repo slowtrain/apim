@@ -1,0 +1,651 @@
+<jhi-alert></jhi-alert>
+<div class="row wrap">
+    <div class="col-md-12">
+        <div ng-hide="vm.showDetail">
+            <h2><strong data-translate="{{vm.state.current.name}}.title">App List</strong></h2>
+            <p class="searchInfo type3">
+                <button has-authority="ROLE_APP_CREATE" ng-click="vm.dialogApp()" class="btn btn-portal btn-flag-radius pull-right">
+                    <span>앱 등록</span>
+                </button>
+            </p>
+
+            <div uib-alert ng-repeat="alert in vm.alerts" type="{{alert.type}}" close="vm.closeAlert($index)" dismiss-on-timeout="5000">
+                {{alert.message}}
+            </div>
+
+            <div class="searchBox">
+                    <span class="form-inline">
+                        <label for="appStatus" data-translate="appManage.status">status</label>
+                        <select id="appStatus" class="form-control input-sm" ng-model="vm.status"
+                                ng-options="appStatus.key as appStatus.key for appStatus in vm.appStatus | filter: vm.statusFiltering track by appStatus.key">
+                            <option value="">전체</option>
+                        </select>
+                    </span>
+                    <span class="form-inline">
+                        <label for="appListName" data-translate="appManage.name">name</label>
+                        <input type="text" class="form-control input-sm" id="appListName" name="appName" ng-model="vm.appName" ng-keypress="($event.charCode==13)? vm.searching() : return" />
+                    </span>
+                    <span class="btnBox">
+                        <button type="button" class="btn search-btn" ng-click="vm.searching()">
+                            <span data-translate="entity.action.search">Search</span>
+                        </button>
+                    </span>
+            </div>
+            <p class="searchInfo type2"> <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 앱이 존재합니다.</span>
+            </p>
+            <div class="table-responsive voffset3">
+
+                <table class="table tableFixed">
+                    <colgroup>
+                        <col style="width:5%"/>
+                        <col style="width:20%"/>
+                        <col style="width:37%"/>
+                        <col style="width:15%"/>
+                        <col style="width:197px"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th id="name" ng-mousedown="vm.sorting('name')">앱 이름<i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                        <th id="description" ng-mousedown="vm.sorting('description')">앱 설명<i id="description" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                        <th>상태</th>
+                        <th>비고</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="app in vm.apps">
+                        <td scope="row" class="t_center">{{(vm.totalItems - (vm.condition.page)*(vm.stateParams.size))-$index}}</td>
+                        <td class="t_left td-btn" ng-click="vm.viewApp(app)">
+                            <div class="table_title_btn" title="{{app.name}}">{{app.name}}</div>
+                            <!-- <button ng-if="app.isUpdated" class="btn btn-default btn-xs pull-right whitehover">변경됨</button> -->
+                        </td>
+                        <td><span class="dotContainer" title="{{app.description}}" style="width:99%; vertical-align:-5px">{{app.description}}</span></td>
+                        <td class="t_center">
+                            <button ng-if="app.status=='DELETE_FAIL' || app.status=='REGIST_FAIL' || app.status=='UPDATE_FAIL'" class="btn btn-danger btn-xs"
+                               uib-popover-template="vm.appDeployStatus.templateUrl"
+                               popover-title="G/W 처리실패 기관목록"
+                               popover-placement="bottom"
+                               popover-is-open="app.openDeployStatus"
+                               popover-trigger="outsideClick"
+                               ng-click="vm.getDeployFailList(app);">{{app.status}}
+                            </button>
+                            <span ng-if="(app.status == 'RUNNING' || app.status == 'SUSPEND') && !vm.appModifyAuthority">{{app.status}}</span>
+                            <button has-authority="ROLE_APP_MODIFY" class="btn btn-running btn-xs" ng-click="vm.changeStatus(app, 'suspend')"
+                                    ng-if="app.status == 'RUNNING'">{{app.status}}
+                            </button>
+                            <button has-authority="ROLE_APP_MODIFY" class="btn btn-danger btn-xs" ng-click="vm.changeStatus(app, 'resume')"
+                                    ng-if="app.status == 'SUSPEND'">{{app.status}}
+                            </button>
+                            <span ng-if="app.status != 'RUNNING' && app.status != 'SUSPEND' && !(app.status=='DELETE_FAIL' || app.status=='REGIST_FAIL' || app.status=='UPDATE_FAIL')">{{app.status}}
+                                <span ng-if="app.status == 'RESERVED_REGIST' || app.status == 'RESERVED_MODIFY'">
+                                    <br/>{{app.reservedTime | date: 'yyyy-MM-dd HH:mm'}}
+                                </span>
+                            </span>
+                        </td>
+
+                        <td class="t_center">
+                            <button class="btn btn-default btn-xs" ng-click="vm.rollback(app)" ng-if="app.status=='UPDATING_DENIED'">롤백</button>
+                            <button class="btn btn-default btn-xs" ng-click="vm.redeploy(app)" ng-if="app.status=='REGIST_FAIL' || app.status=='UPDATE_FAIL' ">재처리</button><!-- delete fail일 경우에는 운영자만 재처리를 한다. -->
+                            <button class="btn btn-danger btn-xs" ng-click="vm.requestApproval(app)" ng-if="app.needApproval && !(app.status=='DELETING' || app.status=='DELETE_FAIL' || app.status=='REGIST_FAIL' || app.status=='UPDATE_FAIL')">
+                                승인요청
+                            </button>
+                            <button has-authority="ROLE_APP_MODIFY" ng-if="app.status=='SUSPEND' || app.status=='DELETING' || app.status == 'RESERVED_REGIST' || app.status == 'RESERVED_MODIFY' || app.status=='APPROVING' || app.status=='UPDATING' || app.status=='DELETE_FAIL' || app.status=='REGIST_FAIL' || app.status=='UPDATE_FAIL'" class="btn btn-default btn-xs" disabled>수정</button>
+                            <button has-authority="ROLE_APP_MODIFY" ng-if="!(app.status=='SUSPEND' || app.status=='DELETING' || app.status == 'RESERVED_REGIST' || app.status == 'RESERVED_MODIFY' || app.status=='APPROVING' || app.status=='UPDATING' || app.status=='DELETE_FAIL' || app.status=='REGIST_FAIL' || app.status=='UPDATE_FAIL')" class="btn btn-default btn-xs" ng-click="vm.show(app)">수정</button>
+
+                            <button has-authority="ROLE_APP_DELETE" ng-if="app.status=='READY'" class="btn btn-default btn-xs" ng-click="vm.delApp(app, 'delete')">삭제</button>
+                        </td>
+                    </tr>
+                    <tr ng-if="vm.apps.length <= 0">
+                        <td colspan="5" class="t_center">등록하신 앱이 존재하지 않습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- <button class="btn btn-default btn-xs pull-right refresh with-paging" ng-click="vm.loadAll()">새로고침</button> -->
+            <div class="text-center voffset2">
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+
+        <div class="tab-ui" ng-show="vm.showDetail">
+            <form name="form" novalidate>
+                <h2><strong>앱 상세정보 등록</strong></h2>
+
+                <div id="underLoading" class="appAddDetail">
+                    <uib-tabset active="active">
+                        <uib-tab index="0" heading="기본정보" disable="true">
+                            <div class="form-group voffset4" ng-class="{'has-error':form.appName.$dirty && form.appName.$invalid}">
+                                <table class="table table_write">
+                                    <colgroup>
+                                        <col style="width:20%;">
+                                        <col style="width:80%;">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>이름</th>
+                                            <td>
+                                                <p class="form-inline" ng-class="{'has-error': form.appName.$invalid}">
+                                                    <input type="text" id="appName" name="appName" class="form-control" ng-model="vm.appDetail.name" minlength="3" maxlength="30" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" ng-if="vm.appDetail.status == 'READY'" required>
+                                                    <input type="text" id="appName" name="appName" class="form-control w_100" value="{{vm.appDetail.name}}" ng-if="vm.appDetail.status != 'READY'" disabled>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>설명</th>
+                                            <td>
+                                                <small class="color_red" ng-show="form.appDescription.$error.minlength || form.appDescription.$error.maxlength">(100자 이내)</small>
+                                                <small class="color_red" ng-show="form.appDescription.$error.pattern">(잘못된 입력입니다.)</small>
+                                                <textarea id="appDescription" name="appDescription" class="form-control text-area-style1" ng-model="vm.appDetail.description" rows="4" maxlength="100" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" ></textarea>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- <label for="appName" class="control-label" data-translate="appManage.info.name">app name</label>
+                                <small class="color_red" ng-show="form.appName.$error.required">*</small>
+                                <small class="color_red" ng-show="form.appName.$error.minlength">(3~ 30자 이내)</small>
+                                <small class="color_red" ng-show="form.appName.$error.maxlength">(30자 이내)</small>
+                                <small class="color_red" ng-show="form.appName.$error.pattern">(잘못된 입력입니다.)</small> -->
+                                <!-- <p class="form-inline" ng-class="{'has-error': form.appName.$invalid}">
+                                    <input type="text" id="appName" name="appName" class="form-control" style="width:50%;" ng-model="vm.appDetail.name" minlength="3" maxlength="30"
+                                    ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" ng-if="vm.appDetail.status == 'READY'" required>
+                                    <input type="text" id="appName" name="appName" class="form-control" style="width:50%;" value="{{vm.appDetail.name}}" minlength="3" maxlength="30"
+                                    ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" ng-if="vm.appDetail.status != 'READY'">
+                                </p> -->
+                            </div>
+                            <!-- <div class="form-group" ng-class="{'has-error':form.appDescription.$dirty && form.appDescription.$invalid}">
+                                <label for="appDescription" class="control-label" data-translate="appManage.info.description">app description</label>
+                                <small class="color_red" ng-show="form.appDescription.$error.minlength || form.appDescription.$error.maxlength">(100자 이내)</small>
+                                <small class="color_red" ng-show="form.appDescription.$error.pattern">(잘못된 입력입니다.)</small>
+                                <textarea id="appDescription" name="appDescription" class="form-control" ng-model="vm.appDetail.description" rows="4" maxlength="100" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" ></textarea>
+                            </div> -->
+                        </uib-tab>
+                        <uib-tab index="1" heading="API 정보" disable="true">
+                            <div class="row api_select_set">
+                                <div class="api_left">
+                                    <ul class="api_top_tab">
+                                        <li class="api_tab_li" ng-disabled="vm.apiUnit" ng-click="vm.apiLoad()">개별</li>
+                                        <li class="api_tab_li" ng-disabled="!vm.apiUnit" ng-click="vm.apiGroupsLoad()">그룹별</li>
+                                    </ul>
+                                    <dl>
+                                        <!-- <dt>
+                                            <button type="button" class="btn btn-default btn-xs f_right" ng-disabled="!vm.apiUnit" ng-click="vm.apiGroupsLoad()">
+                                                <i class="glyphicon glyphicon-chevron-left"></i> 그룹별
+                                            </button>
+                                            <span ng-if="vm.apiUnit">API 개별 선택</span>
+                                            <span ng-if="!vm.apiUnit">API 그룹별 선택</span>
+                                            <button type="button" class="btn btn-default btn-xs f_left" ng-disabled="vm.apiUnit" ng-click="vm.apiLoad()">
+                                                개별 <i class="glyphicon glyphicon-chevron-right"></i></button>
+                                        </dt> -->
+                                        <dt ng-if="vm.apiUnit" class="apiUnitSearch">
+                                            <select class="form-control" name="org" ng-model="vm.searchApi.organization" ng-change="vm.searchingForAvailableApis()"
+                                                    ng-options="organization.name for organization in vm.providers track by organization.name">
+                                                <option value="">제공기관 선택</option>
+                                            </select>
+                                            <div class="search_input_set">
+                                                <input class="form-control voffset1"
+                                                    id="searchApi" name="searchApi" type="text" placeholder=" API 이름 검색" ng-model="vm.searchApi.name"
+                                                    ng-keypress="($event.charCode==13)? vm.searchingForAvailableApis() : return" />
+                                                <button type="button" class="btn form-control" ng-click="vm.searchingForAvailableApis()">
+                                                </button>
+                                            </div>
+                                        </dt>
+                                        <dt ng-if="!vm.apiUnit" class="apiUnitSearch">
+                                            <select class="form-control" name="org" ng-model="vm.searchGroup.organization" ng-change="vm.searchingForAvailableGroups()"
+                                                    ng-options="organization.name for organization in vm.providers track by organization.name">
+                                                <option value="">제공기관 선택</option>
+                                            </select>
+                                            <div class="search_input_set">
+                                                <input class="form-control voffset1" id="searchGroup" name="searchGroup" type="text" placeholder=" API 그룹이름 검색" ng-model="vm.searchGroup.name"
+                                                    ng-keypress="($event.charCode==13)? vm.searchingForAvailableGroups() : return" />
+                                                <button type="button" class="btn btn-success form-control" ng-click="vm.searchingForAvailableGroups()">
+                                                </button>
+                                            </div>
+                                        </dt>
+                                        <div ng-if="vm.apiUnit" class="scrollTable apiUnitList">
+                                            <dd ng-repeat="api in vm.availableList | orderBy: ['organization.name', 'name'] track by api.id"
+                                                ng-class="api.currentSelected && 'selectionActive'"
+                                                ng-click="vm.selectApi($index, api)">
+                                                <p class="listTitle" title="{{api.routingUrl}}">
+                                                    <small ng-if="!vm.searchApi.organization" class="organName">[{{api.organization.name}}]</small>
+                                                    <span>{{api.name}}</span>
+                                                </p>
+                                            </dd>
+                                            <dd ng-if="!vm.availableList.length">선택가능한 API가 없습니다.</dd>
+                                        </div>
+                                        <div ng-if="!vm.apiUnit" class="scrollTable">
+                                            <dd ng-repeat="group in vm.availableList | orderBy: ['organization.name', 'name'] track by group.id" style="padding:0px 10px 4px"
+                                                ng-click="vm.selectGroupApi($index, group)">
+                                                <p class="dotContainer" style="width:100%;">
+                                                    <small ng-if="!vm.searchGroup.organization" class="">[{{group.organization.name}}]</small>
+                                                    <span title="{{group.name}}">{{group.name}}</span>
+                                                </p>
+                                            </dd>
+                                            <dd ng-if="!vm.availableList.length">선택가능한 API그룹이 없습니다.</dd>
+                                        </div>
+                                    </dl>
+                                    <div ng-if="vm.apiUnit" class="text-center">
+                                        <ul uib-pagination max-size="5" total-items="vm.totalAvailableApis" items-per-page="vm.sizeForAvailableApis" ng-model="vm.currentPageOfAvailableApis" ng-change="vm.pageChangedForAvailableApis()"></ul>
+                                    </div>
+                                    <div ng-if="!vm.apiUnit" class="text-center voffset2">
+                                        <ul uib-pagination style="margin: 7px -15px 0" max-size="5" total-items="vm.totalAvailableGroups" items-per-page="vm.sizeForAvailableGroups" ng-model="vm.currentPageOfAvailableGroups" ng-change="vm.pageChangedForAvailableGroups()"></ul>
+                                    </div>
+                                </div>
+                                <div class="apilist_set">
+                                    <div class="">
+                                        <dl class="selectedApi addSet">
+                                            <dt>
+                                                <p class="select_title">추가된 API 정보 &emsp;<small>(총 : <i class="">{{vm.orgIdListInit2.length}}</i> 개<!--  / 동의 : <i class="point-color"> {{vm.orgIdList2.length}} </i> 개 -->)</small></p>
+                                                <div class="select_search">
+                                                    <div class="search_top">
+                                                        <div class="new-form-group">
+                                                            <input type="checkbox" id="orgAll2" ng-model="vm.isNewAllChecked" ng-change="vm.checkingAllCheckBox('new')" class="select_all_check">
+                                                            <label for="orgAll2" class="select_all">전체 동의</label>
+                                                        </div>
+                                                        <select class="form-control" name="org" ng-model="vm.depart2" ng-options="organization2.name for organization2 in vm.providers track by organization2.name">
+                                                            <option value="">제공기관 선택</option>
+                                                        </select>
+                                                        <input class="form-control voffset1"
+                                                            id="searchApiName" type="text" placeholder=" API 이름 검색" ng-model="vm.searchApi3.api.name">
+                                                        <!-- <small ng-if="!!vm.searchApi3.api.name" class="searched_number">{{addAppList2.length}}개</small> -->
+                                                        <small class="searched_number">{{addAppList2.length || 0}}개</small>
+                                                    </div>
+                                                   <!--  <div class="search_bot">
+                                                        <small title="현재 목록에 보이는 기관 수 : 선택기준 정렬">{{vm.apiListInit2.length}} / </small>
+                                                        <small title="현재 선택된 기관 수 : 이름기준 정렬" class="color_red">{{vm.orgIdList2.length}}</small>
+
+                                                    </div> -->
+
+                                                </div>
+                                            </dt>
+                                            <p class="noSelectApi" ng-if="!vm.orgIdListInit2.length">추가된 API가 없습니다.</p>
+                                            <p class="noSelectApi" ng-if="vm.orgIdListInit2.length && !addAppList2.length">검색 결과가 없습니다.</dd>
+
+                                            <div class="scrollTable" ng-class="{'max' : addAppList2.length > 7}">
+                                                <dd ng-style="(!api.apiPlan || (api.api.termsOfUse && !api.consentTerm)) && {'background-color':'#e7e9ee','color' :
+                                                '#195dae'}" ng-repeat="api in vm.apiList | filter:vm.groupIds2 | filter:vm.searchApi3 | filter:vm.selectFilter2 |orderBy:vm.apiListOrderBy as addAppList2">
+                                                    {{vm.filteringCheckSize('new', addAppList2)}}
+
+                                                    <p class="apiUnitLeft"><small class="">[{{api.api.organization.name}}]</small><span title="{{api.api.name}}"> {{api.api.name}}</span></p>
+                                                    <div class="apiUnitRight form-inline">
+                                                        <div class="insideLeft">
+                                                            <button uib-popover-template="vm.apiplanPopover.templateUrl"
+                                                                    popover-title="적용가능한 사용정책목록"
+                                                                    popover-is-open="api.isOpen"
+                                                                    popover-trigger="outsideClick"
+                                                                    popover-placement="bottom"
+                                                                    type="button"
+                                                                    ng-click="vm.checkApiPlan(api)"
+                                                                    class="btn btn-default btn-xs size_1">
+                                                                    <span ng-if="api.apiPlan" style="vertical-align:middle" class="dotContainer" style="width:99%" title="{{(api.apiPlan)? api.apiPlan.name: '정책 선택하기'}}">{{api.apiPlan.name}}</span>
+                                                                    <span ng-if="!api.apiPlan" style="color:red">- 정책 선택하기 -</span>
+                                                            </button>
+
+                                                            <button ng-if="api.api.termsOfUse" type="button" class="btn btn-default btn-xs" ng-click="vm.showTermsContent(api.api)"
+                                                                    data-translate="entity.action.term">show terms content</button>
+                                                            <small ng-if="!api.api.termsOfUse" > ※ 약관 없음</small>
+                                                        </div>
+                                                        <div class="insideRight">
+                                                            <div ng-if="api.api.termsOfUse" class="form-group new-form-group">
+                                                                <input id="{{'consentTerm_' + $index}}" type="checkbox" name="consentTerm" ng-model="api.consentTerm" ng-change="vm.checkingOneCheckBox(
+                                                                'new')" required>
+                                                                <label for="{{'consentTerm_' + $index}}">동의</label>
+                                                            </div>
+
+                                                            <p ng-click="vm.removeApi($index, api)" class="delete">삭제</p>
+                                                        </div>
+                                                    </div>
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                    <div class="voffset4 pad0">
+                                        <dl class="selectedApi">
+                                            <dt>
+                                                <p class="select_title">선택된 API 정보 &emsp;<small>(총 : <i class="point-color">{{vm.orgIdListInit.length}}</i> 개)</small></p>
+                                                <div class="select_search">
+                                                    <div class="search_top">
+                                                        <select class="form-control" name="org" ng-model="vm.depart"
+                                                            ng-options="organization.name for organization in vm.providers track by organization.name">
+                                                            <option value="">제공기관 선택</option>
+                                                        </select>
+                                                        <input class="form-control voffset1"
+                                                            id="searchApiName" type="text" placeholder=" API 이름 검색" ng-model="vm.searchApi2.api.name">
+                                                        <!-- <small ng-if="!!vm.searchApi2.api.name" class="searched_number">{{addAppList.length}}개</small> -->
+                                                        <small class="searched_number">{{addAppList.length || 0}}개</small>
+                                                    </div>
+                                                    <!-- <div class="search_bot">
+                                                        <small>{{vm.apiListInit.length}} / </small>
+                                                        <small class="color_red">{{vm.orgIdList.length}}</small>
+                                                        <input type="checkbox" id="orgAll" ng-model="vm.isOrgAllChecked" ng-change="vm.checkingAllCheckBox('origin')" class="select_all_check">
+                                                        <label for="orgAll" class="select_all">전체 동의</label>
+                                                    </div> -->
+                                                </div>
+                                            </dt>
+                                            <p class="noSelectApi" ng-if="!vm.orgIdListInit.length">선택된 API가 없습니다.</p>
+                                            <p class="noSelectApi" ng-if="vm.orgIdListInit.length && !addAppList.length">검색 결과가 없습니다.</p>
+
+                                            <div class="scrollTable" ng-class="{'max' : addAppList.length > 7}">
+                                                <dd ng-style="(!api.apiPlan || (api.api.termsOfUse && !api.consentTerm)) && {'background-color':'#f5f8fd'}" ng-repeat="api in vm.apiList | filter:vm.searchApi2 | filter:vm.groupIds | filter:vm.selectFilter | filter: vm.apiFilter | orderBy:vm.apiListOrderBy as addAppList">
+                                                    {{vm.filteringCheckSize('origin', addAppList)}}
+                                                    <!-- {{vm.filteringCheckSize('org', addAppList)}} -->
+
+                                                    <!-- api in vm.apiList | filter:vm.searchApi2 | filter:vm.groupIds | filter: vm.organization? {api:{organization:vm.organization}} : true | filter: vm.apiFilter | orderBy:vm.apiListOrderBy as addAppList"> -->
+                                                    <p class="apiUnitLeft"><small class="">[{{api.api.organization.name}}]</small><span title="{{api.api.name}}"> {{api.api.name}}</span></p>
+                                                    <div class="apiUnitRight form-inline">
+                                                        <div class="insideLeft">
+                                                            <button uib-popover-template="vm.apiplanPopover.templateUrl"
+                                                                    popover-title="적용가능한 사용정책목록"
+                                                                    popover-is-open="api.isOpen"
+                                                                    popover-trigger="outsideClick"
+                                                                    type="button"
+                                                                    popover-placement="bottom"
+                                                                    ng-click="vm.checkApiPlan(api)"
+                                                                    class="btn btn-default btn-xs size_1">
+                                                                    <span ng-if="api.apiPlan" style="vertical-align:middle" class="dotContainer" style="width:99%" title="{{(api.apiPlan)? api.apiPlan.name: '정책 선택하기'}}">{{api.apiPlan.name}}</span>
+                                                                    <span ng-if="!api.apiPlan" style="color:red">- 정책 선택하기 -</span>
+                                                            </button>
+
+
+                                                        <!-- <select title="{{api.apiPlan.name}}" ng-model="api.apiPlan" class="form-control" style="width:37%" id="apiPlan" name="apiPlan" ng-init="(vm.showDetail)? vm.selectedApiPlan = api.apiPlan: null" default-option="Select Server..."
+                                                                ng-change="vm.checkApiPlan(api.apiPlan)" ng-options="plan as plan.name for plan in api.api.applicablePlans track by plan.id" ng-required="api">
+                                                            <option value="">필수선택</option>
+                                                        </select> -->
+
+                                                            <button ng-if="api.api.termsOfUse" type="button" class="btn btn-default btn-xs" ng-click="vm.showTermsContent(api.api)"
+                                                                    data-translate="entity.action.term">show terms content</button>
+                                                            <small ng-if="!api.api.termsOfUse" > ※ 약관 없음</small>
+                                                        </div>
+                                                        <div class="insideRight">
+                                                            <div ng-if="api.api.termsOfUse" class="form-group new-form-group">
+                                                                <input id="{{'consentTermTop_' + $index}}" type="checkbox" name="consentTerm" ng-model="api.consentTerm" ng-change="vm.checkingOneCheckBox(
+                                                                'origin')" required>
+                                                                <label for="{{'consentTermTop_' + $index}}">동의</label>
+                                                            </div>
+
+                                                            <p ng-click="vm.removeApi($index, api)" class="delete">삭제</p>
+                                                        </div>
+                                                    </div>
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                        <div class="agree_check_title color_red" ng-if="vm.apiList.length > 0"><span>모든 약관에 동의하셔야만 저장가능합니다.</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </uib-tab>
+                        <uib-tab index="2" heading="인증 정보" disable="true">
+
+                            <div ng-if="false" class="form-group voffset4">
+                                <label class="control-label voffset2 required-label">SCOPE</label><small> : 로그인 타입</small>
+                                <button uib-popover-template="vm.scopePopover.templateUrl"
+                                        popover-title="SCOPE 선택"
+                                        popover-is-open="vm.isScopeOpen"
+                                        popover-trigger="outsideClick"
+                                        ng-click="vm.allSelect=false"
+                                        type="button"
+                                        class="btn btn-default btn-xs"
+                                        style="position: relative; bottom: 3px;">
+                                    <i class="glyphicon glyphicon-plus"></i> 선택하기
+                                </button>
+                                <div class="list-adjust" style="width:50%; margin-top:5px; min-height: 36px; overflow: hidden">
+                                    <p ng-repeat="scope in vm.selectedScopes" style="margin-top:2px; overflow:hidden; width:100%">
+                                        <button type="button" class="btn btn-default btn-xs" style="background-color:#eee; height:32px; width:100%; padding-left:0px; padding-right:12px" ng-click="vm.deleteScope(scope)">
+                                            <span class="dotContainer text-left" style="width:90%; vertical-align:top">{{scope.scope}}
+                                                <span ng-if="scope.name"> ({{scope.name}}) </span>
+                                                <span ng-if="!scope.name" tooltip-placement="right" uib-tooltip="이 항목은 현재 SCOPE관리목록에서 제외되었으나 계속 적용하실 수 있습니다." style="color:#777777" class="glyphicon glyphicon-question-sign"></span>
+                                            </span>
+                                            <i class="glyphicon glyphicon-remove pull-right color_gray" style="top: 2px"></i>
+                                        </button>
+                                    </p>
+                                    <div ng-if="vm.selectedScopes.length==0" style="height:32px; border:1px #eee solid; text-align:center; border-radius:4px; font-size: smaller"><span style="vertical-align:-7px;">선택하기 버튼을 눌러 추가하세요.</span></div>
+                                    <span uib-tooltip="하나 이상 선택 필수입니다." tooltip-is-open="vm.tooltipIsOpen"  tooltip-placement="bottom" tooltip-class="tooltip-css"></span>
+                                </div>
+                            </div>
+
+                            <!-- IP White List -->
+                            <!-- App이 사용하고자 하는 API의 fragment에서 white list 옵션이 필수일 경우 -->
+<!--                             <div ng-if="vm.needWhiteList" class="form-group"> -->
+                            <!-- <div ng-if="true" class="form-group">
+                                <p class="voffset4">
+                                    <label class="control-label">White List</label>
+                                </p>
+                                <div class="voffset2">
+                                    <small style="color:gray"><i class="glyphicon glyphicon-ok"></i><span> Gateway에 접속하고자 하는 출발지의 IP를 입력해주세요.</span></small>
+                                    <div class="form-inline voffset2">
+                                        <input type="text" class="form-control" style="width:30%;" ng-model="vm.whiteIp" maxlength="15" ng-keypress="($event.charCode == 13)? vm.addWhiteList() : return;">
+                                        <button type="button" ng-if="!!vm.whiteIp" ng-click="vm.addWhiteList()" class="btn btn-default btn-xs" style="vertical-align:-1px; padding:7px">
+                                            <i class="glyphicon glyphicon-plus"></i> 추가
+                                        </button>
+                                        <button type="button" ng-if="!!!vm.whiteIp" class="btn btn-default btn-xs" style="vertical-align:-1px; padding:7px" disabled>
+                                            <i class="glyphicon glyphicon-plus"></i> 추가
+                                        </button>
+                                        <p ng-repeat = "ip in vm.whiteList" style="margin-top:5px">
+                                            <input type="text" class="form-control" style="width:30%;" ng-model="ip" maxlength="15">
+                                            <button type="button" ng-click="vm.delWhiteList($index)" class="btn btn-danger btn-xs" style="vertical-align:-1px; padding:7px">
+                                                <i class="glyphicon glyphicon-minus"></i> 삭제
+                                            </button>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <table class="table table_write">
+                                    <colgroup>
+                                        <col style="width:20%;">
+                                        <col style="width:80%;">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr ng-if="vm.needWhiteList">
+                                            <th>White List</th>
+                                            <td>
+                                                <div class="voffset2">
+                                                    <p class="tit1">Gateway에 접속하고자 하는 출발지의 IP를 입력해주세요.</p>
+                                                    <div class="form-inline voffset2 ip_set_wrap">
+                                                        <p class="ip_put">
+                                                            <input type="text" class="form-control" ng-model="vm.whiteIp" maxlength="15" ng-keypress="($event.charCode == 13)? vm.addWhiteList() : return;">
+                                                            <button type="button" ng-if="!!vm.whiteIp" ng-click="vm.addWhiteList()" class="btn add-btn">추가
+                                                            </button>
+                                                            <button type="button" ng-if="!!!vm.whiteIp" class="btn add-btn" disabled>추가</button>
+                                                        </p>
+                                                        <p class="ip_line" ng-repeat = "ip in vm.whiteList">
+                                                            <input type="text" class="form-control" ng-model="ip" maxlength="15">
+                                                            <button type="button" ng-click="vm.delWhiteList($index)" class="btn del-btn">삭제</button>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="required-label">앱 승인 키</span></th>
+                                            <td>
+                                                <div class="inputWithButton">
+                                                    <input type="text" class="form-control input-type1" name="appKey" value="{{vm.appDetail.appKey}}" disabled required>
+                                                    <button ng-if="!vm.appDetail.appKey && !(vm.needWhiteList && !vm.whiteList.length)" type="button" class="tableBtn type2" ng-click="vm.genkey()">앱키발급</button>
+                                                    <button ng-if="!vm.appDetail.appKey && vm.needWhiteList && !vm.whiteList.length" type="button" class="tableBtn type2" disabled>앱키발급</button>
+                                                    <button uib-popover-template="vm.secretPopover.templateUrl"
+                                                            popover-title="시크릿조회"
+                                                            popover-placement="bottom"
+                                                            popover-is-open="vm.popOpen"
+                                                            popover-trigger="outsideClick"
+                                                            type="button"
+                                                            ng-if="vm.appDetail.appKey"
+                                                            ng-click="vm.clickSecretButton()"
+                                                            class="tableBtn type2">시크릿
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                           <!--  <div class="form-group form-inline">
+                                <p class="voffset4">
+                                    <small class="color_red">*</small>
+                                </p>
+                                <div class="voffset2">
+                                    <div class="form-inline voffset2">
+                                        <input type="text" class="form-control voffset2" name="appKey" value="{{vm.appDetail.appKey}}" style="width:41%;" disabled required>
+                                        <button ng-if="!vm.appDetail.appKey && !(vm.needWhiteList && !vm.whiteList.length)" type="button" class="btn btn-portal" ng-click="vm.genkey()" style="vertical-align:-7px">앱키발급</button>
+                                        <button ng-if="!vm.appDetail.appKey && vm.needWhiteList && !vm.whiteList.length" type="button" class="btn btn-portal" style="vertical-align:-7px" disabled>앱키발급</button>
+                                        <button uib-popover-template="vm.secretPopover.templateUrl"
+                                                popover-title="시크릿조회"
+                                                popover-is-open="vm.popOpen"
+                                                popover-trigger="outsideClick"
+                                                type="button"
+                                                ng-if="vm.appDetail.appKey"
+                                                ng-click="vm.clickSecretButton()"
+                                                class="btn btn-warning voffset2">시크릿
+                                        </button>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <!-- <div class="form-group">
+                                <label for="scope" class="control-label" data-translate="appManage.info.scope">Scope</label>
+                                <input id="scope" type="text" class="form-control" ng-model="vm.appDetail.oAuthScope" placeholder='{{ vm.appDetail.oAuthScope }}'>
+                            </div> -->
+
+
+                        </uib-tab>
+                    </uib-tabset>
+                    <div class="btn-layout">
+                        <!-- <div class="left-side">
+                            <button ng-click="vm.loadAll(); active=0" type="button" class="btn-type1">수정 취소</button>
+                        </div> -->
+                        <div class="right-side">
+                            <button ng-if="active == 0 && !form.appName.$invalid" ng-click="vm.gotoTab(1)" type="button" class="btn-type1 arrow_right">다음</button>
+                            <button ng-if="active == 0 && form.appName.$invalid" type="button" class="btn-type1 arrow_right" disabled>다음</button>
+
+                            <button ng-if="active == 1" ng-click="vm.gotoTab(0)" type="button" class="btn-type1 arrow_left">이전</button>
+
+                            <button ng-if="active == 1 && !vm.checkInvalidApi()" ng-click="vm.gotoTab(2); vm.checkNeedWhiteList()" type="button" class="btn-type1 arrow_right">다음</button>
+                            <button ng-if="active == 1 && vm.checkInvalidApi()" type="button" class="btn-type1 arrow_right" disabled>다음</button>
+
+                            <button ng-if="active == 2 && !form.appName.$invalid" ng-click="vm.gotoTab(1)" type="button" class="btn-type1 arrow_left">이전</button>
+                            <button ng-if="active == 2 && form.appName.$invalid" type="button" class="btn btn-portal" disabled><i class="glyphicon glyphicon-chevron-left"></i> API정보 등록</button>
+
+                            <button ng-if="active == 2 && !(!vm.appDetail.appKey || vm.checkInvalidApi() || form.$invalid || vm.whiteIp || (vm.needWhiteList && !vm.whiteList.length))" ng-click="vm.gotoTab(0); vm.save()" type="button" class="btn-type1 arrow_right">
+                                <span data-translate="entity.action.save">Save</span>
+                            </button>
+                            <button ng-if="active == 2 && (!vm.appDetail.appKey || vm.checkInvalidApi() || form.$invalid || vm.whiteIp || (vm.needWhiteList && !vm.whiteList.length))" type="button" class="btn-type1 arrow_right" disabled>
+                                <span data-translate="entity.action.save">Save</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!--<div ng-tabs>
+                    <ul class="nav nav-tabs">
+                        <li ng-tab-head=active>
+                            <a data-translate="appManage.info.basic">기본정보</a>
+                        </li>
+                        <li ng-tab-head>
+                            <a data-translate="appManage.info.api">API 정보</a>
+                        </li>
+                        <li ng-tab-head>
+                            <a data-translate="appManage.info.certi">인증 정보</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div ng-tab-body class="tab-pane">
+                            <div class="form-group voffset4">
+                                <label for="appName" class="control-label" data-translate="appManage.info.name">app name</label>
+                                <input type="text" id="appName" name="appName" class="form-control" style="width:50%;" ng-model="vm.appDetail.name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="appDescription" class="control-label" data-translate="appManage.info.description">app description</label>
+                                <textarea id="appDescription" class="form-control" ng-model="vm.appDetail.description" rows="4" required></textarea>
+                            </div>
+                        </div>
+
+                        <div ng-tab-body class="tab-pane row">
+                            <div class="col-md-4 voffset4">
+                                <dl>
+                                    <dt style="overflow:hidden;">
+                                        <button type="button" class="btn btn-default btn-xs f_left" ng-disabled="vm.apiUnit" ng-click="vm.apiLoad()"><i
+                                            class="glyphicon glyphicon-chevron-left"></i> 개별 API
+                                        </button>
+                                        <span ng-if="vm.apiUnit">API 선택</span>
+                                        <span ng-if="!vm.apiUnit">API 그룹 선택</span>
+                                        <button type="button" class="btn btn-default btn-xs f_right" ng-disabled="!vm.apiUnit" ng-click="vm.apiGroupsLoad()">그룹 API <i
+                                            class="glyphicon glyphicon-chevron-right"></i></button>
+                                    </dt>
+                                    <dt>
+                                        <select class="form-control" name="org" ng-model="vm.searchApi.organization" ng-change="vm.checkSearch()"
+                                                ng-options="organization.name for organization in vm.providers track by organization.name"
+                                                ng-disabled="vm.flagOfOrg && !vm.isAdmin">
+                                            <option value="">제공기관 선택</option>
+                                        </select>
+                                        <input class="form-control voffset1" id="searchApi" name="searchApi" type="text" placeholder=" API 검색" ng-model="vm.searchApi.name"/>
+                                    </dt>
+                                    <div class="scrollTable">
+                                        <dd ng-repeat="api in vm.availableList | filter: vm.searchApi"
+                                            ng-click="vm.apiUnit ? vm.selectApi($index, api) : vm.selectGroupApi($index, api)">
+                                            <p class="dotContainer" style="width:95%;">
+                                                <small class="color_red">[{{api.organization.name}}]</small>
+                                                {{api.name}}
+                                            </p>
+                                        </dd>
+                                        <dd ng-if="vm.availableList.length <= 0">API가 존재하지 않습니다.</dd>
+                                    </div>
+                                </dl>
+                            </div>
+                            <div class="col-md-8 voffset4">
+                                <dl>
+                                    <dt>선택된 API 정보</dt>
+                                    <div class="scrollTable">
+                                        <dd ng-repeat="api in vm.apiList">
+                                            <p class="f_left dotContainer" style="width:30%">{{api.api.name}}</p>
+                                            <span class="f_right form-inline">
+                                            <select ng-model="api.apiPlan" class="form-control" id="apiPlan" name="apiPlan" default-option="Select Server..."
+                                                    ng-change="vm.checkApiPlan(api.apiPlan)" ng-options="plan as plan.name for plan in api.api.applicablePlans" required>
+                                                <option value="">선택 : {{api.apiPlan.name}}</option>
+                                                &lt;!&ndash;<option value="{{plan}}" ng-repeat="plan in api.api.applicablePlans" ng-selected="plan.id == api.apiPlan.id">{{plan.name}}</option>&ndash;&gt;
+                                            </select>
+                                            <button type="button" ng-click="vm.removeApi($index, api)" class="btn btn-warning" style="vertical-align: top;"><i
+                                                class="glyphicon glyphicon-trash"></i> 삭제</button>
+                                            <button type="button" class="btn btn-danger" style="vertical-align: top;" ng-click="vm.showTermsContent(api.api)"
+                                                    data-translate="entity.action.term">show terms content</button>
+                                            <div class="form-group">
+                                                <input id="{{'consentTerm_' + $index}}" type="checkbox" ng-model="api.consentTerm" ng-checked="(vm.showDetail)? api.consentTerm=true: api.consentTerm=false" required>
+                                                <label for="{{'consentTerm_' + $index}}" class="control-label" style="vertical-align:top" data-translate="appManage.consentTerm">약관동의</label>
+                                            </div>
+                                        </span>
+                                        </dd>
+                                        <dd ng-if="vm.apiList.length <= 0">선택된 API가 존재하지 않습니다.</dd>
+                                    </div>
+                                </dl>
+                                <label ng-if="vm.apiList.length > 0" class="control-label" style="display:block;margin-top:10px">* 모든 약관에 동의하셔야만 저장가능합니다.</label>
+                            </div>
+                        </div>
+
+                        <div ng-tab-body class="tab-pane">
+                            <div class="form-group form-inline voffset4">
+                                <label for="appKey" class="control-label" data-translate="appManage.info.appKey" style="display:block;">app name</label>
+                                <input id="appKey" type="text" class="form-control" name="appKey" ng-model="vm.appDetail.appKey" style="width:50%;" ng-disabled="true" required>
+                                <button type="button" class="btn btn-portal" ng-click="vm.genkey()" data-translate="appManage.info.issue">issue</button>
+                                <button uib-popover-template="vm.secretPopover.templateUrl"
+                                        popover-title="시크릿조회"
+                                        popover-is-open="vm.popOpen"
+                                        popover-trigger="outsideClick"
+                                        type="button"
+                                        ng-if="vm.appDetail.appKey"
+                                        ng-click="vm.clickSecretButton()"
+                                        class="btn btn-danger" data-translate="appManage.secret.title">Popover With Template
+                                </button>
+                            </div>
+                            &lt;!&ndash; <div class="form-group">
+                                <label for="callBackUrl" class="control-label" data-translate="appManage.info.callBack">Callback URL</label>
+                                <input id="callBackUrl" type="text" class="form-control" ng-model="vm.appDetail.oAuthCallbackUrl" required>
+                            </div> &ndash;&gt;
+                            <div class="form-group">
+                                <label for="scope" class="control-label" data-translate="appManage.info.scope">Scope</label>
+                                <input id="scope" type="text" class="form-control" ng-model="vm.appDetail.oAuthScope" placeholder='oob'>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+            </form>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,55 @@
+<div ng-style="(!plan.singleOpen && !api.apiPlan.singleOpen) && {'width':'241px'}">
+    <div>{{dynamicPopover.title}}</div>
+    <div ng-if="!plan.singleOpen && !api.apiPlan.singleOpen" class="form-group policy_layer">
+        <div class="scrollTable apiPopover">
+            <table class="table tableFixed">
+                <!-- <colgroup>
+                    <col style="width:40px"/>
+                    <col style="width:183px"/>
+                </colgroup> -->
+                <thead>
+                    <tr>
+                        <th scope="col" class="t_left">
+                            <div class="new-form-group">
+                                <input type="checkbox" ng-model="vm.allSelect" id="policyTitle" ng-change="vm.checkedAll(vm.allSelect)"/>
+                                <label data-translate="apiList.table.planName" for="policyTitle">정책명</label>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="plan in vm.apiPlans">
+                        <td class="t_left">
+                            <div class="new-form-group">
+                                <input type="checkbox" id="{{'plan'+$index}}" ng-checked="(plan.isDisabled)? false: vm.allSelect"  ng-model="plan.checked" ng-disabled="plan.isDisabled"/>
+                                <label for="{{'plan'+$index}}" class="" ng-disabled="plan.isDisabled">{{plan.name}}</label>
+                                <i title="상세보기" ng-click="plan.apiPlanInform=!plan.apiPlanInform; $event.stopPropagation()" class="glyphicon glyphicon-question-sign"></i>
+                            <dl ng-if="plan.apiPlanInform" style="border:0px">
+                                <dd>할 당 량 : <span ng-if="!plan.quotaValue">제한없음</span><span ng-if="plan.quotaValue">{{plan.quotaValue | number}}건 / {{vm.filter(plan.quotaTimeUnit, 1)}}</span></dd>
+                                <dd>초당 처리량 : <span ng-if="!plan.maxRequestRate">제한없음</span><span ng-if="plan.maxRequestRate">{{plan.maxRequestRate | number}}건</span></dd>
+                                <dd>시간 제한 : <span ng-if="!plan.controlTime">제한없음</span><span ng-if="plan.controlTime">{{plan.startTime}} ~ {{plan.endTime}}</span></dd>
+                                <dd>요일 제한 : <span ng-if="!plan.controlDay">제한없음</span><span ng-if="plan.controlDay">{{vm.filter(plan.startDayOfWeek)}} ~ {{vm.filter(plan.endDayOfWeek)}}</span></dd>
+                            </dl>
+                            </div>
+                        </td>
+                        <!-- <td style="text-align:left;">
+                            <label for="{{'plan'+$index}}" ng-disabled="plan.isDisabled">{{plan.name}}</label>
+                        </td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <button type="button" class="btn btn_color_type1 form-control voffset2" ng-click="vm.applicationPlans()" data-translate="entity.action.apply">적용하기</button>
+    </div>
+    <dl ng-if="plan.singleOpen" style="font-size:90%; background-color:#eee; border-radius:4px; margin:2px -3px; padding:5px">
+        <dd style="line-height:25px; padding-left: 5px;"><span style="display: inline-block; width:85px">· 할 당 량 : </span><span ng-if="!plan.quotaValue">제한없음</span><span ng-if="plan.quotaValue">{{plan.quotaValue | number}}건 / {{vm.filter(plan.quotaTimeUnit, 1)}}</span></dd>
+        <dd style="line-height:25px; padding-left: 5px;"><span style="display: inline-block; width:85px">· 초당 처리량 : </span><span ng-if="!plan.maxRequestRate">제한없음</span><span ng-if="plan.maxRequestRate">{{plan.maxRequestRate | number}}건</span></dd>
+        <dd style="line-height:25px; padding-left: 5px;"><span style="display: inline-block; width:85px">· 시간 제한 : </span><span ng-if="!plan.controlTime">제한없음</span><span ng-if="plan.controlTime">{{plan.startTime}} ~ {{plan.endTime}}</span></dd>
+        <dd style="line-height:25px; padding-left: 5px;"><span style="display: inline-block; width:85px">· 요일 제한 : </span><span ng-if="!plan.controlDay">제한없음</span><span ng-if="plan.controlDay">{{vm.filter(plan.startDayOfWeek)}} ~ {{vm.filter(plan.endDayOfWeek)}}</span></dd>
+    </dl>
+    <dl ng-if="api.apiPlan.singleOpen" style="font-size:90%; background-color:#eee; border-radius:4px; margin:2px -3px; padding:5px">
+        <dd style="line-height:25px; padding-left: 5px;"><span style="display: inline-block; width:85px">· 할 당 량 : </span><span ng-if="!api.apiPlan.quotaValue">제한없음</span><span ng-if="api.apiPlan.quotaValue">{{api.apiPlan.quotaValue | number}}건 / {{vm.filter(api.apiPlan.quotaTimeUnit, 1)}}</span></dd>
+        <dd style="line-height:25px; padding-left: 5px;"><span style="display: inline-block; width:85px">· 초당 처리량 : </span><span ng-if="!api.apiPlan.maxRequestRate">제한없음</span><span ng-if="api.apiPlan.maxRequestRate">{{api.apiPlan.maxRequestRate | number}}건</span></dd>
+        <dd style="line-height:25px; padding-left: 5px;"><span style="display: inline-block; width:85px">· 시간 제한 : </span><span ng-if="!api.apiPlan.controlTime">제한없음</span><span ng-if="api.apiPlan.controlTime">{{api.apiPlan.startTime}} ~ {{api.apiPlan.endTime}}</span></dd>
+        <dd style="line-height:25px; padding-left: 5px;"><span style="display: inline-block; width:85px">· 요일 제한 : </span><span ng-if="!api.apiPlan.controlDay">제한없음</span><span ng-if="api.apiPlan.controlDay">{{vm.filter(api.apiPlan.startDayOfWeek)}} ~ {{vm.filter(api.apiPlan.endDayOfWeek)}}</span></dd>
+    </dl>
+</div>

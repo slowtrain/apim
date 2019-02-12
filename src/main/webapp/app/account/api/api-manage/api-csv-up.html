@@ -1,0 +1,71 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="myUserLabel">API 일괄 등록</h4>
+</div>
+<div class="modal-body row">
+    <!--ie9 파일업로드 오류시 ajaxForm함수에서 error를 타려면, 해당html의 textarea[0]이 disply none이어야 한다.-->
+    <textarea style="display:none;"></textarea>
+
+
+    <div id="uploading" class="" style="overflow:hidden">
+        <form id="csvFile">
+            <div class="">
+                <label class="control-label">API 엑셀 파일 업로드</label>
+                <small>(XLSX)</small>
+
+                <div ng-repeat="file in vm.csvFiles" id="inputFile{{$index}}" class="voffset1">
+                    <input id="hiddenInputFile-{{$index}}" class="form-control file-input" type="file" name="csvFile" accept=".xlsx"
+                        onchange="angular.element(this).scope().addFileInput(event, true)" ng-hide="true"/>
+                    <div class="input-group search-input-wrap csvFile excel-type">
+                        <input id="viewInputFile{{$index}}" type="text" class="form-control" name="viewInputFile" placeholder="파일을 선택하세요" disabled>
+                        <button class="btn btn-default file-btn" type="button" ng-click="vm.selectFile($index); file.data=false"></button>
+                        <span class="input-group-btn">
+                            <button ng-disabled="!file.data || (vm.totalCount !=null && vm.totalCount >=0)" class="btn-type2" type="button" ng-click="vm.save()">
+                                등록
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <!-- <div class="progress">
+                    <div class="bar"></div>
+                    <div class="percent">0%</div>
+                </div> -->
+            </div>
+        </form>
+    </div>
+
+    <p ng-if="vm.totalCount !=null && vm.totalCount >=0" class="t_center voffset5"> 총 : {{vm.totalCount}} &nbsp; 성공 : {{vm.successCount}} &nbsp;
+        <button class="btn btn-default btn-xs btn-csv-fail color_red" ng-click="vm.showFails=!vm.showFails">실패 : {{vm.totalCount - vm.successCount}}</button>
+    </p>
+
+    <div ng-if="vm.showFails && vm.results && vm.results.length > 0" class="table-responsive voffset3" style="padding:20px">
+        <table class="table tableFixed">
+            <colgroup>
+                <col/>
+                <col/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>API 이름</th>
+                <th>Fail 메시지</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="result in vm.results">
+                  <td>{{result.name}}</td>
+                  <td ng-if="result.message=='success'"><i class="glyphicon glyphicon-ok"></i></td>
+                  <td ng-if="result.message !='success'" style="color:red">{{result.message}}</td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button ng-if="vm.totalCount && vm.totalCount >= 0" type="button" class="btn btn-default modalBtn" data-dismiss="modal" ng-click="vm.clear()">
+        확인
+    </button>
+    <button ng-if="!vm.totalCount" type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+        닫기
+    </button>
+</div>

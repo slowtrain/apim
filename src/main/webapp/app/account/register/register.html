@@ -1,0 +1,1096 @@
+<div class="row wrap register" sc>
+    <div class="col-md-10 register-width">
+        <h2><strong data-translate="register.title">Registration</strong></h2>
+    </div>
+    <div class="col-md-10 register-width">
+        <div ng-tabs class="">
+            <ul class="api_top_tab type2">
+                <li class="api_tab_li" ng-tab-head="active">
+                    <a href="#" ng-click="$event.preventDefault();" ng-mousedown="vm.init.afterRegister()">이용기관</a>
+                </li>
+                <li class="api_tab_li" ng-tab-head>
+                    <a href="#" ng-click="$event.preventDefault();" ng-mousedown="vm.init.afterRegister()">제공기관</a>
+                </li>
+            </ul>
+
+            <div class="tab-content register-wrap">
+                <div ng-tab-body class="use_organ">
+                    <p class="title1">이용기관소속 사용자의 회원가입 절차 안내</p>
+                    <div class="box_wrap">
+                        <ul class="proceed">
+                            <li>
+                                <div class="left_side"><p class="number">1</p></div>
+                                <div class="right_side">
+                                    <div class="top_cont">자신이 소속된 기관의 사업자등록번호를 검색하세요.</div>
+                                    <div class="bot_cont"></div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="left_side"><p class="number">2</p></div>
+                                <div class="right_side">
+                                    <div class="top_cont">검색한 번호로 등록된 <strong>'이용기관이 있는 경우'</strong></div>
+                                    <div class="bot_cont">
+                                        Market 이용 및 개인정보 이용 안내를 읽고 동의를 체크합니다.<br>
+                                        가입신청자 본인의 정보를 입력하고 저장하면 해당 이용기관 관리자에게 승인 요청 알림 문자가 전송됩니다.<br>
+                                        해당 이용기관 관리자의 승인/반려 결정 즉시 신청자 본인에게 승인결과 알림문자가 전송됩니다.<br>
+                                        관리자의 승인을 받은 신청자는 가입신청시 작성한 아이디와 비밀번호를 이용해서 Market에 로그인할 수 있습니다.<br>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="left_side"><p class="number">3</p></div>
+                                <div class="right_side">
+                                    <div class="top_cont">검색한 번호로 등록된  <strong>‘이용기관이 없는 경우’</strong></div>
+                                    <div class="bot_cont">
+                                        Market 이용 및 개인정보 이용 안내를 읽고 동의를 체크합니다. <br>
+                                        이용기관의 기관 정보와 관리자 정보를 입력하고 저장하면 관심 API 제공기관의 관리자에게 승인요청 알림 문자가 전송됩니다.<br>
+                                        관심 API 제공기관 관리자가 승인/반려 여부를 결정내리면 최종결과가 요청기관 관리자에게 문자로 전송됩니다.<br>
+                                        승인을 받은 이용기관의 관리자는 가입신청시 작성한 아이디와 비밀번호를 이용해서 Market에 로그인할 수 있습니다.
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-if="!vm.readOnly">
+                        <form name="searchForm" novalidate>
+                            <p class="title1">사업자 등록번호</p>
+                            <div class="searchBox mb_10">
+                                <span class="form-inline">
+                                    <input type="text" class="form-control input-lg t_center" style="width:20%;" name="licenseNumber" ng-model="vm.licenseNumber[0]" mask="999" restrict='reject' limit='true' ng-readonly="vm.readOnly" ng-change="vm.lengthCheck('licenseNumber', vm.licenseNumber)">
+                                </span> -
+                                <span class="form-inline">
+                                    <input type="text" class="form-control input-lg t_center" style="width:10%" name="licenseNumber" ng-model="vm.licenseNumber[1]" mask="99" restrict='reject' limit='true' ng-readonly="vm.readOnly" ng-change="vm.lengthCheck('licenseNumber', vm.licenseNumber)">
+                               </span> -
+                               <span class="form-inline">
+                                    <input type="text" class="form-control input-lg t_center" style="width:30%" name="licenseNumber" ng-model="vm.licenseNumber[2]" mask="99999" restrict='reject' limit='true' ng-readonly="vm.readOnly" ng-change="vm.lengthCheck('licenseNumber', vm.licenseNumber)">
+                                </span>
+                                <span class="btnBox">
+                                    <button type="button" class="btn search-btn" ng-click="vm.searchResultPopup()"
+                                            ng-disabled="searchForm.$invalid || vm.licenseNumber.length < 3 || vm.lengthChecked">
+                                        <span data-translate="entity.action.search">Search</span>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- <ul class="form-group voffset2">
+                        <li><strong class="sub-title color_red">이용기관소속 사용자의 회원가입 절차 안내</strong></li>
+                        <li style="color: #545045">&emsp;1. 자신이 소속된 기관의 사업자등록번호를 검색하세요.</li>
+                        <li style="color: #545045; margin-top:10px">&emsp;2. 검색한 번호로 등록된 <strong style="color:#333">'이용기관이 있는 경우'</strong><br/>&emsp;&emsp;
+                            <i style="font-size:8px; color:#fcaf16; vertical-align: 2px" class="glyphicon glyphicon-menu-right"></i> Market 이용 및 개인정보 이용 안내를 읽고 동의를 체크합니다.<br/>&emsp;&emsp;
+                            <i style="font-size:8px; color:#fcaf16; vertical-align: 2px" class="glyphicon glyphicon-menu-right"></i> 가입신청자 본인의 정보를 입력하고 저장하면  해당 이용기관 관리자에게 승인요청알림 문자가 전송됩니다.<br/>&emsp;&emsp;
+                            <i style="font-size:8px; color:#fcaf16; vertical-align: 2px" class="glyphicon glyphicon-menu-right"></i> 해당 이용기관 관리자의 승인/반려 결정 즉시 신청자 본인에게 승인결과알림 문자가 전송됩니다.<br/>&emsp;&emsp;
+                            <i style="font-size:8px; color:#fcaf16; vertical-align: 2px" class="glyphicon glyphicon-menu-right"></i> 관리자의 승인을 받은 신청자는 가입신청시 작성한 아이디와 비밀번호를 이용해서 Market에 로그인할 수 있습니다.
+                        </li>
+                        <li style="color: #545045; margin-top:10px">&emsp;3. 검색한 번호로 등록된 <strong style="color:#333">'이용기관이 없는 경우'</strong><br/>&emsp;&emsp;
+                            <i style="font-size:8px; color:#fcaf16; vertical-align: 2px" class="glyphicon glyphicon-menu-right"></i> Market 이용 및 개인정보 이용 안내를 읽고 동의를 체크합니다.<br/>&emsp;&emsp;
+                            <i style="font-size:8px; color:#fcaf16; vertical-align: 2px" class="glyphicon glyphicon-menu-right"></i> 이용기관의 기관 정보와 관리자 정보를 입력하고 저장하면 활용예정API 제공기관의 관리자들에게 승인요청알림 문자가 전송됩니다.<br/>&emsp;&emsp;
+                            <i style="font-size:8px; color:#fcaf16; vertical-align: 2px" class="glyphicon glyphicon-menu-right"></i> 활용예정API 제공기관 관리자들이 모두 승인/반려 여부를 결정내리면 최종결과가 요청기관 관리자에게 문자로 전송됩니다.<br/>&emsp;&emsp;
+                            <i style="font-size:8px; color:#fcaf16; vertical-align: 2px" class="glyphicon glyphicon-menu-right"></i> 단 하나의 반려 결정도 없어야, 최종 결과 알림문자가 '승인'으로 전송됩니다.<br/>&emsp;&emsp;
+                            <i style="font-size:8px; color:#fcaf16; vertical-align: 2px" class="glyphicon glyphicon-menu-right"></i> 승인을 받은 이용기관의 관리자는 가입신청시 작성한 아이디와 비밀번호를 이용해서 Market에 로그인할 수 있습니다.
+                        </li>
+                    </ul> -->
+                    <!-- <div class="form-group voffset5" ng-if="!vm.readOnly">
+                        <form name="searchForm" novalidate>
+                            <strong class="sub-title">
+                                <i class="glyphicon glyphicon-menu-right"></i> 사업자 등록번호
+                            </strong>
+                            <div class="form-inline">
+                                <input type="text" class="form-control input-lg t_center" style="width:20%;" name="licenseNumber" ng-model="vm.licenseNumber[0]" mask="999"
+                                       restrict='reject' limit='true' ng-readonly="vm.readOnly" ng-change="vm.lengthCheck('licenseNumber', vm.licenseNumber)"> -
+                                <input type="text" class="form-control input-lg t_center" style="width:10%" name="licenseNumber" ng-model="vm.licenseNumber[1]" mask="99"
+                                       restrict='reject' limit='true' ng-readonly="vm.readOnly" ng-change="vm.lengthCheck('licenseNumber', vm.licenseNumber)"> -
+                                <input type="text" class="form-control input-lg t_center" style="width:30%" name="licenseNumber" ng-model="vm.licenseNumber[2]" mask="99999"
+                                       restrict='reject' limit='true' ng-readonly="vm.readOnly" ng-change="vm.lengthCheck('licenseNumber', vm.licenseNumber)">
+                                <button type="button" class="btn search-btn" ng-click="vm.searchResultPopup()"
+                                        ng-disabled="searchForm.$invalid || vm.licenseNumber.length < 3 || vm.lengthChecked">
+                                    <span data-translate="entity.action.search">Search</span>
+                                </button>
+                            </div>
+                        </form>
+
+                    </div> -->
+                    <div ng-if="vm.searchResult || (!vm.searchResult && vm.registerNewOrg)" class="form-group voffset5" style="overflow:hidden;">
+                        <strong class="title1">
+                            Open Api Market 이용안내
+                        </strong>
+                        <div id="portalTermsForUsers2" class="intro-box-form form-control ql-editor" readonly></div>
+                        <span class="pull-right new-form-group">
+                            <input type="checkbox" id="agreeToPortalTermsForUsers" ng-model="vm.agreeToPortalTermsForUsers"/>
+                            <label for="agreeToPortalTermsForUsers" class="agree-check">상기 이용안내에 동의합니다.(필수)</label>
+                        </span>
+                    </div>
+                    <div ng-if="vm.searchResult || (!vm.searchResult && vm.registerNewOrg)" class="form-group voffset2" style="overflow:hidden;">
+                        <strong class="title1">
+                            개인정보 수집 및 이용에 대한 안내
+                        </strong>
+                        <div id="agreeformForUsers2" class="intro-box-form form-control ql-editor" readonly></div>
+                        <span class="pull-right new-form-group">
+                            <input type="checkbox" id="agreeToAgreeform" ng-model="vm.agreeToAgreeform"/>
+                            <label for="agreeToAgreeform" class="agree-check">상기 이용안내에 동의합니다.(필수)</label>
+                        </span>
+                    </div>
+                    <form name="partnerForm" novalidate style="overflow:hidden;">
+                        <div class="table-responsive" ng-if="vm.searchResult && vm.agreeToPortalTermsForUsers && vm.agreeToAgreeform">
+                            <strong class="title1">
+                                계정정보 입력
+                            </strong>
+                            <table class="table table_write">
+                                <colgroup>
+                                    <col style="width:20%"/>
+                                    <col style="width:80%"/>
+                                </colgroup>
+                                <tbody>
+                                <tr class="form-group">
+                                    <th><label for="orgName">기관명</label></th>
+                                    <td class="form-inline">
+                                        <input type="text" id="orgName" class="form-control" name="organization" ng-model="vm.registerAccount.organization.name" readonly/>
+                                    </td>
+                                </tr>
+                                <tr class="form-group" ng-class="{'has-error': partnerForm.userId.$dirty && partnerForm.userId.$invalid}">
+                                    <th><label class="required-label" data-translate="global.form.userId">userId</label>
+                                    </th>
+                                    <td class="form-inline">
+                                        <input type="text" class="form-control" name="userId" placeholder="영문대소숫자 3~15자" ng-model="vm.registerAccount.login" minlength="3" maxlength="15" limit='true' ng-pattern="/^[-A-Za-z0-9._]*$/" required ng-disabled="vm.isSecondAuthRequested"/>
+                                        <span ng-show="partnerForm.userId.$dirty && partnerForm.userId.$invalid">
+                                            <small class="color_red" ng-show="partnerForm.userId.$error.required" data-translate="register.messages.validate.login.required">Your userId is required.</small>
+                                            <small class="color_red" ng-if="partnerForm.userId.$error.minlength || partnerForm.userId.$error.maxlength">(3~15자 이내)</small>
+                                            <small class="color_red" ng-show="partnerForm.userId.$error.pattern" data-translate="register.messages.validate.login.pattern">Your userId can only contain lower-case letters and digits.</small>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="form-group">
+                                    <th><label class="required-label">닉네임</label></th>
+                                    <td class="form-inline">
+                                        <span ng-class="{'has-error':partnerForm.fullName.$dirty && partnerForm.fullName.$invalid}">
+                                        <input type="text" class="form-control" name="fullName"
+                                               ng-model="vm.registerAccount.fullName"
+                                               placeholder="{{'global.form.username.placeholder' | translate}}"
+                                               minlength="2" maxlength="30"
+                                               limit='true' ng-pattern="/^[-가-힣A-Za-z0-9._ ]*$/" required ng-disabled="vm.isSecondAuthRequested">
+                                        </span>
+                                        <!-- <span ng-class="{'has-error':partnerForm.grade.$dirty && partnerForm.grade.$invalid}">
+                                        <input type="text" class="form-control" name="grade" ng-model="vm.registerAccount.grade"
+                                            placeholder="{{'global.form.grade' | translate}}"
+                                            minlength="2" maxlength="15" limit='true'  ng-pattern="/^[-가-힣A-Za-z0-9._ ]*$/">
+                                        </span> -->
+                                        <span style="display:inline-block; width:222px; vertical-align: 8px">
+                                            <small class="color_red" ng-if="partnerForm.fullName.$error.pattern">(닉네임을 잘못 입력하셨습니다.)</small>
+                                            <small class="color_red" ng-if="partnerForm.fullName.$error.minlength || form.fullName.$error.maxlength">(2~30자 이내)</small>
+                                        </span>
+                                        <!-- <span style="vertical-align: -8px; margin-left: -225px">
+                                            <small class="color_red" ng-if="partnerForm.grade.$error.pattern">(직위를 잘못 입력하셨습니다.)</small>
+                                            <small class="color_red" ng-if="partnerForm.grade.$error.minlength || partnerForm.grade.$error.maxlength">(2~15자 이내)</small>
+                                        </span> -->
+                                    </td>
+                                </tr>
+                                <tr class="form-group">
+                                    <th><label class="required-label" data-translate="global.form.password">New password</label>
+                                    </th>
+                                    <td class="form-inline">
+                                        <span ng-class="{'has-error':partnerForm.userPassword.$dirty && partnerForm.userPassword.$invalid}">
+                                            <input autocomplete="off" type="password" class="form-control" name="userPassword"
+                                               placeholder="영문숫자특수조합8~20" ng-pattern="vm.passwordRegex"
+                                               ng-model="vm.registerAccount.password" minlength=8 maxlength=20 limit="true" required ng-disabled="vm.isSecondAuthRequested">
+                                        </span>
+                                        <span ng-class="{'has-error':vm.registerAccount.password && vm.registerAccount.password != vm.confirmPassword}">
+                                            <input autocomplete="off" type="password" class="form-control" name="userConfirmPassword"
+                                               placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
+                                               ng-model="vm.confirmPassword" required ng-disabled="vm.isSecondAuthRequested">
+                                        </span>
+                                        <span ng-show="partnerForm.userPassword.$dirty">
+                                            <small ng-show="partnerForm.userPassword.$error.required" data-translate="global.messages.validate.newpassword.required"
+                                                   class="color_red">Your password is required.</small>
+                                            <small class="color_red"
+                                                   ng-if="partnerForm.userPassword.$error.minlength || partnerForm.userPassword.$error.maxlength || partnerForm.userPassword.$error.pattern">(영문숫자특수조합 8~20자 이내)</small>
+                                            <small ng-show="vm.registerAccount.password && vm.registerAccount.password != vm.confirmPassword" class="color_red">비밀번호가 같지 않습니다.</small>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="form-group">
+                                    <th><label class="required-label" for="orgUserEmailFirst" data-translate="global.form.email">E-mail</label>
+                                    </th>
+                                    <td class="form-inline">
+                                        <span ng-class="{'has-error': partnerForm.orgUserEmailFirst.$dirty && partnerForm.orgUserEmailFirst.$invalid}">
+                                            <input type="text" class="form-control" id="orgUserEmailFirst" name="orgUserEmailFirst" placeholder="이메일 아이디"
+                                                   ng-model="vm.email[0]" ng-pattern="/^[-A-Za-z0-9._]*$/" required ng-disabled="vm.isSecondAuthRequested" ng-change="vm.lengthCheck('email', vm.email)"> @
+                                        </span>
+                                        <span ng-class="{'has-error': partnerForm.orgUserEmailSecond.$dirty && partnerForm.orgUserEmailSecond.$invalid}">
+                                            <input type="text" class="form-control" id="orgUserEmailSecond" name="orgUserEmailSecond" placeholder="도메인"
+                                                   ng-model="vm.email[1]" ng-pattern="/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/" required ng-disabled="vm.isSecondAuthRequested"
+                                                   ng-change="vm.lengthCheck('email', vm.email)">
+                                        </span>
+                                        <select class="form-control" ng-model="vm.email[1]" ng-disabled="vm.isSecondAuthRequested"
+                                                ng-options="domain for domain in vm.domainOptions track by domain" ng-change="vm.lengthCheck('email', vm.email)">
+                                            <option value="">- 직접 입력 -</option>
+                                        </select>
+                                        <!-- <p ng-if="partnerForm.orgUserEmailFirst.$dirty && partnerForm.orgUserEmailFirst.$invalid">
+                                            <small class="color_red" ng-if="partnerForm.orgUserEmailFirst.$error.required || partnerForm.orgUserEmailSecond.$error.required" data-translate="global.messages.validate.email.required">
+                                                Your e-mail is required.
+                                            </small>
+                                            <small class="color_red" ng-if="partnerForm.orgUserEmailFirst.$error.pattern || partnerForm.orgUserEmailSecond.$error.pattern" data-translate="global.messages.validate.email.invalid">
+                                                Your e-mail is invalid.
+                                            </small>
+                                        </p> -->
+                                    </td>
+                                </tr>
+                                <tr class="form-group">
+                                    <th><label>전화번호</label> </th>
+                                    <td class="form-inline">
+                                        <select class="form-control" name="mainPhone" ng-model="vm.mainPhone[0]" ng-options="num for num in vm.districtNums track by num">
+                                            <option value="">선택</option>
+                                        </select> -
+                                        <input type="text" class="form-control t_center" name="mainPhone" ng-model="vm.mainPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' > -
+                                        <input type="text" class="form-control t_center" name="mainPhone" ng-model="vm.mainPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true'>
+                                    </td>
+                                </tr>
+                                <tr class="form-group">
+                                    <th><label class="required-label">휴대폰번호</label></th>
+                                    <td class="form-inline" ng-class="{'has-error' : partnerForm.cellPhone2.$error.minlength || partnerForm.cellPhone3.$error.minlength}">
+                                        <select class="form-control" name="cellPhone1" ng-model="vm.cellPhone[0]" ng-options="num for num in vm.cellIdentifyingNums track by num"
+                                        ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required ng-disabled="vm.isSecondAuthRequested">
+                                            <option value="">선택</option>
+                                        </select> -
+                                        <input type="text" class="form-control t_center" name="cellPhone2" ng-model="vm.cellPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false'
+                                        ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required ng-disabled="vm.isSecondAuthRequested"> -
+                                        <input type="text" class="form-control t_center" name="cellPhone3" ng-model="vm.cellPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' validate='false'
+                                        ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required ng-disabled="vm.isSecondAuthRequested">
+                                        <span>
+                                            <small class="color_red" ng-if="!vm.cellPhone[0] && vm.cellPhone[1] || !vm.cellPhone[0] && vm.cellPhone[2]">(통신사 번호를 선택바랍니다.)</small>
+                                            <small class="color_red" ng-if="partnerForm.cellPhone2.$error.minlength">(앞번호 3자이상 입력바랍니다.)</small>
+                                            <small class="color_red" ng-if="partnerForm.cellPhone3.$error.minlength">(뒷번호 4자리 입력바랍니다.)</small>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="form-group">
+                                    <th><label class="required-label">SMS 인증</label></th>
+                                    <td class="form-inline">
+                                        <div ng-if="!vm.authSuccess">
+                                            <input type="text" class="form-control" style="width:40%" name="authNumber" ng-model="vm.authNumber" ng-readonly="!vm.isSecondAuthRequested" ng-required="vm.isSecondAuthRequested"
+                                                placeholder = "{{vm.isSecondAuthRequested? '인증번호를 입력하고 전송하십시오.' : '먼저 인증번호를 받으십시오'}}"/>
+                                            <button type="button" ng-hide="!vm.authSuccess && vm.isSecondAuthRequested" ng-disabled="partnerForm.$invalid || vm.registerAccount.password != vm.confirmPassword" class="btn-type2 color_666" ng-click="vm.secondaryAuth()">인증번호 받기</button>
+                                            <button type="button" ng-show="!vm.authSuccess && vm.isSecondAuthRequested" class="btn-type2 btn-danger" ng-click="vm.secondaryAuthCheck()">인증번호 전송</button>
+                                            <span style="margin-left:10px vertical-align:middle" ng-hide="!vm.isSecondAuthRequested">남은시간 : <span class="color_red">[{{vm.msecPerMinute | date: 'mm:ss'}}]</span></span>
+                                        </div>
+                                        <span ng-if="vm.authSuccess"><i class="glyphicon glyphicon-ok"></i> 인증완료</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="t_center voffset4">
+                                <button type="button" class="btn-type1 just_left" ng-click="vm.init.afterRegister()">재검색</button>
+                                <button class="btn-type1 arrow_right" ng-click="vm.register()" ng-disabled="!vm.authSuccess || vm.lengthChecked || partnerForm.$invalid || (vm.registerAccount.password != vm.confirmPassword)">
+                                    저장
+                                </button>
+                                <!-- <button class="btn btn-portal btn-lg voffset4" ng-click="vm.secondaryAuth()" ng-disabled="vm.lengthChecked || partnerForm.$invalid || (vm.registerAccount.password != vm.confirmPassword)">
+                                    저장
+                                </button> -->
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- </div>
+                    <div ng-show="vm.searchResult && vm.agreeToPortalTermsForUsers && vm.agreeToAgreeform"> -->
+                        <!-- <div class="form-group form-inline voffset4">
+                            <span id="captcha2"></span>
+                            <div class="input-group">
+                                <input class="form-control" style="width:175px" placeholder="왼쪽문자를 입력하세요." type="text" ng-model="vm.registerAccount.answer"/>
+                                <div class="input-group-addon btn" id="reLoad2"><i class="glyphicon glyphicon-refresh"></i></div>
+                            </div>
+                        </div> -->
+                    <form name="partnerForm2" novalidate>
+                        <div ng-if="!vm.searchResult && vm.agreeToPortalTermsForUsers  && vm.agreeToAgreeform">
+                            <strong class="title1">
+                                관심 API 제공기관 선택
+                                <small class="color_red">(선택된 기관 승인필요)</small>
+                            </strong>
+                            <div class="searchBox">
+                                <div class="form-inline">
+                                    <span class="radio_form" ng-repeat="provider in vm.providers">
+                                        <input type="checkbox" id="id{{provider.id}}" ng-model="provider.checked" ng-change="vm.checkProvider(provider)" ng-disabled="vm.isSecondAuthRequested">
+                                        <label for="id{{provider.id}}" class="">{{provider.name}}</label>
+                                    </span>
+                                </div>
+                            </div>
+                        <!--ie9 파일업로드 오류시 ajaxForm함수에서 error를 타려면, 해당html의 textarea[0]이 disply none이어야 한다.-->
+                        <textarea style="display:none;"></textarea>
+                        <strong class="title1 voffset4">기관등록 정보</strong>
+                            <table class="table table_write">
+                                <colgroup>
+                                    <col style="width:15%;">
+                                    <col style="width:35%;">
+                                    <col style="width:15%;">
+                                    <col style="width:35%;">
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th>
+                                            <label class="required-label">기관명</label>
+                                        </th>
+                                        <td ng-class="{'has-error':partnerForm2.setOrgName.$dirty && partnerForm2.setOrgName.$invalid}">
+                                            <p ng-show="partnerForm2.setOrgName.$dirty && partnerForm2.setOrgName.$invalid">
+                                                <small class="color_red" ng-show="partnerForm2.setOrgName.$error.required">기관명을 입력해주시기 바랍니다.</small>
+                                                <small class="color_red" ng-show="partnerForm2.setOrgName.$error.minlength || partnerForm2.setOrgName.$error.maxlength">2~30자
+                                                    이내로 등록바랍니다.
+                                                </small>
+                                                <small class="color_red" ng-show="partnerForm2.setOrgName.$error.pattern">잘못 입력하셨습니다.</small>
+                                            </p>
+                                            <input type="text" class="form-control" id="setOrgName" name="setOrgName"
+                                                       ng-model="vm.registerAccount.organization.name" minlength="2" maxlength="30" limit='true'
+                                                       ng-pattern="/^[-가-힣A-Za-z0-9._ ]+$/" required ng-disabled="vm.isSecondAuthRequested"/>
+                                        </td>
+                                        <th>대표자 성명</th>
+                                        <td>
+                                            <small class="color_red" ng-show="partnerForm2.ceoName.$error.pattern">잘못 입력하셨습니다.</small>
+                                            <small class="color_red" ng-if="partnerForm2.ceoName.$error.minlength || partnerForm2.ceoName.$error.maxlength">2~30자 이내</small>
+                                            <input type="text" class="form-control" name="ceoName" minlength="2" maxlength="30" limit='true'ng-pattern="/^[-가-힣A-Za-z0-9._ ]+$/" ng-model="vm.registerAccount.organization.ceoName">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th rowspan="2">
+                                            <label>기관설명</label>
+                                        </th>
+                                        <td rowspan="2">
+                                            <small class="color_red" ng-show="partnerForm2.orgDescription.$error.minlength || partnerForm2.orgDescription.$error.maxlength">100자
+                                                이내로 등록바랍니다.
+                                            </small>
+                                            <small class="color_red" ng-show="partnerForm2.orgDescription.$error.pattern">잘못 입력하셨습니다.</small>
+                                            <textarea class="form-control" name="orgDescription" style="min-height:107px;" ng-model="vm.registerAccount.organization.description" maxlength="100" limit='true'ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"></textarea>
+                                        </td>
+                                        <th>
+                                            <div class="form-group" ng-class="{'has-error' : partnerForm2.sectors.$error.pattern}">
+                                                <label>업태명</label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <small class="color_red" ng-show="partnerForm2.sectors.$error.pattern">잘못 입력하셨습니다.</small><input type="text" class="form-control" name="sectors" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"
+                                                       ng-model="vm.registerAccount.organization.sectors"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label>사업자 등록번호</label>
+                                        </th>
+                                        <td>
+                                            <div class="form-inline">
+                                                <input type="text" style="width:28%" class="form-control t_center" name="licenseNumber" ng-model="vm.licenseNumber[0]"
+                                                       mask="999" restrict='reject' limit='true' readonly> -
+                                                <input type="text" style="width:20%" class="form-control t_center" name="licenseNumber" ng-model="vm.licenseNumber[1]" mask="99"
+                                                       restrict='reject' limit='true' readonly> -
+                                                <input type="text" style="width:41%" class="form-control t_center" name="licenseNumber" ng-model="vm.licenseNumber[2]"
+                                                       mask="99999" restrict='reject' limit='true' readonly>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label>사업장 소재지</label>
+                                        </th>
+                                        <td>
+                                            <small class="color_red" ng-show="partnerForm2.address.$error.pattern">잘못 입력하셨습니다.</small>
+                                            <input type="text" class="form-control" name="address" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" ng-model="vm.registerAccount.organization.address">
+                                        </td>
+                                        <th>
+                                            <label>홈페이지 주소</label>
+                                        </th>
+                                        <td>
+                                            <small class="color_red" ng-if="partnerForm2.homepageUrl.$error.pattern">(잘못 입력하셨습니다.)</small>
+                                            <input type="text" class="form-control" name="homepageUrl" ng-pattern="/^[-A-Za-z0-9:._?=/& ]+$/"
+                                                       ng-model="vm.registerAccount.organization.homepageUrl">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label class="required-label">법인 등록번호</label>
+                                        </th>
+                                        <td>
+                                            <p ng-show="partnerForm2.corpRegNumber1.$dirty && partnerForm2.corpRegNumber1.$invalid || partnerForm2.corpRegNumber2.$dirty && partnerForm2.corpRegNumber2.$invalid">
+                                                <small class="color_red" ng-if="partnerForm2.corpRegNumber1.$error.minlength">(앞번호 6자리 입력바랍니다.)</small>
+                                                <small class="color_red" ng-if="partnerForm2.corpRegNumber2.$error.minlength">(뒷번호 7자리 입력바랍니다.)</small>
+                                            </p>
+                                            <div class="form-inline phone_set type3" ng-class="{'has-error':partnerForm2.corpRegNumber1.$dirty && partnerForm2.corpRegNumber1.$invalid || partnerForm2.corpRegNumber2.$dirty && partnerForm2.corpRegNumber2.$invalid}">
+                                                <input type="text" class="form-control t_center" name="corpRegNumber1"
+                                                       ng-model="vm.corpRegNumber[0]" minlength="6" mask="999999" restrict='reject' limit='true' required ng-disabled="vm.isSecondAuthRequested"
+                                                       ng-change="vm.lengthCheck('corpRegNumber', vm.corpRegNumber)">
+                                                <input type="text" class="form-control t_center" name="corpRegNumber2"
+                                                       ng-model="vm.corpRegNumber[1]" minlength="7" mask="9999999" restrict='reject' limit='true' required ng-disabled="vm.isSecondAuthRequested"
+                                                       ng-change="vm.lengthCheck('corpRegNumber', vm.corpRegNumber)">
+                                            </div>
+                                        </td>
+                                        <th>
+                                            <label class="required-label">회사 전화번호</label>
+                                        </th>
+                                        <td>
+                                            <small class="color_red" ng-if="!vm.orgMainPhone[0] && vm.orgMainPhone[1] || !vm.orgMainPhone[0] && vm.orgMainPhone[2]">(지역번호를 선택바랍니다.)</small>
+                                                <small class="color_red" ng-if="partnerForm2.orgMainPhone2.$error.minlength">(앞번호 3자이상 입력바랍니다.)</small>
+                                                <small class="color_red" ng-if="partnerForm2.orgMainPhone3.$error.minlength">(뒷번호 4자리 입력바랍니다.)</small>
+                                                <div class="form-inline phone_set"
+                                                     ng-class="{'has-error':!vm.orgMainPhone[0] && vm.orgMainPhone[1] || !vm.orgMainPhone[0] && vm.orgMainPhone[2] || partnerForm2.orgMainPhone1.$dirty && partnerForm2.orgMainPhone1.$invalid || partnerForm2.orgMainPhone2.$dirty && partnerForm2.orgMainPhone2.$invalid || partnerForm2.orgMainPhone3.$dirty && partnerForm2.orgMainPhone3.$invalid}">
+                                                    <select class="form-control" name="orgMainPhone1" ng-model="vm.orgMainPhone[0]" required ng-disabled="vm.isSecondAuthRequested"
+                                                            ng-options="num for num in vm.districtNums track by num" ng-change="vm.lengthCheck('mainPhone', vm.mainPhone)">
+                                                        <option value="">선택</option>
+                                                    </select>
+                                                    <input type="text" class="form-control center" name="orgMainPhone2" ng-model="vm.orgMainPhone[1]" minlength='3'
+                                                           mask="9999" restrict='reject' limit='true' validate='false' ng-change="vm.lengthCheck('mainPhone', vm.mainPhone)"
+                                                           required ng-disabled="vm.isSecondAuthRequested">
+                                                    <input type="text" class="form-control t_center" name="orgMainPhone3" ng-model="vm.orgMainPhone[2]" minlength='4'
+                                                           mask="9999" restrict='reject' limit='true' ng-change="vm.lengthCheck('mainPhone', vm.mainPhone)" required ng-disabled="vm.isSecondAuthRequested">
+                                                </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- <div class="row">
+                                <div class="col-md-6">
+                                    <dl>
+                                        <dd style="height:430px">
+                                            <div class="form-group" ng-class="{'has-error':partnerForm2.setOrgName.$dirty && partnerForm2.setOrgName.$invalid}">
+                                                <label>기관명</label>
+                                                <small class="color_red">*</small>
+                                                <p ng-show="partnerForm2.setOrgName.$dirty && partnerForm2.setOrgName.$invalid">
+                                                    <small class="color_red" ng-show="partnerForm2.setOrgName.$error.required">기관명을 입력해주시기 바랍니다.</small>
+                                                    <small class="color_red" ng-show="partnerForm2.setOrgName.$error.minlength || partnerForm2.setOrgName.$error.maxlength">2~30자
+                                                        이내로 등록바랍니다.
+                                                    </small>
+                                                    <small class="color_red" ng-show="partnerForm2.setOrgName.$error.pattern">잘못 입력하셨습니다.</small>
+                                                </p>
+                                                <input type="text" class="form-control" id="setOrgName" name="setOrgName"
+                                                       ng-model="vm.registerAccount.organization.name" minlength="2" maxlength="30" limit='true'
+                                                       ng-pattern="/^[-가-힣A-Za-z0-9._ ]+$/" required ng-disabled="vm.isSecondAuthRequested"/>
+                                            </div>
+                                            <div class="form-group voffset2">
+                                                <label>기관설명</label>
+                                                <small class="color_red" ng-show="partnerForm2.orgDescription.$error.minlength || partnerForm2.orgDescription.$error.maxlength">100자
+                                                    이내로 등록바랍니다.
+                                                </small>
+                                                <small class="color_red" ng-show="partnerForm2.orgDescription.$error.pattern">잘못 입력하셨습니다.</small>
+                                                <textarea class="form-control" name="orgDescription" style="min-height:107px;"
+                                                          ng-model="vm.registerAccount.organization.description" maxlength="100" limit='true'
+                                                          ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"></textarea>
+                                            </div>
+                                            </div>
+                                            <div class="form-group voffset2">
+                                                <label>사업자 등록번호</label>
+                                                <div class="form-inline">
+                                                    <input type="text" style="width:29%" class="form-control t_center" name="licenseNumber" ng-model="vm.licenseNumber[0]"
+                                                           mask="999" restrict='reject' limit='true' readonly> -
+                                                    <input type="text" style="width:20%" class="form-control t_center" name="licenseNumber" ng-model="vm.licenseNumber[1]" mask="99"
+                                                           restrict='reject' limit='true' readonly> -
+                                                    <input type="text" style="width:43%" class="form-control t_center" name="licenseNumber" ng-model="vm.licenseNumber[2]"
+                                                           mask="99999" restrict='reject' limit='true' readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group voffset2">
+                                                <label>법인 등록번호</label>
+                                                <small class="color_red">*</small>
+                                                <p ng-show="partnerForm2.corpRegNumber1.$dirty && partnerForm2.corpRegNumber1.$invalid || partnerForm2.corpRegNumber2.$dirty && partnerForm2.corpRegNumber2.$invalid">
+                                                    <small class="color_red" ng-if="partnerForm2.corpRegNumber1.$error.minlength">(앞번호 6자리 입력바랍니다.)</small>
+                                                    <small class="color_red" ng-if="partnerForm2.corpRegNumber2.$error.minlength">(뒷번호 7자리 입력바랍니다.)</small>
+                                                </p>
+                                                <div class="form-inline"
+                                                     ng-class="{'has-error':partnerForm2.corpRegNumber1.$dirty && partnerForm2.corpRegNumber1.$invalid || partnerForm2.corpRegNumber2.$dirty && partnerForm2.corpRegNumber2.$invalid}">
+                                                    <input type="text" class="form-control t_center" style="width:48%" name="corpRegNumber1"
+                                                           ng-model="vm.corpRegNumber[0]" minlength="6" mask="999999" restrict='reject' limit='true' required ng-disabled="vm.isSecondAuthRequested"
+                                                           ng-change="vm.lengthCheck('corpRegNumber', vm.corpRegNumber)"> -
+                                                    <input type="text" class="form-control t_center" style="width:48%" name="corpRegNumber2"
+                                                           ng-model="vm.corpRegNumber[1]" minlength="7" mask="9999999" restrict='reject' limit='true' required ng-disabled="vm.isSecondAuthRequested"
+                                                           ng-change="vm.lengthCheck('corpRegNumber', vm.corpRegNumber)">
+                                                </div>
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div> -->
+                                <!-- <div class="col-md-6">
+                                    <dl>
+                                        <dd style="height:430px">
+                                            <div class="form-group"
+                                                 ng-class="{'has-error' : partnerForm2.ceoName.$error.pattern || form.ceoName.$error.minlength || form.ceoName.$error.maxlength}">
+                                                <label>대표자 성명</label>
+                                                <small class="color_red" ng-show="partnerForm2.ceoName.$error.pattern">잘못 입력하셨습니다.</small>
+                                                <small class="color_red" ng-if="partnerForm2.ceoName.$error.minlength || partnerForm2.ceoName.$error.maxlength">2~30자 이내</small>
+                                                <input type="text" class="form-control" name="ceoName" minlength="2" maxlength="30" limit='true'
+                                                       ng-pattern="/^[-가-힣A-Za-z0-9._ ]+$/"
+                                                       ng-model="vm.registerAccount.organization.ceoName">
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error' : partnerForm2.sectors.$error.pattern}">
+                                                <label>업태명</label>
+                                                <small class="color_red" ng-show="partnerForm2.sectors.$error.pattern">잘못 입력하셨습니다.</small>
+                                                <input type="text" class="form-control" name="sectors" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"
+                                                       ng-model="vm.registerAccount.organization.sectors">
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error' : partnerForm2.address.$error.pattern}">
+                                                <label>사업장 소재지</label>
+                                                <small class="color_red" ng-show="partnerForm2.address.$error.pattern">잘못 입력하셨습니다.</small>
+                                                <input type="text" class="form-control" name="address" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"
+                                                       ng-model="vm.registerAccount.organization.address">
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error' : partnerForm2.homepageUrl.$error.pattern}">
+                                                <label>홈페이지 주소</label>
+                                                <small class="color_red" ng-if="partnerForm2.homepageUrl.$error.pattern">(잘못 입력하셨습니다.)</small>
+                                                <input type="text" class="form-control" name="homepageUrl" ng-pattern="/^[-A-Za-z0-9:._?=/& ]+$/"
+                                                       ng-model="vm.registerAccount.organization.homepageUrl">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>회사 전화번호</label>
+                                                <small class="color_red">*</small>
+                                                <small class="color_red" ng-if="!vm.orgMainPhone[0] && vm.orgMainPhone[1] || !vm.orgMainPhone[0] && vm.orgMainPhone[2]">(지역번호를 선택바랍니다.)</small>
+                                                <small class="color_red" ng-if="partnerForm2.orgMainPhone2.$error.minlength">(앞번호 3자이상 입력바랍니다.)</small>
+                                                <small class="color_red" ng-if="partnerForm2.orgMainPhone3.$error.minlength">(뒷번호 4자리 입력바랍니다.)</small>
+                                                <div class="form-inline"
+                                                     ng-class="{'has-error':!vm.orgMainPhone[0] && vm.orgMainPhone[1] || !vm.orgMainPhone[0] && vm.orgMainPhone[2] || partnerForm2.orgMainPhone1.$dirty && partnerForm2.orgMainPhone1.$invalid || partnerForm2.orgMainPhone2.$dirty && partnerForm2.orgMainPhone2.$invalid || partnerForm2.orgMainPhone3.$dirty && partnerForm2.orgMainPhone3.$invalid}">
+                                                    <select class="form-control" style="width:23%;" name="orgMainPhone1" ng-model="vm.orgMainPhone[0]" required ng-disabled="vm.isSecondAuthRequested"
+                                                            ng-options="num for num in vm.districtNums track by num" ng-change="vm.lengthCheck('mainPhone', vm.mainPhone)">
+                                                        <option value="">선택</option>
+                                                    </select> -
+                                                    <input type="text" style="width:34%;" class="form-control t_center" name="orgMainPhone2" ng-model="vm.orgMainPhone[1]" minlength='3'
+                                                           mask="9999" restrict='reject' limit='true' validate='false' ng-change="vm.lengthCheck('mainPhone', vm.mainPhone)"
+                                                           required ng-disabled="vm.isSecondAuthRequested"> -
+                                                    <input type="text" style="width:35%;" class="form-control t_center" name="orgMainPhone3" ng-model="vm.orgMainPhone[2]" minlength='4'
+                                                           mask="9999" restrict='reject' limit='true' ng-change="vm.lengthCheck('mainPhone', vm.mainPhone)" required ng-disabled="vm.isSecondAuthRequested">
+                                                </div>
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div> -->
+
+                            <div class="table-responsive voffset4">
+                                <p class="title1">출금정보</p>
+                                <div class="searchBox input4">
+                                    <span class="form-inline" ng-class="{'has-error' : partnerForm2.accountAlias.$invalid}">
+                                        <input type="text" name="accountAlias" class="form-control" ng-model="vm.newW.accountAlias" placeholder="계좌별칭 입력" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" maxlength="10"/>
+                                    </span>
+                                    <span class="form-inline" ng-class="{'has-error' : partnerForm2.bankName.$invalid}">
+                                        <input type="text" name="bankName" class="form-control" ng-model="vm.newW.bankName" placeholder="은행 입력" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" maxlength="10"/>
+                                   </span>
+                                   <span class="form-inline" ng-class="{'has-error' : partnerForm2.accountNumber.$invalid}">
+                                        <input type="text" name="accountNumber" class="form-control" ng-model="vm.newW.accountNumber" placeholder="계좌번호 숫자만 입력" mask="9" repeat="20" minlength="1" maxlength="20" restrict="reject" limit="false" validate="false"/>
+                                    </span>
+                                    <span class="form-inline" ng-class="{'has-error' : partnerForm2.description.$invalid}">
+                                        <input type="text" name="description" class="form-control" ng-model="vm.newW.description" placeholder="설명 입력" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" maxlength="20"/>
+                                    </span>
+                                    <span class="btnBox">
+                                        <button type="button" class="btn-type2" disabled ng-if="partnerForm2.description.$invalid || partnerForm2.accountNumber.$invalid || partnerForm2.bankName.$invalid || partnerForm2.accountAlias.$invalid || !vm.newW.accountAlias || !vm.newW.bankName || !vm.newW.accountNumber">추가</button>
+                                        <button type="button" class="btn-type2" ng-click="vm.addWithdrawal()" ng-if="!(partnerForm2.description.$invalid || partnerForm2.accountNumber.$invalid || partnerForm2.bankName.$invalid || partnerForm2.accountAlias.$invalid || !vm.newW.accountAlias || !vm.newW.bankName || !vm.newW.accountNumber)">추가</button>
+
+                                        <!-- <button type="button" class="btn-type2" ng-click="vm.addWithdrawal()" ng-if=" !(!vm.newW.accountAlias || !vm.newW.bankName || !vm.newW.accountNumber)">추가</button> -->
+                                    </span>
+                                </div>
+                                <!-- <table class="table" style="border:0 !important">
+                                    <colgroup>
+                                        <col style="width:21%">
+                                        <col style="width:20%">
+                                        <col style="width:28%">
+                                        <col/>
+                                        <col style="width:60px"/>
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <td style="border:0" ng-class="{'has-error' : partnerForm2.accountAlias.$error.pattern}">
+                                            <input type="text" name="accountAlias" class="form-control" ng-model="vm.newW.accountAlias" placeholder="계좌별칭 입력" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"/>
+                                        </td>
+                                        <td style="border:0" ng-class="{'has-error' : partnerForm2.bankName.$error.pattern}">
+                                            <input type="text" name="bankName" class="form-control" ng-model="vm.newW.bankName" placeholder="은행 입력" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"/>
+                                        </td>
+                                        <td style="border:0" ng-class="{'has-error' : partnerForm2.accountNumber.$error.pattern}">
+                                           <input type="text" name="accountNumber" class="form-control" ng-model="vm.newW.accountNumber" placeholder="계좌번호 숫자만 입력" number/>
+                                        </td>
+                                        <td style="border:0" ng-class="{'has-error' : partnerForm2.description.$error.pattern}">
+                                            <input type="text" name="description" class="form-control" ng-model="vm.newW.description" placeholder="설명 입력" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"/>
+                                        </td>
+                                        <td style="border:0" class="t_center">
+                                            <button type="button" class="btn btn-xs btn-portal" disabled ng-if="!vm.newW.accountAlias || !vm.newW.bankName || !vm.newW.accountNumber">
+                                                <i class="glyphicon glyphicon-plus"></i> 추가
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-portal" ng-click="vm.addWithdrawal()" ng-if=" !(!vm.newW.accountAlias || !vm.newW.bankName || !vm.newW.accountNumber)">
+                                                <i class="glyphicon glyphicon-plus"></i> 추가
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table> -->
+                            </div>
+                            <div class="table-responsive voffset3">
+                                <table class="table">
+                                    <colgroup>
+                                        <col style="width:21%">
+                                        <col style="width:20%">
+                                        <col style="width:28%">
+                                        <col/>
+                                        <col style="width:121px"/>
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>별칭</th>
+                                        <th>은행</th>
+                                        <th>계좌번호</th>
+                                        <th>설명</th>
+                                        <th>비고</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-if="vm.registerAccount.organization.orgWithdrawals.length > 0" ng-repeat="withdrawal in vm.registerAccount.organization.orgWithdrawals">
+                                        <td>{{withdrawal.accountAlias}}
+                                            <label ng-show="withdrawal.isDefault" class="label label-info" style="cursor:default">기본계좌</label>
+                                        </td>
+                                        <td>{{withdrawal.bankName}}</td>
+                                        <td>{{withdrawal.accountNumber}}</td>
+                                        <td>{{withdrawal.description}}</td>
+                                        <td class="t_center">
+                                            <button type="button" class="btn btn-default btn-xs" ng-if="!withdrawal.isDefault" ng-click="vm.setDefaultWithdrawalAccount(withdrawal)">기본계좌지정</button>
+                                            <button type="button" class="btn btn-default btn-xs pull-right" ng-if="!withdrawal.isDefault" ng-click="vm.delWithdrawal(withdrawal)"><i class="glyphicon glyphicon-minus"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr ng-if="!vm.registerAccount.organization.orgWithdrawals.length">
+                                        <td class="t_center" colspan="5">등록된 출금 계좌가 없습니다.</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="voffset5 table-responsive">
+                                <strong class="title1">
+                                    기관관리자 등록 정보
+                                </strong>
+                                <table class="table table_write">
+                                    <colgroup>
+                                        <col style="width:20%"/>
+                                        <col style="width:80%"/>
+                                    </colgroup>
+                                    <tbody>
+                                    <tr class="form-group">
+                                        <th><label class="required-label">관리자 아이디</label>
+                                        </th>
+                                        <td class="form-inline" ng-class="{'has-error':partnerForm2.userId.$dirty && partnerForm2.userId.$invalid}">
+                                            <input type="text" class="form-control" name="userId"
+                                                   placeholder="영문대소숫자 3~15자"
+                                                   ng-model="vm.registerAccount.login" minlength='3' maxlength='15' limit="true" ng-pattern="/^[-A-Za-z0-9._]*$/" required ng-disabled="vm.isSecondAuthRequested">
+                                            <span ng-show="partnerForm2.userId.$dirty && partnerForm2.userId.$invalid">
+                                            <small class="color_red" ng-show="partnerForm2.userId.$error.required" data-translate="register.messages.validate.login.required">Your userId is required.</small>
+                                            <small class="color_red"
+                                                   ng-if="partnerForm2.userId.$error.minlength || partnerForm2.userId.$error.maxlength">3~15자 이내</small>
+                                            <small class="color_red" ng-show="partnerForm2.userId.$error.pattern" data-translate="register.messages.validate.login.pattern">Your userId can only contain lower-case letters and digits.</small>
+                                        </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="form-group">
+                                        <th><label class="required-label">닉네임</label></th>
+                                        <td class="form-inline">
+                                            <span ng-class="{'has-error':partnerForm2.fullName.$dirty && partnerForm2.fullName.$invalid}">
+                                            <input type="text" class="form-control" name="fullName"
+                                                   ng-model="vm.registerAccount.fullName"
+                                                   placeholder="{{'global.form.username.placeholder' | translate}}"
+                                                   minlength="2" maxlength="30"
+                                                   limit='true' ng-pattern="/^[-가-힣A-Za-z0-9._ ]*$/" required ng-disabled="vm.isSecondAuthRequested">
+                                            </span>
+                                            <!-- <span ng-class="{'has-error':partnerForm2.grade.$dirty && partnerForm2.grade.$invalid}">
+                                            <input type="text" class="form-control" name="grade" ng-model="vm.registerAccount.grade"
+                                                placeholder="{{'global.form.grade' | translate}}"
+                                                minlength="2" maxlength="15" limit='true'  ng-pattern="/^[-가-힣A-Za-z0-9._ ]*$/">
+                                            </span> -->
+                                            <span style="display:inline-block; vertical-align: 8px">
+                                                <small class="color_red" ng-if="partnerForm2.fullName.$error.pattern">(닉네임을 잘못 입력하셨습니다.)</small>
+                                                <small class="color_red" ng-if="partnerForm2.fullName.$error.minlength || form.fullName.$error.maxlength">(2~30자 이내)</small>
+                                            </span>
+                                            <!-- <span style="vertical-align: -8px; margin-left: -225px">
+                                                <small class="color_red" ng-if="partnerForm2.grade.$error.pattern">(직위를 잘못 입력하셨습니다.)</small>
+                                                <small class="color_red" ng-if="partnerForm2.grade.$error.minlength || partnerForm2.grade.$error.maxlength">(2~15자 이내)</small>
+                                            </span> -->
+                                        </td>
+                                    </tr>
+                                    <tr class="form-group">
+                                        <th><label class="required-label" data-translate="global.form.password">New password</label>
+                                        </th>
+                                        <td class="form-inline">
+                                            <span ng-class="{'has-error':partnerForm2.userPassword.$dirty && partnerForm2.userPassword.$invalid}">
+                                            <input autocomplete="off" type="password" class="form-control" name="userPassword"
+                                                   placeholder="영문숫자특수조합8~20" ng-pattern="vm.passwordRegex"
+                                                   ng-model="vm.registerAccount.password" minlength=8 maxlength=20 limit="true" required ng-disabled="vm.isSecondAuthRequested">
+                                            </span>
+                                            <span ng-class="{'has-error':vm.registerAccount.password && vm.registerAccount.password != vm.confirmPassword}">
+                                            <input autocomplete="off" type="password" class="form-control" name="userConfirmPassword"
+                                                   placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
+                                                   ng-model="vm.confirmPassword" required ng-disabled="vm.isSecondAuthRequested">
+                                            </span>
+                                            <span ng-show="partnerForm2.userPassword.$dirty">
+                                                <small ng-show="partnerForm2.userPassword.$error.required" data-translate="global.messages.validate.newpassword.required"
+                                                       class="color_red">Your password is required.</small>
+                                                <small class="color_red"
+                                                       ng-if="partnerForm2.userPassword.$error.minlength || partnerForm2.userPassword.$error.maxlength || partnerForm2.userPassword.$error.pattern">(영문숫자특수조합 8~20자 이내)</small>
+                                                <small ng-show="vm.registerAccount.password && vm.registerAccount.password != vm.confirmPassword" class="color_red">비밀번호가 같지 않습니다.</small>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="form-group" ng-class="{'has-error':partnerForm2.email.$dirty && partnerForm2.email.$invalid}">
+                                        <th><label class="required-label" data-translate="global.form.email">E-mail</label>
+                                        </th>
+                                        <td class="form-inline">
+                                            <span ng-class="{'has-error':partnerForm2.emailFirst.$dirty && partnerForm2.emailFirst.$invalid}">
+                                                <input type="text" class="form-control" name="emailFirst" placeholder="이메일 아이디"
+                                                       ng-model="vm.email[0]" ng-pattern="/^[-A-Za-z0-9._]*$/" required ng-disabled="vm.isSecondAuthRequested" ng-change="vm.lengthCheck('email', vm.email)"> @
+                                            </span>
+                                            <span ng-class="{'has-error':partnerForm2.emailSecond.$dirty && partnerForm2.emailSecond.$invalid}">
+                                                <input type="text" class="form-control" name="emailSecond" placeholder="도메인"
+                                                       ng-model="vm.email[1]" ng-pattern="/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/" ng-trim="false" required ng-disabled="vm.isSecondAuthRequested"
+                                                       ng-change="vm.lengthCheck('email', vm.email)">
+                                            </span>
+                                            <select class="form-control" ng-model="vm.email[1]" ng-disabled="vm.isSecondAuthRequested"
+                                                    ng-options="domain for domain in vm.domainOptions track by domain" ng-change="vm.lengthCheck('email', vm.email)">
+                                                <option value="">- 직접 입력 -</option>
+                                            </select>
+                                            <!-- <p ng-show="partnerForm2.emailFirst.$dirty || partnerForm2.emailSecond.$dirty">
+                                                <small class="color_red" ng-show="partnerForm2.emailFirst.$error.required || partnerForm2.emailFirst.$error.required" data-translate="global.messages.validate.email.required">Your e-mail is required.</small>
+                                                <small class="color_red" ng-show="partnerForm2.emailFirst.$error.pattern || partnerForm2.emailSecond.$error.pattern" data-translate="global.messages.validate.email.invalid">Your e-mail is invalid.</small>
+                                            </p> -->
+                                        </td>
+                                    </tr>
+                                    <tr class="form-group">
+                                        <th><label>전화번호</label> </th>
+                                        <td class="form-inline">
+                                            <select class="form-control" name="mainPhone" ng-model="vm.mainPhone[0]" ng-options="num for num in vm.districtNums track by num">
+                                                <option value="">선택</option>
+                                            </select> -
+                                            <input type="text" class="form-control t_center" name="mainPhone" ng-model="vm.mainPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' > -
+                                            <input type="text" class="form-control t_center" name="mainPhone" ng-model="vm.mainPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true'>
+                                        </td>
+                                    </tr>
+                                    <tr class="form-group">
+                                        <th><label class="required-label">휴대폰번호</label></th>
+                                        <td class="form-inline" ng-class="{'has-error' : partnerForm2.cellPhone2.$error.minlength || partnerForm2.cellPhone3.$error.minlength}">
+                                            <div class="">
+                                                <select class="form-control" name="cellPhone1" ng-model="vm.cellPhone[0]" ng-options="num for num in vm.cellIdentifyingNums track by num" ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required ng-disabled="vm.isSecondAuthRequested">
+                                                    <option value="">선택</option>
+                                                </select> -
+                                                <input type="text" class="form-control t_center" name="cellPhone2" ng-model="vm.cellPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required ng-disabled="vm.isSecondAuthRequested"> -
+                                                <input type="text" class="form-control t_center" name="cellPhone3" ng-model="vm.cellPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' validate='false' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required ng-disabled="vm.isSecondAuthRequested">
+                                                <span>
+                                                    <small class="color_red" ng-if="!vm.cellPhone[0] && vm.cellPhone[1] || !vm.cellPhone[0] && vm.cellPhone[2]">(통신사 번호를 선택바랍니다.)</small>
+                                                    <small class="color_red" ng-if="partnerForm2.cellPhone2.$error.minlength">(앞번호 3자이상 입력바랍니다.)</small>
+                                                    <small class="color_red" ng-if="partnerForm2.cellPhone3.$error.minlength">(뒷번호 4자리 입력바랍니다.)</small>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="form-group">
+                                        <th><label class="required-label">SMS 인증</label></th>
+                                        <td class="form-inline">
+                                            <div ng-if="!vm.authSuccess">
+                                                <input type="text" class="form-control" style="width:40%" name="authNumber" ng-model="vm.authNumber" ng-readonly="!vm.isSecondAuthRequested" ng-required="vm.isSecondAuthRequested"
+                                                    placeholder = "{{vm.isSecondAuthRequested? '인증번호를 입력하고 전송하십시오.' : '먼저 인증번호를 받으십시오'}}"/>
+                                                <button type="button" ng-hide="!vm.authSuccess && vm.isSecondAuthRequested" ng-disabled="partnerForm2.$invalid || !vm.providerChecked || vm.registerAccount.password != vm.confirmPassword" class="btn-type2 color_666" ng-click="vm.secondaryAuth()">인증번호 받기</button>
+                                                <button type="button" ng-show="!vm.authSuccess && vm.isSecondAuthRequested" class="btn-type2 btn-danger" ng-click="vm.secondaryAuthCheck()">인증번호 전송</button>
+                                                <span style="margin-left:10px" ng-hide="!vm.isSecondAuthRequested">남은시간 : <span class="color_red">[{{vm.msecPerMinute | date: 'mm:ss'}}]</span></span>
+                                            </div>
+                                            <span ng-if="vm.authSuccess"><i class="glyphicon glyphicon-ok"></i> 인증완료</span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        </form>
+                        <div ng-if="!vm.searchResult && vm.agreeToPortalTermsForUsers  && vm.agreeToAgreeform" class="voffset5">
+                            <strong class="title1">
+                                기관인증자료 업로드(법인 및 사업자등록증, 통장사본 등)
+                                <button uib-popover-template="fileUploadHelpPopover.all"
+                                    popover-trigger = "mouseenter"
+                                    type="button"
+                                    class="file-upload-helppop">?
+                                </button>
+                            </strong>
+
+                            <form id="fileForm">
+                                <div ng-repeat="file in vm.files" id="inputFile{{$index}}" class="file-style-form">
+                                    <input id="hiddenInputFile-{{$index}}" class="form-control file-input" type="file" name="hiddenInputFile-{{$index}}" onchange="angular.element(this).scope().addFileInput(event)" ng-hide="true"/>
+                                    <div class="input-group">
+                                        <input id="viewInputFile{{$index}}" type="text" class="form-control" name="viewInputFile" placeholder="파일을 선택하세요" disabled>
+                                        <span class="input-group-btn">
+                                            <button ng-if="!file.data || vm.files.length==1" class="btn btn-default file-btn" type="button" ng-click="vm.deletion=false; vm.selectFile($index);">
+                                                <i class="glyphicon glyphicon-search"></i>
+                                            </button>
+                                            <button ng-if="file.data" class="btn btn-danger file-btn" type="button" ng-click="vm.deletion=true; vm.delInput($index, vm.files);">
+                                                <i class="glyphicon glyphicon-minus"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- <form id="fileForm">
+                            <label class="voffset4">첨부파일</label>
+                            <div style="background-color:#f6f6f6; border-radius:5px; width:97%; margin:10px; padding:5px 0px 18px 5px">
+                                <input style="width:100%; margin-left:20px" class="voffset2" type="file" id="file1" name="file1"/>
+                            </div>
+                        </form> -->
+                    <div ng-show="!vm.searchResult && vm.agreeToPortalTermsForUsers  && vm.agreeToAgreeform">
+                        <!-- <div class="form-group form-inline voffset4">
+                            <span id="captcha3"></span>
+                            <div class="input-group">
+                                <input class="form-control" style="width:175px" placeholder="왼쪽문자를 입력하세요." type="text" ng-model="vm.registerAccount.answer"/>
+                                <div class="input-group-addon btn" id="reLoad3"><i class="glyphicon glyphicon-refresh"></i></div>
+                            </div>
+                        </div> -->
+                        <div class="btn-center-wrap">
+                            <button type="button" class="btn-type1 just_left" ng-click="vm.init.afterRegister()">다시검색</button>
+                            <button class="btn-type1 just_right" ng-click="vm.register()" ng-disabled="!vm.authSuccess || !vm.providerChecked || vm.lengthChecked || partnerForm2.$invalid || (vm.mainPhone[0] && vm.mainPhone.length !=3) || (vm.corpRegNumber[0] && vm.corpRegNumber.length !=2) || (vm.licenseNumber[0] && vm.licenseNumber.length !=3) || (vm.registerAccount.password != vm.confirmPassword)">
+                                저장
+                            </button>
+                            <!-- <button class="btn btn-danger btn-lg" ng-click="vm.secondaryAuth()" ng-disabled="!vm.providerChecked || vm.lengthChecked || partnerForm2.$invalid || (vm.mainPhone[0] && vm.mainPhone.length !=3) || (vm.corpRegNumber[0] && vm.corpRegNumber.length !=2) || (vm.licenseNumber[0] && vm.licenseNumber.length !=3) || (vm.registerAccount.password != vm.confirmPassword)">
+                                저장
+                            </button> -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <div ng-tab-body class="provide_organ">
+                    <form name="providerForm" role="form" novalidate style="overflow:hidden;">
+                        <p class="title1">제공기관소속 사용자의 회원가입 절차 안내</p>
+                        <div class="box_wrap">
+                            <ul class="proceed">
+                                <li>
+                                    <div class="left_side"><p class="number">1</p></div>
+                                    <div class="right_side">
+                                        <div class="top_cont">아래의 Market 이용 및 개인정보 이용 안내를 읽고 동의를 체크하면 사용자 계정정보 입력이 가능합니다.</div>
+                                        <div class="bot_cont"></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left_side"><p class="number">2</p></div>
+                                    <div class="right_side">
+                                        <div class="top_cont">신청자 본인의 기본 정보를 입력하고 저장하면 해당 기관 관리자에게 승인요청알림 문자가 전송됩니다.</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left_side"><p class="number">3</p></div>
+                                    <div class="right_side">
+                                        <div class="top_cont">해당 기관 관리자의 승인/반려 결정 즉시 신청자 본인에게 승인결과알림 문자가 전송됩니다.</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="left_side"><p class="number">4</p></div>
+                                    <div class="right_side">
+                                        <div class="top_cont">관리자의 승인을 받은 신청자는 가입신청시 작성한 아이디와 비밀번호를 이용해서 Market에 로그인할 수 있습니다.</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- <ul class="voffset2">
+                            <li style="color: #545045">&emsp;1. 아래의 Market 이용 및 개인정보 이용 안내를 읽고 동의를 체크하면 사용자 계정정보 입력이 가능합니다.</li>
+                            <li style="color: #545045">&emsp;2. 신청자 본인의 기본 정보를 입력하고 저장하면 해당 기관 관리자에게 승인요청알림 문자가 전송됩니다.</li>
+                            <li style="color: #545045">&emsp;3. 해당 기관 관리자의 승인/반려 결정 즉시 신청자 본인에게 승인결과알림 문자가 전송됩니다.</li>
+                            <li style="color: #545045">&emsp;4. 관리자의 승인을 받은 신청자는 가입신청시 작성한 아이디와 비밀번호를 이용해서 포탈에 로그인할 수 있습니다.</li>
+                        </ul> -->
+
+                        <div class="form-group voffset5" style="overflow:hidden">
+                            <p class="title1">
+                                Open API Market 이용안내
+                            </p>
+                            <div id="portalTermsForUsers1" class="intro-box-form form-control ql-editor" readonly></div>
+                            <span class="pull-right new-form-group">
+                                <input type="checkbox" id="userAgreeToPortalTerms" ng-model="vm.agreeToPortalTermsForUsers"/>
+                                <label for="userAgreeToPortalTerms" class="agree-check"><strong>상기 이용안내에 동의합니다. (필수)</strong></label>
+                            </span>
+                        </div>
+                        <div class="form-group voffset2" style="overflow:hidden;">
+                            <p class="title1">개인정보 수집 및 이용에 대한 안내
+                            </p>
+                            <div id="agreeformForUsers1" class="intro-box-form form-control ql-editor" readonly></div>
+                            <span class="pull-right new-form-group">
+                                <input type="checkbox" id="agreeToAgreeform" ng-model="vm.agreeToAgreeform"/>
+                                <label for="agreeToAgreeform" class="agree-check"><strong>상기 이용안내에 동의합니다. (필수)</strong></label>
+                            </span>
+                        </div>
+
+                        <div class="table-responsive" ng-if="vm.agreeToPortalTermsForUsers && vm.agreeToAgreeform">
+
+                            <strong class="title1">
+                                계정정보 입력
+                            </strong>
+                            <table class="table table_write">
+                                <colgroup>
+                                    <col style="width:20%"/>
+                                    <col style="width:80%"/>
+                                </colgroup>
+                                <tbody>
+                                <tr class="form-group" ng-class="{'has-error':providerForm.userId.$dirty && providerForm.userId.$invalid}">
+                                    <th><label class="required-label" data-translate="global.form.userId">UserId</label>
+                                    </th>
+                                    <td class="form-inline">
+                                        <input type="text" class="form-control" name="userId" placeholder="영문대소숫자 3~15자"
+                                               ng-model="vm.registerAccount.login" minlength='3' maxlength='15' limit="true" ng-pattern="/^[-A-Za-z0-9._]*$/" required ng-disabled="vm.isSecondAuthRequested" ng-disabled="vm.isSecondAuthRequested">
+                                        <span ng-show="providerForm.userId.$dirty && providerForm.userId.$invalid">
+                                            <small ng-show="providerForm.userId.$error.required" data-translate="register.messages.validate.login.required" class="color_red">Your username is required.</small>
+                                            <small class="color_red" ng-if="providerForm.userId.$error.minlength || providerForm.userId.$error.maxlength">(3~15자 이내)</small>
+                                            <small ng-show="providerForm.userId.$error.pattern" data-translate="register.messages.validate.login.pattern" class="color_red">Your username can only contain lower-case letters and digits.</small>
+                                        </span>
+                                        <!-- <button type="button" ng-if="!vm.userIdSuccess" class="btn btn-default btn-xs" ng-click="vm.checkingDuplication('userId')">중복체크</button>
+                                        <span ng-if="vm.userIdSuccess"> <i class="glyphicon glyphicon-ok"></i> 사용하셔도 좋습니다.</span> -->
+                                    </td>
+                                </tr>
+                                <tr class="form-group">
+                                    <th><label class="required-label">닉네임</label></th>
+                                    <td class="form-inline">
+                                        <span ng-class="{'has-error':providerForm.fullName.$dirty && providerForm.fullName.$invalid}">
+                                        <input type="text" class="form-control" name="fullName"
+                                               ng-model="vm.registerAccount.fullName"
+                                               placeholder="{{'global.form.username.placeholder' | translate}}"
+                                               minlength="2" maxlength="30"
+                                               limit='true' ng-pattern="/^[-가-힣A-Za-z0-9._ ]*$/" required ng-disabled="vm.isSecondAuthRequested">
+                                        </span>
+                                        <!-- <span ng-class="{'has-error':providerForm.grade.$dirty && providerForm.grade.$invalid}">
+                                        <input type="text" class="form-control" name="grade" ng-model="vm.registerAccount.grade"
+                                            placeholder="{{'global.form.grade' | translate}}"
+                                            minlength="2" maxlength="15" limit='true'  ng-pattern="/^[-가-힣A-Za-z0-9._ ]*$/">
+                                        </span> -->
+                                        <span style="display:inline-block; width:222px; vertical-align: 8px">
+                                            <small class="color_red" ng-if="providerForm.fullName.$error.pattern">(닉네임을 잘못 입력하셨습니다.)</small>
+                                            <small class="color_red" ng-if="providerForm.fullName.$error.minlength || form.fullName.$error.maxlength">(2~30자 이내)</small>
+                                        </span>
+                                        <!-- <span style="vertical-align: -8px; margin-left: -225px">
+                                            <small class="color_red" ng-if="providerForm.grade.$error.pattern">(직위를 잘못 입력하셨습니다.)</small>
+                                            <small class="color_red" ng-if="providerForm.grade.$error.minlength || providerForm.grade.$error.maxlength">(2~15자 이내)</small>
+                                        </span> -->
+                                    </td>
+                                </tr>
+                                <!-- <tr class="form-group">
+                                    <th><label for="grade" data-translate="global.form.grade">직위</label> </th>
+                                    <td class="form-inline">
+                                        <input type="text" class="form-control" id="grade" name="grade" ng-model="vm.registerAccount.grade"
+                                            placeholder="{{'global.form.grade' | translate}}"
+                                            minlength="2" maxlength="15" limit='true'  ng-pattern="/^[-가-힣A-Za-z0-9._ ]*$/">
+                                        <span>
+                                            <small class="color_red" ng-if="providerForm.grade.$error.pattern">(잘못 입력하셨습니다.)</small>
+                                            <small class="color_red" ng-if="providerForm.grade.$error.minlength || providerForm.grade.$error.maxlength">(2~15자 이내)</small>
+                                        </span>
+                                    </td>
+                                </tr> -->
+                                <tr class="form-group">
+                                    <th><label class="required-label" data-translate="global.form.password">New password</label>
+                                    </th>
+                                    <td class="form-inline">
+                                        <span ng-class="{'has-error':providerForm.userPassword.$dirty && providerForm.userPassword.$invalid}">
+                                        <input autocomplete="off" type="password" class="form-control" name="userPassword"
+                                               placeholder="영문숫자특수조합8~20" ng-pattern="vm.passwordRegex"
+                                               ng-model="vm.registerAccount.password" minlength=8 maxlength=20 limit="true" required ng-disabled="vm.isSecondAuthRequested">
+                                        </span>
+                                        <span ng-class="{'has-error':vm.registerAccount.password && vm.registerAccount.password != vm.confirmPassword}">
+                                        <input autocomplete="off" type="password" class="form-control" name="userConfirmPassword"
+                                               placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
+                                               ng-model="vm.confirmPassword" required ng-disabled="vm.isSecondAuthRequested">
+                                        </span>
+                                        <span ng-show="providerForm.userPassword.$dirty">
+                                            <small ng-show="providerForm.userPassword.$error.required" data-translate="global.messages.validate.newpassword.required"
+                                                   class="color_red">Your password is required.</small>
+                                            <small class="color_red"
+                                                   ng-if="providerForm.userPassword.$error.minlength || providerForm.userPassword.$error.maxlength || providerForm.userPassword.$error.pattern">(영문숫자특수조합 8~20자 이내)</small>
+                                            <small ng-show="vm.registerAccount.password && vm.registerAccount.password != vm.confirmPassword" class="color_red">비밀번호가 같지 않습니다.</small>
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr class="form-group">
+                                    <th><label class="required-label" data-translate="global.form.email">E-mail</label>
+                                    </th>
+                                    <td class="form-inline">
+                                        <span ng-class="{'has-error':providerForm.userEmailFirst.$dirty && providerForm.userEmailFirst.$invalid}">
+                                            <input type="text" class="form-control" id="userEmailFirst" name="userEmailFirst" placeholder="이메일 아이디"
+                                                   ng-model="vm.email[0]" ng-pattern="/^[-A-Za-z0-9._]*$/" required ng-disabled="vm.isSecondAuthRequested" ng-change="vm.lengthCheck('email', vm.email)"> @
+                                        </span>
+                                        <span ng-class="{'has-error':providerForm.userEmailSecond.$dirty && providerForm.userEmailSecond.$invalid}">
+                                            <input type="text" class="form-control" id="userEmailSecond" name="userEmailSecond" placeholder="shinhan.com"
+                                                   ng-model="vm.email[1]" ng-pattern="/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/" ng-trim="false" ng-disabled="vm.isSecondAuthRequested">
+                                        </span>
+                                        <!-- <p ng-show="providerForm.userEmailFirst.$dirty || providerForm.userEmailSecond.$dirty">
+                                            <small ng-show="providerForm.userEmailFirst.$error.required" data-translate="global.messages.validate.email.required" class="color_red">Your e-mail is required.</small>
+                                            <small ng-show="providerForm.userEmailFirst.$error.pattern || providerForm.userEmailSecond.$error.pattern" data-translate="global.messages.validate.email.invalid" class="color_red">Your e-mail is invalid.</small>
+                                        </p> -->
+                                        <!-- <button type="button" ng-if="!vm.emailSuccess" class="btn btn-default btn-xs" ng-click="vm.checkingDuplication('email')">중복체크</button>
+                                        <span ng-if="vm.emailSuccess"> <i class="glyphicon glyphicon-ok"></i> 사용하셔도 좋습니다.</span> -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><label class="required-label">소속기관</label>
+                                    </th>
+                                    <td class="form-inline">
+                                        <select id="userProvider" class="form-control" name="org" ng-model="vm.registerAccount.organization"
+                                                ng-options="organization.name for organization in vm.providers track by organization.name" required ng-disabled="vm.isSecondAuthRequested">
+                                            <option value="">- 필수 선택 -</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="form-group">
+                                    <th><label>전화번호</label> </th>
+                                    <td class="form-inline">
+                                        <select class="form-control" name="mainPhone" ng-model="vm.mainPhone[0]" ng-options="num for num in vm.districtNums track by num">
+                                            <option value="">선택</option>
+                                        </select> -
+                                        <input type="text" class="form-control t_center" name="mainPhone" ng-model="vm.mainPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' > -
+                                        <input type="text" class="form-control t_center" name="mainPhone" ng-model="vm.mainPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true'>
+                                    </td>
+                                </tr>
+                                <tr class="form-group">
+                                    <th><label class="required-label">휴대폰번호</label></th>
+                                    <td class="form-inline" ng-class="{'has-error' : providerForm.cellPhone2.$error.minlength || providerForm.cellPhone3.$error.minlength}">
+                                        <select class="form-control" name="cellPhone1" ng-model="vm.cellPhone[0]" ng-options="num for num in vm.cellIdentifyingNums track by num" ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required ng-disabled="vm.isSecondAuthRequested">
+                                            <option value="">선택</option>
+                                        </select> -
+                                        <input type="text" class="form-control t_center" name="cellPhone2" ng-model="vm.cellPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required ng-disabled="vm.isSecondAuthRequested"> -
+                                        <input type="text" class="form-control t_center" name="cellPhone3" ng-model="vm.cellPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' validate='false' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required ng-disabled="vm.isSecondAuthRequested">
+                                        <span>
+                                            <small class="color_red" ng-if="!vm.cellPhone[0] && vm.cellPhone[1] || !vm.cellPhone[0] && vm.cellPhone[2]">(통신사 번호를 선택바랍니다.)</small>
+                                            <small class="color_red" ng-if="providerForm.cellPhone2.$error.minlength">(앞번호 3자이상 입력바랍니다.)</small>
+                                            <small class="color_red" ng-if="providerForm.cellPhone3.$error.minlength">(뒷번호 4자리 입력바랍니다.)</small>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="form-group">
+                                    <th><label class="required-label">SMS 인증</label></th>
+                                    <td class="form-inline">
+                                        <div ng-if="!vm.authSuccess">
+                                            <input type="text" class="form-control" style="width:40%" name="authNumber" ng-model="vm.authNumber" ng-readonly="!vm.isSecondAuthRequested" ng-required="vm.isSecondAuthRequested"
+                                                placeholder = "{{vm.isSecondAuthRequested? '인증번호를 입력하고 전송하십시오.' : '먼저 인증번호를 받으십시오'}}"/>
+                                            <button type="button" ng-hide="!vm.authSuccess && vm.isSecondAuthRequested" ng-disabled="providerForm.$invalid || vm.registerAccount.password != vm.confirmPassword" class="btn-type2 color_666" ng-click="vm.secondaryAuth()">인증번호 받기</button>
+                                            <button type="button" ng-show="!vm.authSuccess && vm.isSecondAuthRequested" class="btn-type2 btn-danger" ng-click="vm.secondaryAuthCheck()">인증번호 전송</button>
+                                            <span style="margin-left:10px" ng-hide="!vm.isSecondAuthRequested">남은시간 : <span class="color_red">[{{vm.msecPerMinute | date: 'mm:ss'}}]</span></span>
+                                        </div>
+                                        <span ng-if="vm.authSuccess"><i class="glyphicon glyphicon-ok"></i> 인증완료</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="btn-center-wrap type2" ng-show="vm.agreeToPortalTermsForUsers && vm.agreeToAgreeform">
+                            <!-- <div class="form-group form-inline voffset4">
+                                <span id="captcha1"></span>
+                                <div class="input-group">
+                                    <input class="form-control" style="width:175px" placeholder="왼쪽문자를 입력하세요." type="text" ng-model="vm.registerAccount.answer"/>
+                                    <div class="input-group-addon btn" id="reLoad1"><i class="glyphicon glyphicon-refresh"></i></div>
+                                </div>
+                            </div> -->
+
+                            <div class="">
+                                <button class="btn-type1 just_right" ng-click="vm.register()" ng-disabled="!vm.authSuccess || !vm.agreeToPortalTermsForUsers || providerForm.$invalid || (vm.registerAccount.password != vm.confirmPassword)">저장</button>
+<!--                                 <button class="btn btn-portal btn-lg" ng-click="vm.secondaryAuth()" ng-disabled="!vm.agreeToPortalTermsForUsers || providerForm.$invalid || (vm.registerAccount.password != vm.confirmPassword)">저장</button> -->
+                            </div>
+                        </div>
+                        <div class="list-group" ng-if="emailEnabled">
+                            <div class="list-group-item voffset4">
+                                <label class="control-label voffset2">인증코드 입력</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="activateKey" name="activateKey" placeholder="이메일로 전송된 인증코드를 입력하세요."
+                                           ng-model="vm.activateKey" required>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-danger" ng-click="vm.checkActivateKey()" ng-disabled="!vm.activateKey">전송</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+

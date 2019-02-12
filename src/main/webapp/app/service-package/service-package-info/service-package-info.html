@@ -1,0 +1,184 @@
+<div class="row wrap">
+    <div ng-if="vm.$rootScope.contentId !=-1" class="col-md-12 mb-5">
+        <!-- <h2><strong>{{vm.contents.title}}</strong></h2> -->
+
+        <!-- <uib-tabset active="active">
+            <uib-tab index="0" heading="소개" ng-click="vm.clickTab()">
+                <div class="voffset4" style="margin-left:20px"></div>
+            </uib-tab>
+            <uib-tab index="1" heading="API 그룹보기" ng-click="vm.clickTab()">
+                <div class="voffset4" style="margin-left:20px"></div>
+            </uib-tab>
+        </uib-tabset> -->
+
+        <div id="contentsBody" class="ql-editor service"></div>
+        <!-- <div ng-show="vm.show2"> -->
+        <div ng-if="vm.contents.apiGroups && vm.contents.apiGroups.length > 0">
+            <!-- <button class="btn btn-info btn-show-apiGroups voffset4" ng-click="vm.showApiGroups = !vm.showApiGroups">API 그룹 자세히 보기&nbsp;
+                <i ng-class="vm.showApiGroups? 'glyphicon glyphicon-minus' : 'glyphicon glyphicon-plus'"></i>
+            </button> -->
+            <div class="table-responsive voffset5">
+                <table class="table tableFixed">
+                    <colgroup>
+                        <col style="width:23%"/>
+                        <col/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>API 그룹</th>
+                        <th>API 목록</th>
+                    </tr>
+                    </thead>
+                    <tbody class="t_left service-package-info">
+                        <tr ng-repeat="group in vm.contents.apiGroups | orderBy : ['organization.name', 'name']">
+                            <td>
+                                <div ng-class="vm.selectedGroup.id==group.id? 'btn-border' : 'btn-no-border'" >
+                                    <small class="color_red">[{{group.organization.name}}]</small> {{group.name}}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="table_title_btn type2 un_private" ng-repeat="api in group.apis" ng-click="vm.showDetailApi(api)" title="{{api.description}}">
+                                    {{api.name}}
+                                </div>
+                                <!-- <button ng-repeat="api in group.apis" ng-if="group.apis.length > 0" class="btn btn-info btn-md" style="width:49.6%; margin:1px; padding: 2px 10px; text-align:left" ng-click="vm.showDetailApi(api)">
+                                    <span tooltip-placement="top" uib-tooltip="{{api.description}}">{{api.name}}</span>
+                                </button> -->
+                            </td>
+                        </tr>
+                    <!-- <tr>
+                        <td>
+                            <div ng-click="vm.showGroup(group)" ng-class="vm.selectedGroup.id==group.id? 'btn-border' : 'btn-no-border'" ng-repeat="group in vm.contents.apiGroups | orderBy : ['organization.name', 'name']">
+                                <small class="color_red">[{{group.organization.name}}]</small> {{group.name}}
+                            </div>
+                        </td>
+                        <td>
+                            <button ng-repeat="api in vm.selectedGroup.apis" class="btn btn-info btn-md" style="width:49.6%; margin:1px; padding: 2px 10px; text-align:left" ng-click="vm.showDetailApi(api)">
+                                <span tooltip-placement="top" uib-tooltip="{{api.description}}">{{api.name}}</span>
+                            </button>
+                        </td>
+                    </tr> -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div ng-show="vm.$rootScope.contentId==-1" class="col-md-12">
+        <h2><strong><span data-translate="global.menu.service-package-open.main">서비스</span> 조회</strong>
+        </h2>
+
+
+        <!-- <h2><strong>서비스 패키지 조회{{vm.searchResultList? ' 결과': ''}}</strong>
+            <button ng-if="!vm.searchResultList" class="btn btn-danger btn-xs search-btn" ng-click="vm.searchCategories()">
+                <i class="glyphicon glyphicon-search"></i> 조회하기
+            </button>
+            <button ng-if="vm.searchResultList" class="btn btn-info btn-xs search-btn" ng-click="vm.searchTableOpen()">
+                <i class="glyphicon glyphicon-search"></i> 조회테이블 열기
+            </button>
+        </h2> -->
+        <!-- <div ng-if="vm.searchResultList" >
+            <div class="col-md-2" ng-repeat="result in vm.searchResultList">
+                <button class="btn btn-default" style="width:100%; height:100px; border-radius:4px" ng-click="vm.gotoContents(result)">{{result.title}}</button>
+            </div>
+            <div ng-if="!vm.searchResultList.length">조건에 맞는 서비스패키지가 없습니다.</div>
+        </div> -->
+
+        <!-- 임시 주석 처리 -->
+        <!-- <table class="table tableFixed table-i-left service-table"> -->
+            <!-- <thead>
+                <tr>
+                    <th class="t_center"><label for="checkAll1" style="vertical-align: -3px;">첫번째 분류</label><input id="checkAll1" type="checkbox" class="check-all" ng-model="vm.allChecking1" ng-click="vm.checkAll('1')"></th>
+                    <th class="t_center"><label for="checkAll2" style="vertical-align: -3px;">두번째 분류</label><input id="checkAll2" type="checkbox" class="check-all" ng-model="vm.allChecking2" ng-click="vm.checkAll('2')"></th>
+                    <th class="t_center"><label for="checkAll3" style="vertical-align: -3px;">세번째 분류</label><input id="checkAll3" type="checkbox" class="check-all" ng-model="vm.allChecking3" ng-click="vm.checkAll('3')"></th>
+                </tr>
+            </thead> -->
+            <!-- <tbody>
+            <tr>
+                <td>
+                    <div class="input-group" ng-style="!$last && {'margin-bottom' : '5px'}" ng-repeat="category in vm.allCategories | filter: {classifyNumber: '1'} as list1" ng-click="vm.checkOneCategory(category, '1')">
+                        <span class="form-control input-sm"><i ng-if="category.checked" class="glyphicon glyphicon-ok"></i></span>
+                        <span class="input-group-btn">
+                            <button class="btn btn-info btn-xs input-sm-addon">
+                                {{category.name}}
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-if="!list1.length" style="text-align:center; color:#999">항목이 존재하지 않습니다.</div>
+                </td>
+                <td>
+                    <div class="input-group" style="width:100%" ng-style="!$last && {'margin-bottom' : '5px'}" ng-repeat="category in vm.allCategories | filter: {classifyNumber: '2'} as list2" ng-click="vm.checkOneCategory(category, '2')">
+                        <span class="form-control input-sm"><i ng-if="category.checked" class="glyphicon glyphicon-ok"></i></span>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-xs input-sm-addon">
+                                {{category.name}}
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-if="!list2.length" style="text-align:center; color:#999">항목이 존재하지 않습니다.</div>
+                </td>
+                <td>
+                    <div class="input-group" ng-style="!$last && {'margin-bottom' : '5px'}" ng-repeat="category in vm.allCategories | filter: {classifyNumber: '3'} as list3" ng-click="vm.checkOneCategory(category, '3')">
+                        <span class="form-control input-sm"><i ng-if="category.checked" class="glyphicon glyphicon-ok"></i></span>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-xs input-sm-addon">
+                                {{category.name}}
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-if="!list3.length" style="text-align:center; color:#999">항목이 존재하지 않습니다.</div>
+                </td>
+            </tr>
+            </tbody>
+        </table> -->
+        <div class="newServiceList">
+            <div class="groupWrapping">
+                <p class="groupWrapTitle">{{vm.serviceCategoryTitles[0]}}</p>
+                <ul class="serviceWrap">
+                    <li ng-class="{'on' : category.checked}" class="serviceLi" ng-repeat="category in vm.allCategories | filter: {classifyNumber: '1'} as list1" ng-click="vm.checkOneCategory(category, '1')">
+                        <button class="serviceBtn">{{category.name}}</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="groupWrapping">
+                <p class="groupWrapTitle">{{vm.serviceCategoryTitles[1]}}</p>
+                <ul class="serviceWrap">
+                    <li ng-class="{'on' : category.checked}" class="serviceLi" ng-repeat="category in vm.allCategories | filter: {classifyNumber: '2'} as list2" ng-click="vm.checkOneCategory(category, '2')">
+                        <button class="serviceBtn">{{category.name}}</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="groupWrapping">
+                <p class="groupWrapTitle">{{vm.serviceCategoryTitles[2]}}</p>
+                <ul class="serviceWrap">
+                    <li ng-class="{'on' : category.checked}" class="serviceLi" ng-repeat="category in vm.allCategories | filter: {classifyNumber: '3'} as list3" ng-click="vm.checkOneCategory(category, '3')">
+                        <button class="serviceBtn">{{category.name}}</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="searchArea">
+                <!-- <button class="btn-type2 btn-init" ng-disabled="vm.serviceInit2();" ng-click="vm.serviceBtnAll()">
+                    전체선택
+                </button> -->
+                <button class="btn-type2 btn-init color_666" ng-disabled="vm.serviceInit();" ng-click="vm.serviceBtnReset()">
+                    초기화
+                </button>
+                <button class="btn btn-xs search-btn" ng-click="vm.searchCategories()">
+                    검색
+                </button>
+            </div>
+        </div>
+        <p class="totalTitleSentence">총 <span>{{totalSearchList.length}}</span>개의 서비스가 존재합니다.</p>
+        <ul ng-show="vm.searchResultList" class="voffset5 apiCardList">
+<!--             <span>{{vm.resultTitle}}</span> -->
+            <li class="" ng-repeat="result in vm.searchResultList as totalSearchList">
+                <a href="" class="" ng-click="vm.gotoContents(result)">
+                    <!-- <span class="serviceNum">{{("0" + ($index + 1)).substr(-2,2)}}</span> -->
+                    <div class="apiImg" id="serviceIcon{{result.id}}" ng-bind-html="result.contentsIcon"></div>
+                    <p class="serviceTitle">{{result.title}}</p>
+                    <div class="serviceSentence-container">
+                        <p ng-if="$index < 3" class="serviceSentence" ng-repeat="s in result.splitSentences">{{s.sentence}}</p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

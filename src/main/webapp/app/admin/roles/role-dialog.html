@@ -1,0 +1,54 @@
+<jhi-alert></jhi-alert>
+<form name="form" role="form" ng-submit="vm.save()" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" ng-click="vm.clear()"></button>
+        <h4 class="modal-title" id="myUserLabel"
+            data-translate="roleManagement.{{vm.mode}}.title">Title</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="control-label required-label" data-translate="roleManagement.register.name">name</label>
+            <small class="color_red" ng-if="form.roleName.$error.minlength || form.roleName.$error.maxlength">(3~15자 이내)</small>
+            <small class="color_red" ng-if="form.roleName.$error.pattern">(잘못 입력하셨습니다.)</small>
+            <input type="text" class="form-control" name="roleName" ng-model="vm.role.name" minlength="3" maxlength="15" limit='true' ng-pattern="/^[-가-힣A-Za-z0-9._ ]+$/" required>
+        </div>
+        <div class="form-group">
+            <label for="roleDescription" class="control-label required-label" data-translate="roleManagement.register.description">설명</label>
+            <small class="color_red" ng-if="form.roleDescription.$error.minlength || form.roleDescription.$error.maxlength">(100자 이내)</small>
+            <small class="color_red" ng-if="form.roleDescription.$error.pattern">(잘못 입력하셨습니다.)</small>
+            <textarea id="roleDescription" name="roleDescription" class="form-control" ng-model="vm.role.description" maxlength="100" limit='true'
+                      ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required></textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label required-label">역할 코드</label>&nbsp;(기입예: ROLE_OFFER_MEMBER)<small ng-if="vm.mode == 'edit'" class="color_red"> (수정불가)</small>
+            <small class="color_red" ng-if="form.roleCode.$error.minlength || form.roleCode.$error.maxlength">(6~30자 이내)</small>
+            <small class="color_red" ng-if="form.roleCode.$error.pattern">(잘못 입력하셨습니다.)</small>
+            <input ng-disabled="vm.mode == 'edit'" type="text" class="form-control" name="roleCode" ng-model="vm.role.code" minlength="6" maxlength="30" limit='true' ng-pattern="/^[A-Z_]+$/" required>
+        </div>
+        <div class="form-group" style="padding: 7px 0;">
+            <label>역할 소속</label><small ng-if="vm.mode == 'edit'" class="color_red"> (수정불가)</small>
+            <div>
+                <span class="radio_form">
+                    <input ng-disabled="vm.mode == 'edit'" type="radio" name="orgType" id="provider" value="PROVIDER" ng-model="vm.role.organizationType" required>
+                    <label for="provider">제공기관</label>
+                </span>
+                <span class="radio_form">
+                    <input ng-disabled="vm.mode == 'edit'" type="radio" name="orgType" id="user" value="PARTNER" ng-model="vm.role.organizationType" required>
+                    <label for="user">이용기관</label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" ng-disabled="form.$invalid"
+                class="btn btn-portal modalBtn">
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal"
+                ng-click="vm.clear()">
+                <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>
+</form>

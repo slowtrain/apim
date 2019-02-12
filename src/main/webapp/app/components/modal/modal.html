@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()"></button>
+    <h4 class="modal-title">{{vm.params.title}}</h4>
+</div>
+<div class="modal-body text-center">
+    <div style="word-wrap:break-word">
+        <b><span ng-if="vm.messages.length > 0" ng-repeat="message in vm.messages">{{message}}<br/></span></b>
+    </div>
+</div>
+<div ng-if="vm.type==1" class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" ng-enter="vm.clear()" ng-click="vm.clear()">
+        <span>{{vm.params.button.text}}</span>
+    </button>
+</div>
+<div ng-if="vm.type==2" class="modal-footer">
+    <button class="btn modalBtn" ng-click="vm.yes()">
+        <span>{{vm.params.button.text1}}</span>
+    </button>
+    <button type="button" class="btn modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+        <span>{{vm.params.button.text2}}</span>
+    </button>
+</div>

@@ -1,0 +1,388 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()"></button>
+    <h4 class="modal-title"><span data-translate="approvalModal.{{vm.selections.mode}}">Approval</span><span class="dotContainer" style="font-size:.8em; color:#ddd; vertical-align: middle; width:90%">&emsp;:&emsp;{{vm.selections.obj.title}}</span>
+    </h4>
+</div>
+<div class="modal-body" sc>
+    <div uib-alert ng-repeat="alert in vm.alerts" type="{{alert.type}}" close="vm.closeAlert($index)" dismiss-on-timeout="5000">
+        {{alert.message}}
+    </div>
+    <form name="form" novalidate>
+        <div class="input-group">
+            <span class="input-group-addon approve" data-translate="approvalModal.comment">comment</span>
+            <textarea type="text" class="form-control" name="comment" ng-model="vm.decision.detailComment" minlength="2" placeholder="{{(vm.selections.mode=='deny')? '2자이상 필수입니다.': ''}}" ng-required="vm.selections.mode=='deny'"></textarea>
+        </div>
+    </form>
+    <!-- <div class="voffset3" ng-if="vm.selections.mode == 'approve' && (vm.approval.type === 'API' || vm.approval.type === 'APP')">
+        <input type="checkbox" id="registerApproval" ng-model="vm.decision.isReserved"/>
+        <label for="registerApproval">예약승인</label>
+        <div ng-if="vm.decision.isReserved" class="form-inline registerApprovalField datePickerField">
+            <span class="input-group">
+                <input style="height:35px" type="text" class="form-control" readonly
+                       uib-datepicker-popup="yyyy-MM-dd"
+                       datepicker-options="dateOptions"
+                       ng-model="vm.decision.reservedTime"
+                       ng-change="vm.makeHourOptions()"
+                       is-open="vm.reservedTimeCalendarOpen"
+                       popup-placement="bottom-left"
+                       on-open-focus="false"
+                       close-text="닫기"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-protal" ng-click="showReservedTimeCalendar($event)"
+                            uib-is-class="'btn-info' for selectedDt, 'active' for activeDt on dt">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
+            </span>
+            <span ng-class="{'has-error': vm.decision.reservedHour==null}">
+                <select class="form-control" ng-model="vm.decision.reservedHour" ng-options="o.value as o.hour for o in vm.hourOptions">
+                    <option value="">--선택--</option>
+                </select>
+                <small ng-if="vm.decision.reservedHour==null"> &nbsp;※ 시간을 선택해주세요</small>
+            </span>
+        </div>
+    </div> -->
+    <div class="form-group table-responsive voffset3" style="overflow:hidden">
+        <table ng-if="vm.changeSets.length > 0" class="table th_bb tableFixed f_left">
+            <colgroup>
+                <col style="width:23%"/>
+                <col/>
+                <col/>
+            </colgroup>
+            <thead>
+            <th>변경 항목</th>
+            <th style="background-color:#f6f6f6; text-align: center">원본 내용</th>
+            <th style="text-align: center">변경 내용</th>
+            </thead>
+            <tbody>
+            <tr ng-if="changeSet.name.indexOf('계좌') < 0" ng-repeat="changeSet in vm.changeSets">
+                <th>{{changeSet.name}}</th>
+                <td>{{changeSet.from}}</td>
+                <td>{{changeSet.to}}</td>
+            </tr>
+            <tr ng-if="changeSet.name.indexOf('계좌') >= 0" ng-repeat="changeSet in vm.changeSets">
+                <th>{{changeSet.name}}</th>
+                <td>{{changeSet.from.split('+=')[0]}}
+                    <button
+                        ng-if ="changeSet.from.split('+=')[1]"
+                        uib-popover-template="vm.accountNumberPopover.templateUrl"
+                        popover-title="계좌번호 조회"
+                        popover-is-open="changeSet.isOpenAtChangeFrom"
+                        popover-trigger="outsideClick"
+                        type="button"
+                        ng-click="vm.accountNumberSearch({id: changeSet.from.split('+=')[1]})"
+                        class="btn btn-default btn-xs pull-right">계좌번호 조회
+                    </button>
+                </td>
+                <td>{{changeSet.to.split('+=')[0]}}
+                    <button
+                        ng-if ="changeSet.to.split('+=')[1]"
+                        uib-popover-template="vm.accountNumberPopover.templateUrl"
+                        popover-title="계좌번호 조회"
+                        popover-is-open="changeSet.isOpenAtChangeTo"
+                        popover-trigger="outsideClick"
+                        type="button"
+                        ng-click="vm.accountNumberSearch({id: changeSet.to.split('+=')[1], history: changeSet.from !='삭제'})"
+                        class="btn btn-default btn-xs pull-right">계좌번호 조회
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <table ng-if="vm.approval.type=='API'" class="table th_bb f_left">
+            <tbody>
+            <tr>
+                <th style="width:160px"><span class="f_left" data-translate="approvalRequester">승인요청자</span></th>
+                <td>
+                    <span class="f_left">{{vm.api.creator.fullName}} {{vm.api.creator.login?"(":""}}
+                    {{vm.api.creator.grade?vm.api.creator.grade+", ":""}}{{vm.api.creator.login}}{{vm.api.creator.login?")":""}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span class="f_left" data-translate="apiList.register.name">API이름</span></th>
+                <td>
+                    <span class="f_left">{{vm.api.name}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span class="f_left" data-translate="apiList.description">API설명</span></th>
+                <td>
+                    <span class="f_left">{{vm.api.description}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span class="f_left" data-translate="apiList.plans">사용정책</span></th>
+                <td>
+                    <!--<button style="cursor:default; margin-right:5px" type="button" class="btn btn-default btn-xs f_left" ng-repeat="plan in vm.api.applicablePlans">-->
+                        <!--{{plan.name}}-->
+                    <!--</button>-->
+                    <button class="btn btn-default btn-xs f_left" ng-repeat="plan in vm.api.applicablePlans"
+                            uib-popover-template="vm.apiplanPopover.templateUrl"
+                            popover-title="정책 내용"
+                            popover-is-open="plan.singleOpen"
+                            popover-animation = false
+                            popover-trigger="outsideClick"
+                            ng-click="plan.singleOpen = true"
+                            popover-placement="bottom"
+                            style = "margin-right:5px;"
+                            type="button">
+                        {{plan.name}}
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <th><span class="f_left" data-translate="apiList.proxyURL_short">Proxy URL</span></th>
+                <td>
+                    <span class="f_left">{{vm.api.urlPattern}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span class="f_left" data-translate="apiList.apiRequestURL">Routing URL</span></th>
+                <td>
+                    <span class="f_left">{{vm.api.routingUrl}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span class="f_left" data-translate="apiList.terms">약관</span></th>
+                <td style="text-align:left">
+                    <dl ng-if="vm.api.termsOfUse">
+                        <dd style="width:75%;display:inline-block;">
+                            {{vm.api.termsOfUse.name}}
+                        </dd>
+                        <dd style="display:inline;">
+                            <button class="btn btn-danger btn-xs" ng-click="vm.showTermsContent()" data-translate="entity.action.term">show terms content</button>
+                            <!-- button uib-popover-template="vm.termPopover.templateUrl"
+                                    popover-title="약관보기"
+                                    popover-is-open="vm.isTermsOpen"
+                                    popover-enable="vm.isTermsOpen"
+                                    popover-trigger="outsideClick"
+                                    popover-placement="top-right"
+                                    type="button"
+                                    ng-click="vm.showTermsContent();"
+                                    class="btn btn-danger btn-xs" data-translate="entity.action.term">show terms content
+                            </button-->
+                        </dd>
+                    </dl>
+                    <span ng-if="!vm.api.termsOfUse">없음</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span class="f_left" data-translate="apiList.billingPolicy">과금정책</span></th>
+                <td style="text-align:left">
+                    <dl>
+                        <dd style="width:75%;display:inline-block;">
+                            {{vm.api.billingPolicy?vm.api.billingPolicy.name:'사용안함'}}
+                        </dd>
+                        <dd style="display:inline;" ng-show="vm.api.billingPolicy?true:false">
+                            <button ng-click="vm.showBillingPolicies();"
+                                    class="btn btn-danger btn-xs"
+                                    id="billingPolicyButton"
+                                    style="vertical-align: 2px;"
+                                    data-translate="entity.action.billingPolicy">show billingPolicies content
+                            </button>
+                        </dd>
+                    </dl>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table ng-if="vm.approval.type=='APP'" class="table th_bb f_left">
+            <tbody>
+            <tr>
+                <th style="width:130px"><span class="f_left" data-translate="appManage.register.organization">제작기관</span></th>
+                <td>
+                    <span class="f_left">{{vm.app.organization.name}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span class="f_left" data-translate="approvalRequester">승인요청자</span></th>
+                <td>
+                    <span class="f_left">{{vm.approval.requester.fullName}} ({{vm.approval.requester.grade?vm.app.creator.grade+", ":""}}{{vm.approval.requester.login}})</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span class="f_left" data-translate="appManage.register.name">APP이름</span></th>
+                <td>
+                    <span class="f_left">{{vm.app.name}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span class="f_left" data-translate="appManage.description">APP설명</span></th>
+                <td>
+                    <span class="f_left">{{vm.app.description}}</span>
+                </td>
+            </tr>
+            <tr>
+                    <th><span class="f_left">API명·정책·약관</span></th>
+                    <td><button class="btn btn-xs btn-info" ng-click="vm.showApiList = !vm.showApiList">{{vm.showApiList? '목록닫기':'목록보기'}}</button></td>
+                </tr>
+            <tr ng-if="vm.showApiList">
+                <th></th>
+                <td>
+                    <dl>
+                        <dd class="form-inline" ng-repeat="api in vm.apiList" ng-style="!$last && {'margin-bottom':'2px'}">
+                            <span class="dotContainer" style="width:50%; line-height: 20px"><small style="vertical-align: 1px;" class="color_red">[{{api.api.organization.name}}]</small> {{api.api.name}}</span>
+                            <button ng-if="api.api.termsOfUse" type="button" class="btn btn-default btn-xs pull-right" ng-click="vm.showAppTermsContent(api.api)">약관보기</button>
+                            <button ng-if="!api.api.termsOfUse" type="button" class="btn btn-default btn-xs pull-right" style="height:22px; cursor:default">약관없음</button>
+                            <button class="btn btn-default btn-xs pull-right"
+                                    uib-popover-template="vm.apiplanPopover.templateUrl"
+                                    popover-title="정책 내용"
+                                    popover-is-open="api.apiPlan.singleOpen"
+                                    popover-animation = false
+                                    popover-trigger="outsideClick"
+                                    ng-click="api.apiPlan.singleOpen = true"
+                                    popover-placement="bottom"
+                                    style = "margin-right:5px; width:37%"
+                                    type="button">
+                            <span class="dotContainer" style="width:95%; vertical-align:-3px; line-height:17px">{{api.apiPlan.name}}</span>
+                            </button>
+                        </dd>
+                    </dl>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table ng-if="vm.approval.type=='USER'" class="table th_bb f_left">
+            <tbody>
+            <tr>
+                <th style="width:160px"><span>닉네임</span></th>
+                <td>
+                    <span class="f_left">{{vm.user.fullName}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span data-translate="userManagement.login">login ID</span></th>
+                <td>
+                    <span class="f_left">{{vm.user.login}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span data-translate="userManagement.email">email</span></th>
+                <td>
+                    <span class="f_left">{{vm.user.email}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span data-translate="userManagement.roles">역할</span></th>
+                <td>
+                    <span class="f_left">{{vm.user.role.name}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th><span data-translate="userManagement.state">상태</span></th>
+                <td>
+                    <span class="f_left">{{vm.displayActivated(vm.user)}}</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table ng-if="vm.partner" class="table th_bb f_left table_read">
+            <colgroup>
+                <col style="width:30%"/>
+                <col style="width:70%"/>
+            </colgroup>
+            <tr>
+                <th>기관 이름</th>
+                <td>{{vm.partner.name}}</td>
+            </tr>
+            <tr>
+                <th>기관 설명</th>
+                <td>{{vm.partner.description}}</td>
+            </tr>
+            <!-- <tr>
+                <th>기관 구분</th>
+                <td>{{vm.partner.type}}</td>
+            </tr> -->
+            <tr>
+                <th>사업자 등록번호</th>
+                <td>{{vm.partner.licenseNumber}}</td>
+            </tr>
+            <tr>
+                <th>법인 등록번호</th>
+                <td>{{vm.partner.corpRegNumber}}</td>
+            </tr>
+            <tr>
+                <th>전화 번호</th>
+                <td>{{vm.partner.mainPhone}}</td>
+            </tr>
+            <tr>
+                <th>대표자 이름</th>
+                <td>{{vm.partner.ceoName}}</td>
+            </tr>
+            <tr>
+                <th>업태명</th>
+                <td>{{vm.partner.sectors}}</td>
+            </tr>
+            <tr>
+                <th>사업장 소재지</th>
+                <td>{{vm.partner.address}}</td>
+            </tr>
+            <tr>
+                <th>홈페이지 주소</th>
+                <td>{{vm.partner.homepageUrl}}</td>
+            </tr>
+            <tr ng-hide="!vm.partner.orgWithdrawals.length">
+                <th>출금계좌 정보</th>
+                <td>
+                    <p class="form-inline" ng-repeat="withdrawal in vm.partner.orgWithdrawals" ng-style="!$last && {'margin-bottom':'2px'}">
+                        <span class="label label-info file va_m"></span>
+                        <small class="account-number">{{withdrawal.accountAlias}} [{{withdrawal.bankName}}]</small>
+                        <button uib-popover-template="vm.accountNumberPopover.templateUrl"
+                            popover-title="계좌번호 조회"
+                            popover-is-open="withdrawal.isOpen"
+                            popover-trigger="outsideClick"
+                            type="button"
+                            ng-click="vm.accountNumberSearch(withdrawal)"
+                            class="btn btn-default btn-xs">계좌번호 조회
+                        </button>
+                        <label ng-if="withdrawal.isDefault" class="label label-info pull-right" style="line-height:16px; cursor:default">기본계좌</label>
+                    </p>
+                </td>
+            </tr>
+            <!-- <tr>
+                <th>활용예정 API 제공기관</th>
+                <td>
+                    <p ng-repeat="provider in vm.partner.reservedProviders" ng-style="!$last && {'margin-bottom': '5px'}">
+                        <span class="label label-info file va_m">{{$index+1}}</span>
+                        <span>{{provider.name}}</span>
+                    </p>
+                </td>
+            </tr> -->
+            <tr>
+                <th>첨부파일</th>
+                <td>
+                    <p ng-repeat="file in vm.partner.attachFileList" ng-style="!$last && {'margin-bottom': '5px'}">
+                        <span ng-click="vm.fileDown(file)" class="file-list-wrap">
+                            <span class="file_name_info">{{file.fileName.split('\\').pop()}}</span>
+                            <span class="file_size">{{vm.fileSize(file)}}</span>
+                        </span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <th>기관소속 사용자</th>
+                <td style="border-bottom: 1px solid #eee;">
+                    <p ng-repeat="user in vm.partner.users" class="file-list-wrap" ng-style="!$last && {'margin-bottom': '5px'}">
+                        <span class="file_name_info">{{user.fullName}}</span>
+                        <small class="color_red">({{user.role.name}})</small>
+                        <label ng-show="user.isManager" class="label label-info pull-right" style="line-height:16px; cursor:default">관리자</label>
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-portal btn-md" disabled ng-if="(vm.decision.isReserved && vm.decision.reservedHour==null) || (vm.selections.mode=='deny' && form.$invalid) || (vm.register.checked && !vm.register.time.value)"
+            data-translate="approvalModal.{{vm.selections.mode}}">Decision
+    </button>
+    <button class="btn modalBtn btn-md" ng-click="vm.decide()" ng-if="!((vm.decision.isReserved && vm.decision.reservedHour==null) || (vm.selections.mode=='deny' && form.$invalid) || (vm.register.checked && !vm.register.time.value))"
+            data-translate="approvalModal.{{vm.selections.mode}}">Decision
+    </button>
+</div>
+

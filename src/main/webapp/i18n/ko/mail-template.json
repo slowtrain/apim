@@ -1,0 +1,10 @@
+{
+    "mailTemplate": {
+        "list":{
+            "title": "템플릿 목록"
+        },
+        "popup":{
+            "title": "템플릿 목록"
+        }
+    }
+}

@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()"></button>
+    <h4 class="modal-title" id="passwordLabel">계좌 정보</h4>
+</div>
+<div class="modal-body">
+    <div class="apiInfoTop">
+        <div class="form-box form-box-shadow">
+            <div class="form-group">
+                <label class="control-label">은행</label>
+                <p class="innerInput">
+                    <span style="font-size:14px; line">{{vm.bankName}}</span>
+                </p>
+            </div>
+            <div class="form-group">
+                <label class="control-label">계좌번호</label>
+                <p class="innerInput">
+                    <span style="font-size:14px; line">{{vm.accountNumber}}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">확인</button>
+</div>

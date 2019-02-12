@@ -1,0 +1,53 @@
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong data-translate="useOrgsManage.list.title">useOrgs Lists</strong></h2>
+<!--         <button ng-click="vm.editPolicy()" class="btn btn-portal btn-md"> -->
+<!--             <span data-translate="discount.list.registration">Register</span> -->
+<!--         </button> -->
+    </div>
+    <div class="col-md-12">
+        <p class="searchInfo">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 기관이 존재합니다.</span>
+        </p>
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:5%"/>
+                    <col style="width:45%"/>
+                    <col style="width:50%"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">사용 기관</th>
+                    <th scope="col">할인 정책</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="useOrg in vm.useOrgs" ng-if="vm.useOrgs.length > 0">
+                    <td scope="row" class="t_center">{{vm.totalItems - (vm.condition.page * vm.size) - $index}}</td>
+                    <td class="td_padding1">{{useOrg.organization.name}}
+                        <button class="btn btn-default btn-xs pull-right" ng-click="vm.showApps(useOrg)">사용앱 목록</button>
+                        <button class="btn btn-default btn-xs pull-right" ng-click="vm.showComment(useOrg)">계약사항</button>
+                    </td>
+                    <td class="td_padding2"><span ng-if="useOrg.readOnly">{{vm.checkPolicy(useOrg.discountPolicy)}}</span>
+                        <select ng-if="!useOrg.readOnly" style="width:65%;height:30px" class="pull-left" name="policy" ng-model="useOrg.discountPolicy"
+                                ng-options="discountPolicy.name for discountPolicy in vm.discountPolicies | orderBy: 'name' track by discountPolicy.id">
+                                <option value="">* 없음 *</option>
+                        </select>
+                        <button ng-if="useOrg.readOnly" class="btn btn-default btn-xs pull-right" ng-click="vm.editPolicy(useOrg)">변경</button>
+                        <button ng-if="!useOrg.readOnly" class="btn btn-default btn-xs pull-right" ng-click="vm.clear(useOrg)">취소</button>
+                        <button ng-if="!useOrg.readOnly" class="btn btn-danger btn-xs pull-right" ng-click="vm.save(useOrg)">저장</button>
+                    </td>
+                </tr>
+                <tr ng-if="vm.useOrgs.length <= 0">
+                    <td colspan="3" class="t_center">현재 사용기관이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center">
+            <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+        </div>
+    </div>
+</div>

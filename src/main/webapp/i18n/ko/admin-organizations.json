@@ -1,0 +1,34 @@
+{
+    "admin-organizations": {
+        "home": {
+            "title": "기관 관리",
+            "createLabel": "기관 생성",
+            "register": "기관 등록",
+            "edit": "기관 정보 수정"
+        },
+        "created": "A new user is created with identifier {{ param }}",
+        "updated": "An user is updated with identifier {{ param }}",
+        "deleted": "An user is deleted with identifier {{ param }}",
+        "delete": {
+            "question": "{{ orgName }} 기관을 삭제하시겠습니까?"
+        },
+        "detail": {
+            "title": "사용자"
+        },
+        "login": "로그인 아이디",
+        "firstName": "이름",
+        "lastName": "성",
+        "email": "이메일",
+        "activated": "활성",
+        "deactivated": "비활성",
+        "profiles": "Profiles",
+        "langKey": "언어",
+        "createdBy": "생성자",
+        "createdDate": "생성일",
+        "lastModifiedBy": "수정자",
+        "lastModifiedDate": "수정일",
+        "orgName":"기관명",
+        "orgDescription":"기관설명",
+        "orgUsers":"기관 소속 사용자"
+    }
+}

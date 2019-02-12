@@ -1,0 +1,147 @@
+<div class="wrap row" sc>
+    <div class="find-id-wrap type2">
+        <p class="title1">비밀번호 초기화</p>
+        <ul class="id_intro">
+            <li ng-if="vm.isDormant">장기간 미사용으로 휴면처리 되었습니다. 비밀번호 초기화를 통해 재사용하실 수 있습니다.</li>
+            <!-- <li>1. 본인의 아이디와 닉네임을 정확히 기입하고 등록조회버튼을 누르십시오.</li>
+            <li>2. 본인의 등록정보가 조회되면, SMS 방식으로 임시비밀번호 발급을 요청하십시오.</li>
+            <li>3. 임시비밀번호를 사용해 로그인하신 후, [계정-내 정보 설정]에서 비밀번호를 변경하십시오.</li> -->
+            <li>1. 본인의 아이디와 닉네임을 정확히 기입하고 임시비밀번호를 요청하십시오.</li>
+            <li>2. 계정이 확인되면, 등록된 휴대폰으로 임시비밀번호가 전송됩니다.</li>
+            <li>3. 임시비밀번호를 사용해 로그인하신 후, [관리-내 정보 설정]에서 비밀번호를 변경하십시오.</li>
+        </ul>
+        <form name="form" role="form" novalidate>
+            <div>
+                <ul class="id_option">
+                    <li ng-class="{'has-error' : form.login.$error.pattern}">
+                        <div class="left_side">
+                            <label class="required-label">아이디</label>
+                        </div>
+                        <div class="right_side">
+                            <input type="text" class="form-control" name="login" ng-model="vm.user.login"  required/>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="left_side" ng-class="{'has-error' : form.fullName.$error.pattern}">
+                            <label class="required-label">닉네임</label>
+                        </div>
+                        <div class="right_side">
+                            <input type="text" class="form-control" name="fullName" ng-model="vm.user.fullName"  required/>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="left_side">
+                            <label class="required-label">이메일</label>
+                        </div>
+                        <div class="right_side">
+                            <input type="text" class="form-control" name="email" ng-model="vm.user.email"  required/>
+                        </div>
+                    </li>
+                </ul>
+                <div class="btn_layout">
+                    <button class="btn-type1 just_right" ng-disabled="form.$invalid" ng-click="vm.searching()">임시비밀번호 요청</button>
+                </div>
+            </div>
+            <!-- <div class="id_option type2" ng-if="vm.searchResult">
+                <div class="">
+                    <label class="">임시 비밀번호를 받으실 곳</label>
+                </div>
+                <div class="showCard"></div>
+                <div ng-hide="true" style="display:inline-table;">
+                    <div style="width:141px" class="col-md-3 panel panel-default shadow card">
+                            <div style="text-align:center; width:141px">
+                                <input type="radio" name="sendType" id="email" value="email" ng-model="vm.type" required>
+                            </div>
+                            <label for="email" style="text-align:center; width:100%; height:100%; background:url(../img/portal/email.png) no-repeat 59% 0; background-size:100% 74%; top:35px" class="panel-body">
+                            </label>
+                    </div>
+                </div>
+                <div class="btn_layout">
+                    <button ng-click="vm.requestReset()" ng-disabled="!vm.type" class="btn-type1 just_right">임시비밀번호 요청</button>
+                </div>
+            </div> -->
+        </form>
+    </div>
+    <!-- <div class="col-md-10">
+        <h2><strong>비밀번호 초기화</strong></h2>
+
+        <div class="alert" style="background-color:#eee; color:#777777">
+            <p ng-if="vm.isDormant" style="font-size:17px; margin-bottom:10px"><i class="glyphicon glyphicon-off"></i> 장기간 미사용으로 <strong style="color:darkviolet;">휴면처리</strong> 되었습니다. 비밀번호 초기화를 통해 재사용하실 수 있습니다.</p>
+            <p>1. 본인의 아이디와 닉네임을 정확히 기입하고 등록조회버튼을 누르십시오.</p>
+            <p>2. 본인의 등록정보가 조회되면, SMS 방식으로 임시비밀번호 발급을 요청하십시오.</p>
+            <p>3. 임시비밀번호를 사용해 로그인하신 후, [계정-내 정보 설정]에서 비밀번호를 변경하십시오.</p>
+        </div>
+
+
+        <form name="form" role="form" novalidate>
+            <div ng-if="!vm.searchResult">
+                <div class="form-group" ng-class="{'has-error' : form.login.$error.pattern}">
+                    <label class="voffset3">아이디</label>
+                    <small class="color_red" ng-if="form.login.$error.required">*</small>
+                    <input type="text" class="form-control" name="login" ng-model="vm.user.login"  required/>
+                </div>
+                <div class="form-group" ng-class="{'has-error' : form.fullName.$error.pattern}">
+                    <label>닉네임</label>
+                    <small class="color_red" ng-if="form.fullName.$error.required">*</small>
+                    <input type="text" class="form-control" name="fullName" ng-model="vm.user.fullName" required/>
+                </div>
+                <div class="form-group">
+                    <label>이메일</label>
+                    <small class="color_red" ng-if="form.email.$error.required">*</small>
+                    <input type="text" class="form-control" name="email" ng-model="vm.user.email" required/>
+                </div>
+                <button class="btn btn-portal voffset2" ng-disabled="form.$invalid" ng-click="vm.searching()">등록조회</button>
+            </div>
+            <div ng-if="vm.searchResult">
+                <div class="voffset3" style="padding: 7px 0;">
+                    <label>임시 비밀번호를 받으실 곳</label> <small class="color_red" ng-if="!vm.Org.type">*</small>
+                </div>
+                <div style="display:inline-table;">
+                    <div style="width:141px;" class="col-md-3 panel panel-default shadow card">
+                            <div style="text-align:center; width:141px">
+                                <input type="radio" name="sendType" id="sms" value="sms" ng-model="vm.type" ng-init="vm.type='sms'" required/>
+                            </div>
+                            <label for="sms" style="width:100%; height:100%; background:url(../img/portal/sms.png) no-repeat 59% 0; background-size:100% 74%; top:35px" class="panel-body">
+                            </label>
+                    </div>
+                </div>
+                <div ng-hide="true" style="display:inline-table;">
+                    <div style="width:141px" class="col-md-3 panel panel-default shadow card">
+                            <div style="text-align:center; width:141px">
+                                <input type="radio" name="sendType" id="email" value="email" ng-model="vm.type" required>
+                            </div>
+                            <label for="email" style="text-align:center; width:100%; height:100%; background:url(../img/portal/email.png) no-repeat 59% 0; background-size:100% 74%; top:35px" class="panel-body">
+                            </label>
+                    </div>
+                </div>
+                <button style="display:block" ng-click="vm.requestReset()" ng-disabled="!vm.type" class="btn btn-portal voffset3">임시비밀번호 요청</button>
+            </div> -->
+
+
+            <!-- <div class="form-group">
+                <label class="control-label" for="email" data-translate="global.form.email">E-mail</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
+                       ng-model="vm.resetAccount.email" ng-minlength=5 ng-maxlength=100 required>
+                <div ng-show="form.email.$dirty && form.email.$invalid">
+                    <p class="help-block"
+                       ng-show="form.email.$error.required" data-translate="global.messages.validate.email.required">
+                        Your e-mail is required.
+                    </p>
+                    <p class="help-block"
+                       ng-show="form.email.$error.email" data-translate="global.messages.validate.email.invalid">
+                        Your e-mail is invalid.
+                    </p>
+                    <p class="help-block"
+                       ng-show="form.email.$error.minlength" data-translate="global.messages.validate.email.minlength">
+                        Your e-mail is required to be at least 5 characters.
+                    </p>
+                    <p class="help-block"
+                       ng-show="form.email.$error.maxlength" data-translate="global.messages.validate.email.maxlength">
+                        Your e-mail cannot be longer than 100 characters.
+                    </p>
+                </div>
+            </div> -->
+
+            <!-- </form>
+    </div> -->
+</div>

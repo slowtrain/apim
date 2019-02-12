@@ -1,0 +1,9 @@
+{
+    "dashboard": {
+        "tool":{
+            "conform": "conform",
+            "api":"api"
+        }
+
+    }
+}

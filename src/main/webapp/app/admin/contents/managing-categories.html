@@ -1,0 +1,131 @@
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong>추천 카테고리 관리</strong></h2>
+    </div>
+    <div class="category_manage">
+
+    </div>
+    <div class="col-md-12">
+        <table class="table tableFixed table-i-left">
+            <thead>
+                <tr>
+                    <th class="cateTop">
+                        <div class="title_area">
+                            <div class="title_left">
+                                {{vm.serviceCategoryTitles[0]}}
+                            </div>
+                            <div class="title_right">
+                                <button ng-if="!vm.inputDisabled[0]" class="btn btn-default btn-xs" ng-click="vm.editCategories('1')">
+                                    <span> 수정</span>
+                                </button>
+                                <button ng-if="vm.inputDisabled[0]" class="btn btn-default btn-xs" ng-click="vm.editCategories('1', 'cancel')">
+                                    <span> 취소</span>
+                                </button>
+                                <button ng-if="vm.inputDisabled[0]" class="btn btn-danger btn-xs" ng-click="vm.editCategories('1', 'save')">
+                                    <span> 저장</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input class="form-control input-sm" type="text" placeholder="추가 항목 입력하기"
+                                ng-keypress="($event.charCode==13)? vm.addCategories('1') : return" ng-model="vm.input[0]"  ng-disabled="vm.inputDisabled[0]"/>
+                            <span class="input-group-btn" style="width:15%">
+                                <button class="btn btn-info btn-xs input-sm-addon" ng-click="vm.addCategories('1')" ng-disabled="vm.inputDisabled[0] || !vm.input[0]">
+                                    <span> 추가</span>
+                                </button>
+                            </span>
+                        </div>
+                    </th>
+                    <th class="cateTop">
+                        <div class="title_area">
+                            <div class="title_left">
+                                {{vm.serviceCategoryTitles[1]}}
+                            </div>
+                            <div class="title_right">
+                                <button ng-if="!vm.inputDisabled[1]" class="btn btn-default btn-xs" ng-click="vm.editCategories('2')">
+                                    <span> 수정</span>
+                                </button>
+                                <button ng-if="vm.inputDisabled[1]" class="btn btn-default btn-xs" ng-click="vm.editCategories('2', 'cancel')">
+                                    <span> 취소</span>
+                                </button>
+                                <button ng-if="vm.inputDisabled[1]" class="btn btn-danger btn-xs"ng-click="vm.editCategories('2', 'save')">
+                                    <span> 저장</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input class="form-control input-sm" type="text" placeholder="추가 항목 입력하기"
+                                ng-keypress="($event.charCode==13)? vm.addCategories('2') : return" ng-model="vm.input[1]" ng-disabled="vm.inputDisabled[1]"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-info btn-xs input-sm-addon" ng-click="vm.addCategories('2')" ng-disabled="vm.inputDisabled[1] || !vm.input[1]">
+                                    <span> 추가</span>
+                                </button>
+                            </span>
+                        </div>
+                    </th>
+                    <th class="cateTop">
+                        <div class="title_area">
+                            <div class="title_left">
+                                {{vm.serviceCategoryTitles[2]}}
+                            </div>
+                            <div class="title_right">
+                                <button ng-if="!vm.inputDisabled[2]" class="btn btn-default btn-xs" ng-click="vm.editCategories('3')">
+                                    <span> 수정</span>
+                                </button>
+                                <button ng-if="vm.inputDisabled[2]" class="btn btn-default btn-xs" ng-click="vm.editCategories('3', 'cancel')">
+                                    <span> 취소</span>
+                                </button>
+                                <button ng-if="vm.inputDisabled[2]" class="btn btn-danger btn-xs" ng-click="vm.editCategories('3', 'save')">
+                                    <span> 저장</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input class="form-control input-sm" type="text" placeholder="추가 항목 입력하기"
+                                ng-keypress="($event.charCode==13)? vm.addCategories('3') : return" ng-model="vm.input[2]" ng-disabled="vm.inputDisabled[2]"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-info btn-xs input-sm-addon" ng-click="vm.addCategories('3')" ng-disabled="vm.inputDisabled[2] || !vm.input[2]">
+                                    <span> 추가</span>
+                                </button>
+                            </span>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr class="cateBot">
+                <td>
+                    <div class="input-group" ng-style="!$last && {'margin-bottom' : '5px'}" ng-repeat="category in vm.allCategories | filter: {classifyNumber: '1'} as result1">
+                        <input class="form-control input-sm" type="text" ng-model="category.name" ng-disabled="!vm.inputDisabled[0]"/>
+                        <span class="input-group-btn">
+                            <button class="btn delete-type1" ng-click="vm.delCategories(category)" ng-disabled="vm.inputDisabled[0]">
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-if="!result1.length" style="text-align:center; color:#999">항목이 존재하지 않습니다.</div>
+                </td>
+                <td>
+                    <div class="input-group" ng-style="!$last && {'margin-bottom' : '5px'}" ng-repeat="category in vm.allCategories | filter: {classifyNumber: '2'} as result2">
+                        <input class="form-control input-sm new-input-form" type="text" ng-model="category.name" ng-disabled="!vm.inputDisabled[1]"/>
+                        <span class="input-group-btn">
+                            <button class="btn delete-type1" ng-click="vm.delCategories(category)" ng-disabled="vm.inputDisabled[1]">
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-if="!result2.length" style="text-align:center; color:#999">항목이 존재하지 않습니다.</div>
+                </td>
+                <td>
+                    <div class="input-group" ng-style="!$last && {'margin-bottom' : '5px'}" ng-repeat="category in vm.allCategories | filter: {classifyNumber: '3'} as result3">
+                        <input class="form-control input-sm new-input-form" type="text" ng-model="category.name" ng-disabled="!vm.inputDisabled[2]"/>
+                        <span class="input-group-btn">
+                            <button class="btn delete-type1" ng-click="vm.delCategories(category)" ng-disabled="vm.inputDisabled[2]">
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-if="!result3.length" style="text-align:center; color:#999">항목이 존재하지 않습니다.</div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

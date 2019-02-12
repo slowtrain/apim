@@ -1,0 +1,19 @@
+<div style="width:440px">
+    <div>{{Popover.title}}</div>
+    <dl class="t_left">
+        <dt><i class="glyphicon glyphicon-minus"></i>개요</dt>
+        <dd style="margin-left:15px">기관별 API 호출 가능 정책을 제한함</dd>
+        <dd style="margin-left:15px">(단, 기관에 속한 모든 앱은 정책을 공유함)</dd>
+        <dd style="margin:10px 0 0 15px">Ex) 기관이 앱1, 앱2, 앱3 을 사용하고 있고,</dd>
+        <dd style="margin-left:40px">10,000건/일의 사용량을 할당받은 정책을 사용하면</dd>
+        <dd style="margin-left:40px">앱1, 앱2, 앱3 에서 호출한 API 건수는 합산하여 10,000/일 건을 넘지 못하게 제어함.</dd>
+        <dt style="margin-top:15px"><i class="glyphicon glyphicon-minus"></i>설정항목</dt>
+        <dd style="margin-left:15px">1. 제목(필수) : 정책명</dd>
+        <dd style="margin-left:15px">2. 정책 설명 : 정책에 대한 내용</dd>
+        <dd style="margin-left:15px">3. 할당량 설정 : 초, 분, 시, 일, 월별 할당량을 제한함.</dd>
+        <dd style="margin-left:30px">(기관에 등록된 여러 앱에서 API 호출 건수 모두 합산한 건수로 제한함)</dd>
+        <!-- <dd style="margin-left:15px">4. 초당 요청건수 제한 : 초당 API 호출건 수를 제한함.</dd>
+        <dd style="margin-left:30px">(기관에 등록된 여러 앱에서 순간 API 호출 건수를 모두 합산한 건수로 제한함)</dd> -->
+        <button type="button" class="btn btn-danger form-control voffset2" ng-click="vm.isaccountplanHelpOpen=false" data-translate="entity.action.close">닫기</button>
+    </dl>
+</div>

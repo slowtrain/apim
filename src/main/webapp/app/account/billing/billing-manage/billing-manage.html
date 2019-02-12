@@ -1,0 +1,58 @@
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong data-translate="billing.list.title">billing Manage Lists</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <p class="searchInfo">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 과금정책이 존재합니다.</span>
+            <button has-authority="ROLE_PLAN_CREATE" type="submit" ng-click="vm.addBilling()" class="btn btn-portal btn-flag-radius pull-right">
+                <span data-translate="billing.register.title">Register</span>
+            </button>
+        </p>
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:5%"/>
+                    <col/>
+                    <col style="width:13%"/>
+                    <col style="width:12%"/>
+                    <col style="width:8%"/>
+                    <col style="width:8%"/>
+                    <col style="width:150px"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col" id="name" ng-mousedown="vm.sorting('name')">이름<i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th scope="col" id="chargePerHit" ng-mousedown="vm.sorting('chargePerHit')">기본요금 (원/건)<i id="chargePerHit" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th scope="col" id="leastAmount" ng-mousedown="vm.sorting('leastAmount')">최소과금 (원)<i id="leastAmount" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th scope="col">구간갯수</th>
+                    <th>상태</th>
+                    <th scope="col">비고</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr ng-repeat="Billing in vm.Billings" ng-if="vm.Billings.length > 0">
+                    <td class="t_center">{{vm.totalItems -(vm.condition.page*vm.size) - $index}}</td>
+                    <td class="hover" ng-click="vm.showBilling(Billing)">{{Billing.name}}</td>
+                    <td class="t_right">{{Billing.chargePerHit | number}}</td>
+                    <td class="t_right">{{Billing.leastAmount | number}}</td>
+                    <td class="t_right">{{Billing.segments.length | number}}</td>
+                    <td class="t_center">{{(Billing.isUsing)? '사용중':'사용없음'}}</td>
+                    <td class="t_center">
+                        <button has-authority="ROLE_PLAN_MODIFY" ng-disabled="Billing.isUsing" class="btn btn-default btn-xs" ng-click="vm.addBilling(Billing)">수정</button>
+                        <button has-authority="ROLE_PLAN_DELETE" ng-disabled="Billing.isUsing" class="btn btn-default btn-xs" ng-click="vm.delBilling(Billing, 'delete')">삭제</button>
+                    </td>
+                </tr>
+                <tr ng-if="vm.Billings.length == 0">
+                    <td  class="t_center" colspan="7">등록하신 과금정책이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center">
+            <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+        </div>
+    </div>
+</div>

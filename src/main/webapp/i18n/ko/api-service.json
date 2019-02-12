@@ -1,0 +1,12 @@
+{
+    "apiService": {
+        "title": "API 서비스",
+        "organization": "제공기관",
+        "apiKind": "API 분류",
+        "forum": {
+        	"title": "포럼 목록",
+        	"name": "API 이름",
+        	"organization": "제공기관"
+        }
+    }
+}

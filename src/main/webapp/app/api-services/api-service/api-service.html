@@ -1,0 +1,208 @@
+<div class="wrap lnbParent">
+    <div class="api_set">
+        <div class="row">
+            <div class="forum-title">
+                <h3><strong data-translate="global.menu.apiService.main">APIs</strong></h3>
+            </div>
+            <div class="col-md-10 forum-title2">
+                <div class="clear">
+                    <h2><strong>{{vm.organizationSelected.name}}</strong></h2>
+                    <div class="btn-group btn-group-md pull-right">
+<!--                         <button class="btn btn-default first" ng-disabled="!vm.isGroupView" ng-click="vm.setGroupView()">API별로 보기 <i ng-if="vm.isGroupView" class="glyphicon glyphicon-share-alt"></i></button> -->
+<!--                         <button class="btn btn-default last" ng-disabled="vm.isGroupView" ng-click="vm.setGroupView(true)">그룹별로 보기 <i ng-if="!vm.isGroupView" class="glyphicon glyphicon-share-alt"></i></button> -->
+                        <!-- <button class="btn btn-default first" ng-disabled="!vm.isGroupView" ng-click="vm.setGroupView()">API별로 보기</button>
+                        <button class="btn btn-default last" ng-disabled="vm.isGroupView" ng-click="vm.setGroupView(true)">그룹별로 보기</button> -->
+                    </div>
+                </div>
+                <ul class="api_top_tab color_type1">
+                    <li class="api_tab_li" ng-disabled="!vm.isGroupView" ng-click="vm.setGroupView()">API별로 보기</li>
+                    <li class="api_tab_li" ng-disabled="vm.isGroupView" ng-click="vm.setGroupView(true)">그룹별로 보기</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="api_set2">
+        <div class="row">
+            <div class="provider-container">
+<!--                 <strong class="sub-title"><i class="glyphicon glyphicon-menu-right"></i> 제공기관</strong> -->
+                <ul class="lnb2 type2">
+                    <li ng-repeat="organization in vm.organizations | filter: vm.orgFilter" ng-click="vm.showApiList(organization)" ng-class="{'selectOn': organization == vm.organizationSelected}">
+                        <a href="">
+                            {{organization.name}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="underLoading" class="forumRight">
+<!--                 <strong class="sub-title ng-binding ng-scope"> -->
+<!--                     <i class="glyphicon glyphicon-menu-right"></i> {{vm.organizationSelected.name}} -->
+<!--                 </strong> -->
+
+                <div ng-if="!vm.isGroupView" class="searchBox">
+                    <span class="form-inline">
+                        <label for="apiGroupSelected">API 그룹</label>
+                        <select style="width:22%;" id="apiGroupSelected" class="form-control input-sm" name="apiGroupSelected" ng-model="vm.apiGroupSelected"
+                                ng-options="group as group.name for group in vm.apiGroups track by group.id">
+                            <option value="">전체</option>
+                        </select>
+                    </span>
+                    <span class="form-inline">
+                        <label for="apiListName" data-translate="apiList.name">name</label>
+                        <input type="text" class="form-control input-sm" id="apiListName" name="apiName" ng-model="vm.apiName" ng-keypress="($event.charCode==13)? vm.searching() : return" />
+                    </span>
+                    <span ng-if="vm.isProvider" class="form-inline">
+                        <label for="apiPrivate">API 공개</label>
+                        <select id="apiPrivate" class="form-control input-sm" ng-model="vm.apiPrivate"
+                                ng-options="option.key as option.name for option in [{name: '공개', key: 'false'},{name: '비공개', key: 'true'}]">
+                            <option value="">전체</option>
+                        </select>
+                    </span>
+                    <!-- <span class="form-inline">
+                        <label for="proxyURLTitle">URL</label>
+                        <input type="text" class="form-control" id="proxyURLTitle" name="apiUrl" ng-model="vm.proxyUrl" ng-keypress="($event.charCode==13)? vm.searching() : return" />
+                    </span> -->
+                    <span class="btnBox">
+                        <button type="button" class="btn search-btn" data-dismiss="modal" ng-click="vm.searching()">
+                            검색
+                        </button>
+                    </span>
+                </div>
+
+                <div ng-if="vm.isGroupView" class="searchBox">
+                    <span ng-if="vm.isProvider" class="form-inline">
+                        <label for="apiGroupPrivate">그룹 공개</label>
+                        <select id="apiGroupPrivate" class="form-control input-sm" ng-model="vm.apiGroupPrivate"
+                                ng-options="option.key as option.name for option in [{name: '공개', key: 'false'},{name: '비공개', key: 'true'}]">
+                            <option value="">전체</option>
+                        </select>
+                    </span>
+                    <span class="form-inline">
+                        <label for="apiListGroup">그룹 이름</label>
+                        <input type="text" class="form-control input-sm" name="apiGroupName" ng-model="vm.apiGroupName" ng-keypress="($event.charCode==13)? vm.searching() : return" />
+                    </span>
+                    <span class="form-inline">
+                        <label for="apiName">API 이름</label>
+                        <input type="text" class="form-control input-sm" name="apiName" ng-model="vm.apiName" ng-keypress="($event.charCode==13)? vm.searching() : return" />
+                    </span>
+                    <span class="btnBox">
+                        <button type="button" class="btn search-btn" data-dismiss="modal" ng-click="vm.searching()">
+                            <span data-translate="entity.action.search">Search</span>
+                        </button>
+                    </span>
+                </div>
+                <p class="searchInfo">
+                    <span>
+                        &nbsp; 총 <span class="color_red ng-binding">{{vm.totalItems}}</span>개의 {{vm.isGroupView? '서비스그룹이' : 'API가'}} 존재합니다.
+                    </span>
+                </p>
+                <div ng-if="vm.isGroupView" class="table-responsive voffset3">
+                    <table class="table tableFixed bt_bold">
+                        <colgroup>
+                            <col style="width:4%"/>
+                            <col style="width:15%"/>
+        <!--                     <col style="width:25%"/> -->
+                            <col/>
+        <!--                     <col style="width:120px"/> -->
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th id="name" ng-mousedown="vm.sorting('name')"><span data-translate="apiGroup.name">Name</span><i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+        <!--                     <th id="description" ng-mousedown="vm.sorting('description')"><span data-translate="apiGroup.description">description</span><i id="description" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th> -->
+                            <th>API 목록</th>
+        <!--                     <th scope="col" data-translate="apiList.actions">Etc</th> -->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="group in vm.groups">
+                            <td scope="row" class="t_center">{{(vm.totalItems - (vm.condition.page)*(vm.stateParams.size))-$index}}</td>
+                            <td style="border-right:0">{{group.name}} <i ng-if="group.isPrivate" style="float:right" class="forum_lock"></i></td>
+        <!--                     <td>{{group.description}}</td> -->
+                            <td class="td-btn2">
+                                <div class="table_title_btn type2" ng-class="api.isPrivate? 'private' : 'un_private'" title="{{api.description}}" ng-repeat="api in group.apis" ng-click="vm.showDetailApi(api)">
+                                    <span class="" tooltip-placement="top" uib-tooltip="{{api.description}}">{{api.name}}</span>
+                                    <!-- <span class="" tooltip-placement="top" uib-tooltip="{{api.description}}">{{api.name}}</span> -->
+                                    <!-- <i ng-if="api.isPrivate" class="forum_lock"></i> -->
+                                </div>
+                            </td>
+                            <!-- <td class="t_center">
+                                <button has-authority="ROLE_API_MODIFY" class="btn btn-default btn-xs" ng-click="vm.addGroup(group)">수정</button>
+                                <button has-authority="ROLE_API_DELETE" class="btn btn-default btn-xs" ng-click="vm.delGroup(group)">삭제</button>
+                            </td> -->
+                        </tr>
+                        <tr ng-if="!vm.groups.length">
+                            <td colspan="3" class="t_center">등록된 API 그룹이 존재하지 않습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+                    </div>
+                </div>
+                <div ng-if="!vm.isGroupView" class="table-responsive voffset3">
+                    <table class="table tableFixed">
+                        <colgroup>
+                            <col style="width:7%"/>
+                            <col style="width:42%"/>
+        <!--                     <col style="width:25%"/> -->
+        <!--                     <col style="width:24%"/> -->
+                            <col ng-if="vm.isProvider" style="width:6%"/>
+                            <col/>
+        <!--                     <col style="width:75px"/> -->
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>No</th>
+        <!--                     <th scope="col" id="apiGroup" ng-mousedown="vm.sorting('apiGroup')"><span>API그룹</span><i id="apiGroup" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th> -->
+                            <th scope="col" id="name" ng-mousedown="vm.sorting('name')"><span data-translate="apiList.name">API이름</span><i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+        <!--                     <th scope="col" id="description" ng-mousedown="vm.sorting('description')"><span data-translate="apiList.description">API설명</span><i id="description" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th> -->
+        <!--                    <th scope="col" id="version" ng-mousedown="vm.sorting('version')"><span data-translate="apiList.version">버전</span><i id="version"></i></th> -->
+        <!--                    <th scope="col" id="private" ng-mousedown="vm.sorting('private')"><span data-translate="apiList.isPrivate">private</span><i id="private" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th> -->
+                            <th ng-if="vm.isProvider">사용앱</th>
+                            <th>소속그룹</th>
+        <!--                     <th scope="col" data-translate="apiList.actions">비고</th> -->
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="api in vm.apis">
+                                <td scope="row" class="t_center">{{(vm.totalItems - (vm.condition.page)*(vm.stateParams.size))-$index}}</td>
+        <!--                         <td><span class="dotContainer" title="{{api.apiGroup}}" style="width:100%">{{api.apiGroup}}</span></td> -->
+                                <td class="td-btn" title="{{'상세보기: '+api.name}}" ng-click="vm.showDetailApi(api)">
+                                    <div class="table_title_btn" ng-class="{'un_private' : !api.isPrivate}">{{api.name}}
+                                        <!-- <i ng-if="api.isPrivate" class="forum_lock"></i> -->
+                                    </div>
+                                </td>
+                                <td ng-if="vm.isProvider" class="t_center">
+                                    <button type="button" class="btn btn-default btn-xs use-btn-app" ng-click="vm.showApps(api)">사용앱</button>
+                                </td>
+        <!--                         <td class="t_left hover" ui-sref="post({forumId: api.forum.id})">{{api.name}}</td> -->
+        <!--                         <td><span class="dotContainer" title="{{api.description}}" style="width:100%">{{api.description}}</span></td> -->
+        <!--                         <td>{{api.version}}</td> -->
+        <!--                         <td>{{api.private?"비공개":"공개"}}</td> -->
+                                <td>
+                                    <span class="fake-btn"  ng-repeat="group in api.apiGroups">
+                                        <span class="dotContainer" tooltip-placement="top" uib-tooltip="{{group.description || group.name}}">{{group.name}}</span>
+                                        <i ng-if="group.isPrivate" style="font-size:10px" class="forum_lock"></i>
+                                        <span ng-if="!$last" class="comma-bold">,</span>
+                                    </span>
+                                </td>
+                                <!-- <td class="t_center">
+                                    <button ng-disabled="!account" class="btn btn-default btn-xs" ng-click="vm.showDetailApi(api)">상세보기</button>
+                                    <button ng-disabled="!account" class="btn btn-default btn-xs" ng-click="vm.showGroup(api)">그룹보기</button>
+                                </td> -->
+                            </tr>
+                            <tr ng-if="!vm.apis.length">
+                                <td colspan="{{vm.isProvider? 4 : 3}}" class="t_center">API가 존재하지 않습니다.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,39 @@
+<div class="modal-header">
+    <button ng-if="!(vm.items.type =='noService' || vm.items.type == 'redeploy')" type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()"></button>
+    <h4 class="modal-title" ng-if="!vm.items.title" data-translate="entity.{{vm.items.type}}.title">Confirm delete operation</h4>
+    <h4 class="modal-title" ng-if="vm.items.title">{{vm.items.title}}</h4>
+</div>
+<div class="modal-body text-center">
+    <div style="word-wrap:break-word" ng-if ="vm.items.type=='delete' || vm.items.type=='unuse' || vm.items.type=='redeploy' || vm.items.type=='changeStatus' || vm.items.type=='orgDeactivate' || vm.items.type=='modify' || vm.items.type=='changeCaptcha' || vm.items.type=='error' || vm.items.type=='activate' || vm.items.type=='searchResult' || vm.items.type=='register' || vm.items.type=='withdraw' || vm.items.type=='withdrawConfirm'">
+        <b><span ng-if="vm.messages.length > 0" ng-repeat="message in vm.messages track by $index">{{message}}<br/></span></b>
+        <div ng-if="vm.items.type=='delete' || vm.items.type=='unuse' || vm.items.type=='withdraw' || vm.items.type=='changeStatus' || vm.items.type=='orgDeactivate'">
+            <input autocomplete="off" type="password" class="form-control voffset4" placeholder="로그인 비밀번호를 입력하세요." ng-model="vm.loginPassword"/>
+        </div>
+    </div>
+    <span ng-if="vm.items.type == 'cancel'">
+        <label>취소사유</label>
+        <textarea type="text" placeholder="취소사유 작성" ng-model="vm.detailComment" class="form-control" style="margin-bottom:5px;"></textarea>
+    </span>
+
+    <div style="overflow:hidden" ng-if="vm.items.type=='noService'">
+        <div class="col-md-4"><img src="/img/portal/img_pageError.png" /></div>
+        <div class="col-md-8 voffset5">
+            <p style="color:#545045; font-size:30px; line-height: 30px;"><span style="color:#ff9600;">서비스 점검 중입니다.</span></p>
+            <p class="voffset3" style="color:#656565; font-size:25px;">3월 23일</p>
+            <p class="voffset1" style="color:#656565; font-size:24px;">18:00 ~ 00:00</p>
+        </div>
+    </div>
+</div>
+<div ng-if="vm.items.type !='noService'" class="modal-footer">
+    <button ng-if = "vm.items.type=='withdraw' || vm.items.type=='changeStatus' || vm.items.type=='orgDeactivate' || vm.items.type=='delete' || vm.items.type=='unuse' || vm.items.type=='cancel' || vm.items.type=='searchResult'" class="btn modalBtn" ng-click="vm.yes()"
+        ng-disabled="(vm.items.type=='delete'|| vm.items.type=='unuse' || vm.items.type=='withdraw' || vm.items.type=='changeStatus' || vm.items.type=='orgDeactivate') && !vm.loginPassword.trim()">
+        <span class="">예</span>
+    </button>
+    <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+        <span ng-if = "vm.items.type=='error'">닫기</span>
+        <span ng-if = "vm.items.type=='withdraw' || vm.items.type=='changeStatus' || vm.items.type=='orgDeactivate' || vm.items.type=='delete' || vm.items.type=='unuse' || vm.items.type=='cancel' || vm.items.type=='searchResult'">아니오</span>
+        <span ng-if = "vm.items.type=='redeploy' || vm.items.type=='modify' || vm.items.type=='changeCaptcha' || vm.items.type=='register' || vm.items.type=='withdrawConfirm'">확인</span>
+    </button>
+
+</div>

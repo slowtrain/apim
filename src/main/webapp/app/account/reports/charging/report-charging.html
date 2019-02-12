@@ -1,0 +1,108 @@
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong>API 과금 징구</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <div class="searchField type2 typeNew">
+            <div class="dateContainer">
+                <dl class="datePickerField">
+                    <dd class="form-inline">
+                        <label>연도 선택</label>
+                        <select class="form-control" ng-options="year for year in vm.years" ng-model="vm.requestYear" ng-change="vm.setToTime()"></select>
+
+                        <label>월 선택</label>
+                        <select class="form-control" ng-options="month for month in vm.months" ng-model="vm.requestMonth" ng-change="vm.setToTime()"></select>
+
+                        <!-- <label class="control" for="approvalRequester">요청일자</label>
+                        <span class="input-group">
+                            <input style="height:35px" type="text" class="form-control"
+                                   id="approvalRequester" readonly
+                                   uib-datepicker-popup="yyyy-MM-dd"
+                                   datepicker-options="fromDateOptions"
+                                   ng-model="vm.condition.fromTime"
+                                   is-open="vm.fromDateOpen"
+                                   popup-placement="bottom-left"
+                                   on-open-focus="false"
+                                   close-text="닫기"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openFromDatePicker($event)"
+                                        uib-is-class="'btn-info' for selectedDt, 'active' for activeDt on dt"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </span><span style="font-size:22px; vertical-align:middle"> ~ </span>
+                        <span class="input-group">
+                            <input style="height:35px" type="text" class="form-control" readonly
+                                   uib-datepicker-popup="yyyy-MM-dd"
+                                   datepicker-options="toDateOptions"
+                                   ng-model="vm.condition.toTime"
+                                   is-open="vm.toDateOpen"
+                                   popup-placement="bottom-left"
+                                   on-open-focus="false"
+                                   close-text="닫기"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openToDatePicker($event)"
+                                        uib-is-class="'btn-info' for selectedDt, 'active' for activeDt on dt">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                        </span> -->
+                    </dd>
+                </dl>
+                <button type="button" class="btn btn-default search-btn" ng-click="vm.searching(true)">조회</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-center voffset3" ng-show="!vm.success">
+        <div class="searchField2" style="padding:23px; border:0px">{{ vm.alertMessage }}</div>
+    </div>
+    <div class="col-md-12 voffset3" ng-show="vm.success">
+        <div class="col-md-3 voffset1" style="padding-left: 0;">
+            <select class="form-control" ng-options="org.id as org.name for org in vm.chargeOrgs" ng-change="vm.selectingOrg()" ng-model="vm.selectedOrganization">
+                <option value="">전체 사용기관</option>
+            </select>
+        </div>
+        <div class="col-md-12 voffset1" style="padding: 0;">
+            <p class="searchInfo">
+                <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 목록이 존재합니다.</span>
+            </p>
+            <table class="table tableFixed">
+                <thead>
+                <tr>
+                    <th style="width:73px">No</th>
+                    <th id="orgName" ng-mousedown="vm.sorting('orgName')">이용기관<i class="sort-position glyphicon glyphicon-triangle-bottom" id="orgName"></i></th>
+                    <th>출금계좌</th>
+                    <th style="width:141px" id="amount" ng-mousedown="vm.sorting('amount')">총요금<i class="sort-position glyphicon glyphicon-triangle-bottom" id="amount"></i></th>
+                    <th style="width:141px" id="finalAmount" ng-mousedown="vm.sorting('finalAmount')">최종요금(할인)<i class="sort-position glyphicon glyphicon-triangle-bottom" id="finalAmount"></i></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="c in vm.chargeList">
+                    <td class="text-center">{{vm.totalItems - $index - (vm.condition.page*vm.size)}}</td>
+                    <td>{{c.orgName}}</td>
+                    <td>{{c.withdrawalAccountNumber}}</td>
+
+                    <!-- <td class="text-center">
+                        <button uib-popover-template="vm.billingPolicyPopover.templateUrl"
+                                popover-title="과금정책 상세보기"
+                                popover-is-open="c.tooltipOpen"
+                                popover-trigger="outsideClick"
+                                popover-placement="bottom"
+                                ng-click="vm.tooltipControl(c)"
+                                type="button"
+                                class="btn btn-default btn-xs"
+                                style="width:99%">
+                            <span class="dotContainer" style="width:98%; vertical-align: -4px;">{{ c.billingPolicyName }}</span>
+                        </button>
+                    </td> -->
+                    <td class="text-right">{{ c.amount | number }}</td>
+                    <td class="text-right">{{ c.finalAmount | number }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center voffset3">
+                <button type="button" class="btn btn-exceldown btn-sm voffset2" ng-click="vm.downloadExcel()">EXCEL</button>
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+    </div>
+    <!--<button ng-click="vm.showApiTrend({orgId: 1, appId: 2, apiId: 3})">test</button>-->
+</div>

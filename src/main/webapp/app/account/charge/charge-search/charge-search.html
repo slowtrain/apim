@@ -1,0 +1,87 @@
+<div class="row wrap">
+    <div class="">
+        <h2><strong data-translate="charge-search.title">chargeSearch Lists</strong></h2>
+    </div>
+    <div class="">
+        <div class="searchField type2 typeNew">
+            <div class="dateContainer">
+                <dl class="datePickerField">
+                    <dd class="form-inline" style="width:260px">
+                        <label class="control" for="approvalRequester">요청월</label>
+                        <span class="input-group">
+                            <input type="text" class="form-control"
+                                   id="approvalRequester" readonly
+                                   uib-datepicker-popup="yyyy-MM"
+                                   ng-model="vm.condition.chargeMonth"
+                                   is-open="vm.dateOpen"
+                                   popup-placement="bottom-left"
+                                   on-open-focus="false"
+                                   datepicker-options="dateOptions"
+                                   close-text="닫기"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"
+                                        uib-is-class="'btn-info' for selectedDt, 'active' for activeDt on dt"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </span>
+                    </dd>
+                </dl>
+                <button type="button" ng-hide="vm.isAutoMode" class="btn search-btn" ng-click="vm.clickSearchButton(true)">검색</button>
+            </div>
+        </div>
+    </div>
+    <div class="text-center voffset3" ng-show="!vm.success">
+        <div class="searchField2" style="padding:23px; border:0px">{{ vm.alertMessage }}</div>
+    </div>
+    <div class="voffset3" ng-show="vm.success">
+        <div class="voffset1" style="padding: 0;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>API</th>
+                    <th style="width:70px">사용앱</th>
+                    <th style="width:79px">수행횟수</th>
+                    <th style="width:100px">과금 정책</th>
+                    <th style="width:100px">요금</th>
+                    <th style="width:115px">총요금(할인)</th>
+                    <th style="width:115px">최종요금</th>
+                    <th style="width:115px">계좌 별칭</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="m in vm.metricsList">
+                    <td class="text-left">[{{ m.providerName }}] {{ m.apiName }}</td>
+                    <td class="t_center">
+                        <button type="button" class="btn btn-default btn-xs" ng-click="vm.showApps(m.apiId, m.orgId)">사용앱</button>
+                    </td>
+                    <td class="text-right">{{ m.completedCount }}</td>
+                    <td class="text-center">
+                        <button uib-popover-template="vm.billingPolicyPopover.templateUrl"
+                                popover-title="과금정책 상세보기"
+                                popover-is-open="m.tooltipOpen"
+                                popover-trigger="outsideClick"
+                                popover-placement="bottom"
+                                ng-click="vm.tooltipControl(m)"
+                                type="button"
+                                class="btn btn-default btn-xs"
+                                style="width:99%">
+                            <span class="dotContainer" style="width:98%; vertical-align: -4px;">{{ m.billingPolicyName }}</span>
+                        </button>
+                    </td>
+                    <td class="text-right">{{ m.amount | number }}</td>
+                    <td class="text-right" title="{{ m.rates }}">{{ m.totalAmount | number }}</td>
+                    <td class="text-right" title="{{ m.changeReason }}">{{ m.finalAmount | number }}</td>
+                    <td class="text-left" ng-click="vm.showAccount(m)" ng-style="{'cursor' : 'default'}">
+                        <span class="dotContainer" style="width:100%">
+                            {{ m.accountAlias }}
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center voffset3">
+                <button type="button" class="btn btn-exceldown btn-sm voffset2" ng-click="vm.downloadExcel()">EXCEL</button>
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+    </div>
+</div>

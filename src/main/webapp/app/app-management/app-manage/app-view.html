@@ -1,0 +1,153 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true" ng-click="vm.clear()"></button>
+    <h4 class="modal-title">앱 상세보기</h4>
+</div>
+<div class="modal-body">
+    <div class="table-responsive" style="overflow:hidden">
+        <table ng-if="vm.changeSets.length > 0" class="table tableFixed f_left th_bb voffset1">
+            <colgroup>
+                <col style="width:23%" />
+                <col/>
+                <col/>
+            </colgroup>
+            <thead>
+                <th><span>변경 항목&ensp;</span><span style="top:2px" tooltip-placement="right" uib-tooltip="추후 변경저장된 항목으로 아직 승인요청대기중이거나 현재 승인진행 중인 항목입니다." class="glyphicon glyphicon-question-sign"></span></th>
+                <th style="background-color:#f6f6f6; text-align: center">원본 내용</th>
+                <th style="text-align: center">변경 내용</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="changeSet in vm.changeSets">
+                    <th>{{changeSet.name}}</th>
+                    <td>{{vm.splitContents(changeSet)}}
+                        <span ng-if="changeSet.fromInfos.length > 0" ng-repeat="from in changeSet.fromInfos">{{from}}<br/></span>
+                    </td>
+                    <td>
+                        <span ng-if="changeSet.toInfos.length > 0" ng-repeat="to in changeSet.toInfos">{{to}}<br/></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table th_bb tableFixed f_left">
+            <colgroup>
+                <col style="width:23%" />
+                <col/>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th>앱 이름</th>
+                    <td>{{vm.appDetail.name}}</td>
+                </tr>
+                <tr>
+                    <th>앱 설명</th>
+                    <td>{{vm.appDetail.description}}</td>
+                </tr>
+                <tr>
+                    <th>등록 기관</th>
+                    <td>{{vm.appDetail.organization.name}}</td>
+                </tr>
+                <tr ng-hide="!account.organization || vm.appDetail.organization.id != account.organization.id">
+                    <th>앱 키</th>
+                    <td>{{vm.appDetail.appKey}}</td>
+                </tr>
+                <tr ng-hide="!account.organization || vm.appDetail.organization.id != account.organization.id">
+                    <th>앱 시크릿</th>
+                    <td><button ng-if="vm.appDetail.appKey" uib-popover-template="vm.secretPopover.templateUrl" popover-title="시크릿조회" popover-is-open="vm.isOpen" popover-trigger="outsideClick" type="button" ng-click="vm.clickSecretButton()" class="btn btn-danger btn-xs">시크릿 조회</button></td>
+                </tr>
+                <tr ng-if="vm.appDetail.whiteList">
+                    <th>White List</th>
+                    <td>
+                        <p ng-repeat="ip in vm.whiteList">
+                            <span>{{ip}}</span>
+                        </p>
+                    </td>
+                </tr>
+                <tr ng-hide="vm.apiList==null">
+                    <th>API명·정책·문서</th>
+                    <td><button class="btn btn-xs btn-info" ng-click="vm.showApiList = !vm.showApiList">{{vm.showApiList? '목록닫기':'목록보기'}}</button></td>
+                </tr>
+                <tr ng-if="vm.showApiList">
+                    <th></th>
+                    <td>
+                        <p class="form-inline" ng-repeat="api in vm.apiList | orderBy: ['api.organization.name', 'api.name']" ng-style="!$last && {'margin-bottom':'2px'}">
+                            <span class="dotContainer" style="width:50%; line-height: 21px" title="{{api.api.name}}"><small  style="vertical-align: 1px;" class="color_red">[{{api.api.organization.name}}]</small> {{api.api.name}}</span>
+                            <button uib-popover-template="vm.apiAttachFileListPopover.templateUrl"
+                                    popover-title="API 명세·설명서 다운로드"
+                                    popover-is-open="api.api.tooltipOpen"
+                                    popover-trigger="outsideClick"
+                                    popover-placement="bottom"
+                                    ng-click="vm.tooltipControl(api.api)"
+                                    ng-disabled="vm.appDetail.status == 'READY' || vm.appDetail.status == 'APPROVING' || vm.appDetail.status == 'DENIED'"
+                                    type="button"
+                                    class="btn btn-default btn-xs pull-right"
+                                    style="width:15%; margin-right:-3px">
+                                <span>명세·설명서</span>
+                            </button>
+<!--                             <button class="btn btn-default btn-xs pull-right" ng-click="vm.showTermsContent(api.api)">약관보기</button> -->
+                            <button class="btn btn-default btn-xs pull-right"
+                                    uib-popover-template="vm.apiplanPopover.templateUrl"
+                                    popover-title="정책 내용"
+                                    popover-is-open="api.apiPlan.singleOpen"
+                                    popover-animation = false
+                                    popover-trigger="outsideClick"
+                                    ng-click="api.apiPlan.singleOpen = true"
+                                    popover-placement="bottom"
+                                    style = "margin-right:5px; width:34%"
+                                    type="button">
+                            <span class="dotContainer" style="width:95%; vertical-align:-3px; line-height:17px">{{api.apiPlan.name}}</span>
+                            </button>
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- <tr>
+                    <th>oAuth 콜백URL</th>
+                    <td>{{vm.appDetail.oAuthCallbackUrl}}</td>
+                </tr> -->
+                <!-- <tr>
+                    <th>oAuth 스코프<p><small>(로그인 타입)</small></p></th>
+                    <td>
+                        <p ng-repeat="scope in vm.appScopes">{{vm.parsingScopeValue(scope)}}
+                            <span ng-if="!vm.existingScope">{{scope.scope}}</span>
+                            <span ng-if="vm.existingScope">{{scope.name}} ({{scope.scope}})</span>
+                        </p>
+                    </td>
+                </tr> -->                
+            </tbody>
+        </table>
+
+
+    </div>
+    <!--<dl class="dl-horizontal">
+        <dt><span>APP 이름</span></dt>
+        <dd><span>{{vm.appDetail.name}}</span></dd>
+        <dt><span>APP 설명</span></dt>
+        <dd>{{vm.appDetail.description}}</dd>
+        <dt><span>사용 API 및 정책</span></dt>
+        <dd ng-if="vm.apiList.length == 0"> </dd>
+        <dd ng-repeat="api in vm.apiList">
+            <div style="background-color:#f6f6f6; padding:5px; margin-bottom:5px">
+            <span>API 이름 : {{api.api.name}}</span>
+            <div class="voffset1">API 정책 : {{api.apiPlan.name}}</div>
+            <div class="voffset1">API 약관 : <button class="btn btn-info btn-xs" ng-click="vm.showTermsContent(api.api)">약관보기</button></div>
+            </div>
+        </dd>
+        <dt class="voffset2"><span>APP 키</span></dt>
+        <dd class="voffset2">{{vm.appDetail.appKey}}</dd>
+        <dt class="voffset2"><span>APP 시크릿</span></dt>
+        <dd class="voffset2">
+            <button ng-if="vm.appDetail.appKey" uib-popover-template="vm.secretPopover.templateUrl" popover-title="시크릿조회" popover-is-open="vm.isOpen" popover-trigger="outsideClick" type="button" ng-click="vm.clickSecretButton()" class="btn btn-danger btn-xs">시크릿 조회</button>
+        </dd>
+        <dt><span>oAuth 콜백URL</span></dt>
+        <dd>{{vm.appDetail.oAuthCallbackUrl}}</dd>
+        <dt><span>oAuth 스코프</span></dt>
+        <dd>{{vm.appDetail.oAuthScope}}</dd>
+    </dl>-->
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+        <span data-translate="entity.action.close">Close</span>
+    </button>
+</div>
+

@@ -1,0 +1,71 @@
+<form class="form" name="form">
+    <div class="row wrap" sc>
+        <div class="login-wrap">
+            <p class="title1">LOGIN</p>
+            <input ng-readonly="vm.isSecondAuthRequested" type="text" class="form-control" id="userId" placeholder="{{'global.form.userId.placeholder' | translate}}" ng-model="vm.userId" required>
+            <input autocomplete="off" ng-readonly="vm.isSecondAuthRequested" type="password" class="form-control" name="password" placeholder="{{'login.form.password.placeholder' | translate}}" ng-model="vm.password" required>
+
+            <div ng-if="!vm.profileInfos.loginSecondaryAuth && vm.needSecondaryAuth()" class="new-form-group form-group">
+                <input type="checkbox" id="forAdmin" ng-model="vm.forAdmin" >
+                <label for="forAdmin" class="label">운영자 인증</label>
+            </div>
+            <div ng-if="vm.profileInfos.loginSecondaryAuth || vm.forAdmin" class="form-inline">
+                <input type="text" class="form-control" id="authNumber" ng-model="vm.authNumber" ng-readonly="!vm.isSecondAuthRequested" required/>
+                <span ng-hide="!vm.isSecondAuthRequested"><span class="color_red">[ {{vm.msecPerMinute | date: 'mm : ss'}} ]</span></span>
+                <button ng-hide="vm.isSecondAuthRequested" type="button" class="btn" ng-click="vm.secondaryAuthenticate()">인증번호 받기</button>
+            </div>
+<!--             <p ng-if="vm.profileInfos.loginSecondaryAuth || vm.forAdmin" class="title2">개발환경에서는 인증받기 번호를 누르신 후, 3215를 입력하면 됩니다.</p> -->
+
+            <div class="alert alert-danger" ng-show="vm.authenticationError" data-translate="{{vm.authenticationErrorMessage}}">
+                <strong>Failed to sign in!</strong> Please check your credentials and try again.
+                <strong>인증 오류!</strong> 아이디나 비밀번호가 잘못 되었습니다.<br/>
+                상태가 지속될 경우 운영자에게 문의하세요.
+            </div>
+            <button type="submit" class="btn login-btn" ng-disabled="form.$invalid" ng-click="vm.login($event)">로그인</button>
+            <ul class="login_option">
+                <li ui-sref="findId">ID 찾기</li>
+                <li ng-click="vm.requestResetPassword()">비밀번호 초기화</li>
+                <li ng-click="vm.register()" class="">회원가입</li>
+            </ul>
+        </div>
+        <!-- <div class="col-md-10">
+            <h2><strong data-translate="login.title">로그인</strong></h2>
+        </div> -->
+        <!-- <div class="col-md-10">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="alert alert-danger" ng-show="vm.authenticationError" data-translate="{{vm.authenticationErrorMessage}}">
+                    <strong>Failed to sign in!</strong> Please check your credentials and try again.
+                    <strong>인증 오류!</strong> 아이디나 비밀번호가 잘못 되었습니다.<br/>
+                    상태가 지속될 경우 운영자에게 문의하세요.
+                </div>
+            </div>
+            <div class="col-md-8 col-md-offset-2">
+                <div class="form-group" style="margin-top: 20px">
+                    <label for="userId">아이디</label>
+                    <input ng-readonly="vm.isSecondAuthRequested" type="text" class="form-control" id="userId" placeholder="{{'global.form.userId.placeholder' | translate}}" ng-model="vm.userId" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" data-translate="login.form.password">Password</label>
+                    <input autocomplete="off" ng-readonly="vm.isSecondAuthRequested" type="password" class="form-control" name="password" placeholder="{{'login.form.password.placeholder' | translate}}" ng-model="vm.password" required>
+                </div>
+                <div ng-if="vm.profileInfos.loginSecondaryAuth" class="form-group">
+                    <label>SMS 인증</label>
+                    <p>개발환경에서는 인증받기 번호를 누르신 후, 1111을 입력하면 됩니다.</p>
+                    <div class="form-inline" style="padding: 10px 0; margin-top:5px; margin-right:-5px;">
+                        <input type="text" class="form-control" style="width:52%" id="authNumber" ng-model="vm.authNumber" ng-readonly="!vm.isSecondAuthRequested" required/>
+                        <span ng-hide="!vm.isSecondAuthRequested">남은시간 : <span class="color_red">[{{vm.msecPerMinute | date: 'mm:ss'}}]</span></span>
+                        <button type="button" style="padding:7px 70px; border-radius:4px;" ng-hide="vm.isSecondAuthRequested" class="btn btn-info" ng-click="vm.secondaryAuthenticate()">인증번호 받기</button>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 43px">
+                    <span class="btn-group pull-left">
+                        <button type="button" ui-sref="findId" class="btn btn-xs btn-bebe btn-group-style" style="height:33px;">ID 찾기</button>
+                        <button type="button" ng-click="vm.requestResetPassword()" class="btn btn-xs btn-b2b2 btn-group-style" style="height:33px;">비밀번호 초기화</button>
+                        <button type="button" ng-click="vm.register()" class="btn btn-xs btn-portal btn-eee btn-group-style" style="height:33px;">회원가입</button>
+                    </span>
+                    <button style="border-radius:3px; width: 80px" type="submit" class="btn btn-portal pull-right" ng-if="form.$invalid" disabled>로그인</button>
+                    <button style="border-radius:3px; width: 80px" type="submit" class="btn btn-portal pull-right" ng-if="!form.$invalid" ng-click="vm.login($event)">로그인</button>
+                </div>
+            </div> -->
+        </div>
+    </form>

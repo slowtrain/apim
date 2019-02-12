@@ -1,0 +1,51 @@
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong data-translate="discount.list.title">discount Manage Lists</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <p class="searchInfo">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 할인정책이 존재합니다.</span>
+            <button has-authority="ROLE_PLAN_CREATE" ng-click="vm.editPolicy()" class="btn btn-portal btn-flag-radius pull-right">
+                <span>할인정책 등록</span>
+            </button>
+        </p>
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:5%"/>
+                    <col style="width:25%"/>
+                    <col style="width:45%"/>
+                    <col style="width:10%"/>
+                    <col style="width:151px"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col" id="name" ng-mousedown="vm.sorting('name')">할인 정책명<i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th scope="col" id="description" ng-mousedown="vm.sorting('description')">정책 설명<i id="description" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th scope="col" id="rates" ng-mousedown="vm.sorting('rates')">할인율 (%)<i id="rates" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th scope="col">비고</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="discountPolicy in vm.discountPolicies" ng-if="vm.discountPolicies.length > 0">
+                    <td class="t_center">{{vm.totalItems -(vm.condition.page*vm.size) - $index}}</td>
+                    <td>{{discountPolicy.name}}</td>
+                    <td>{{discountPolicy.description}}</td>
+                    <td class="t_right">{{discountPolicy.rates}}%</td>
+                    <td class="t_center">
+                        <button ng-disabled="discountPolicy.isUsing" has-authority="ROLE_PLAN_MODIFY" class="btn btn-default btn-xs" ng-click="vm.editPolicy(discountPolicy)">수정</button>
+                        <button ng-disabled="discountPolicy.isUsing" has-authority="ROLE_PLAN_DELETE" class="btn btn-default btn-xs" ng-click="vm.delPolicy(discountPolicy, 'delete')">삭제</button>
+                    </td>
+                </tr>
+                <tr ng-if="vm.discountPolicies.length <= 0">
+                    <td colspan="5" class="t_center">등록하신 할인정책이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center">
+            <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+        </div>
+    </div>
+</div>

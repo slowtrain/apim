@@ -1,0 +1,318 @@
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()"></button>
+        <h4 class="modal-title" id="myUserLabel" data-translate="admin-organizations.home.{{vm.mode}}">
+            Create or edit a User</h4>
+    </div>
+    <div class="modal-body">
+        <form name="form" role="form" novalidate>
+            <div class="row">
+                <div class="col-md-4" style="padding-right:0;">
+                    <div class="form-group" ng-class="{'has-error':form.orgName.$dirty && form.orgName.$invalid}">
+                        <label class="required-label">기관명</label>
+                        <small class="color_red" ng-if="form.orgName.$error.minlength || form.orgName.$error.maxlength">(2~30자 이내)</small>
+                        <small class="color_red" ng-if="form.orgName.$error.pattern">(잘못 입력하셨습니다.)</small>
+                        <input type="text" class="form-control" name="orgName"
+                               ng-model="vm.Org.name" minlength="2" maxlength="30" limit='true' ng-pattern="/^[-가-힣A-Za-z0-9._ ]+$/" required>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error':form.orgDescription.$dirty && form.orgDescription.$invalid}">
+                        <label>기관설명</label>
+                        <small class="color_red" ng-if="form.orgDescription.$error.minlength || form.orgDescription.$error.maxlength">(100자 이내)</small>
+                        <small class="color_red" ng-if="form.orgDescription.$error.pattern">(잘못 입력하셨습니다.)</small>
+                        <input type="text" class="form-control" name="orgDescription" maxlength="100" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"
+                               ng-model="vm.Org.description">
+                    </div>
+                    <div class="form-group" style="padding: 7px 0;">
+                        <label class="required-label">기관구분</label>
+                        <div>
+                            <span class="radio_form">
+                                <input ng-disabled="!vm.flagOfRegister" type="radio" name="orgType" id="provider" value="PROVIDER" ng-model="vm.Org.type" ng-init="vm.Org.type=vm.flagOfRegister? 'PROVIDER' : vm.Org.type" ng-click="vm.checkBoxClickProvider()" required>
+                                <label for="provider">제공기관</label>
+                            </span>
+                            <span class="radio_form">
+                                <input ng-disabled="!vm.flagOfRegister" type="radio" name="orgType" id="user" value="PARTNER" ng-model="vm.Org.type" ng-click="vm.Org.code = null; vm.Org.gatewayDomainName = null" required>
+                                <label for="user">이용기관</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline" ng-class="{'has-error':form.licenseNumber1.$error.minlength||form.licenseNumber2.$error.minlength||form.licenseNumber3.$error.minlength}">
+                        <label class="required-label">사업자 등록번호</label>
+                        <p>
+                            <small class="color_red" ng-if="form.licenseNumber1.$error.minlength">(앞번호 3자리 입력바랍니다.)</small>
+                            <small class="color_red" ng-if="form.licenseNumber2.$error.minlength">(중간번호 2자리 입력바랍니다.)</small>
+                            <small class="color_red" ng-if="form.licenseNumber3.$error.minlength">(뒷번호 5자리 입력바랍니다.)</small>
+                        </p>
+                        <div>
+                            <input type="text" class="form-control" style="width:27%" name="licenseNumber1" ng-model="vm.licenseNumber[0]" minlength="3" mask="999" restrict='reject' limit='true' ng-change="vm.lengthCheck('licenseNumber', vm.licenseNumber)" required> -
+                            <input type="text" class="form-control" style="width:23%" name="licenseNumber2" ng-model="vm.licenseNumber[1]" minlength="2" mask="99" restrict='reject' limit='true' ng-change="vm.lengthCheck('licenseNumber', vm.licenseNumber)" required> -
+                            <input type="text" class="form-control" style="width:40%" name="licenseNumber3" ng-model="vm.licenseNumber[2]" minlength="5" mask="99999" restrict='reject' limit='true' ng-change="vm.lengthCheck('licenseNumber', vm.licenseNumber)" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline" ng-class="{'has-error':form.corpRegNumber1.$error.minlength||form.corpRegNumber2.$error.minlength}">
+                        <label class="required-label">법인 등록번호</label>
+                        <p>
+                            <small class="color_red" ng-if="form.corpRegNumber1.$error.minlength">(앞번호 6자리 입력바랍니다.)</small>
+                            <small class="color_red" ng-if="form.corpRegNumber2.$error.minlength">(뒷번호 7자리 입력바랍니다.)</small>
+                        </p>
+                        <div>
+                            <input type="text" class="form-control" style="width:45%" name="corpRegNumber1" ng-model="vm.corpRegNumber[0]" minlength="6" mask="999999" restrict='reject' limit='true' ng-change="vm.lengthCheck('corpRegNumber', vm.corpRegNumber)" required> -
+                            <input type="text" class="form-control" style="width:50%" name="corpRegNumber2" ng-model="vm.corpRegNumber[1]" minlength="7" mask="9999999" restrict='reject' limit='true' ng-change="vm.lengthCheck('corpRegNumber', vm.corpRegNumber)" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" style="padding-right:0">
+                    <div class="form-group" ng-class="{'has-error' : form.ceoName.$error.pattern || form.ceoName.$error.minlength || form.ceoName.$error.maxlength}">
+                        <label>대표자 성명</label>
+                        <small class="color_red" ng-show="form.ceoName.$error.pattern">잘못 입력하셨습니다.</small>
+                        <small class="color_red" ng-if="form.ceoName.$error.minlength || form.ceoName.$error.maxlength">2~30자 이내</small>
+                        <input type="text" class="form-control" name="ceoName" minlength="2" maxlength="30" limit='true' ng-pattern="/^[-가-힣A-Za-z0-9._ ]+$/"
+                               ng-model="vm.Org.ceoName">
+                    </div>
+                    <div class="form-group" ng-class="{'has-error' : form.sectors.$error.pattern}">
+                        <label>업태명</label>
+                        <small class="color_red" ng-show="form.sectors.$error.pattern">잘못 입력하셨습니다.</small>
+                        <input type="text" class="form-control" name="sectors" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"
+                               ng-model="vm.Org.sectors">
+                    </div>
+                    <div class="form-group" ng-class="{'has-error' : form.address.$error.pattern}">
+                        <label  class="voffset1">사업장 소재지</label>
+                        <small class="color_red" ng-show="form.address.$error.pattern">잘못 입력하셨습니다.</small>
+                        <input type="text" class="form-control" name="address" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"
+                               ng-model="vm.Org.address">
+                    </div>
+                    <div class="form-group" ng-class="{'has-error' : form.homepageUrl.$error.pattern}">
+                        <label>홈페이지 주소</label>
+                        <small class="color_red" ng-if="form.homepageUrl.$error.pattern">(잘못 입력하셨습니다.)</small>
+                        <input type="text" class="form-control" name="homepageUrl" ng-pattern="/^[-A-Za-z0-9:._?=/& ]+$/"
+                               ng-model="vm.Org.homepageUrl">
+                    </div>
+                    <div class="form-group" ng-class="{'has-error' : form.mainPhone2.$error.minlength || form.mainPhone3.$error.minlength}">
+                        <div>
+                            <label class="required-label">회사 전화번호</label>
+                            <!-- <button type="button" ng-if="!vm.flagOfRegister" class="btn btn-default btn-xs pull-right" style="position:relative; bottom:3px;" ng-class="{'btn-portal': !vm.modifyMainPhone, 'btn-default': vm.modifyMainPhone}" ng-click="vm.modifyMainPhone = !vm.modifyMainPhone; vm.mainPhone=[]">
+                                <i ng-class="{'glyphicon-pencil': !vm.modifyMainPhone, 'glyphicon-remove': vm.modifyMainPhone}" class="glyphicon"></i> {{(vm.modifyMainPhone)? '취소' : '수정'}}
+                            </button> -->
+                            <p>
+                                <small class="color_red" ng-if="!vm.mainPhone[0] && vm.mainPhone[1] || !vm.mainPhone[0] && vm.mainPhone[2]">(지역번호를 선택바랍니다.)</small>
+                                <small class="color_red" ng-if="form.mainPhone2.$error.minlength">(앞번호 3자이상 입력바랍니다.)</small>
+                                <small class="color_red" ng-if="form.mainPhone3.$error.minlength">(뒷번호 4자리 입력바랍니다.)</small>
+                            </p>
+                        </div>
+                        <div class="form-inline phone_set type5">
+                            <select class="form-control" name="mainPhone1" ng-model="vm.mainPhone[0]" ng-options="num for num in vm.districtNums track by num" required>
+                                <option value="">선택</option>
+                            </select>
+                            <input type="text" class="form-control center" name="mainPhone2" ng-model="vm.mainPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' required>
+                            <input type="text" class="form-control" name="mainPhone3" ng-model="vm.mainPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' required>
+                        </div>
+                        <!-- <div ng-if="!vm.flagOfRegister">
+                            <div ng-if="vm.modifyMainPhone" class="form-inline">
+                                <select class="form-control" name="mainPhone" ng-model="vm.mainPhone[0]" ng-options="num for num in vm.districtNums track by num" ng-change="vm.lengthCheck('mainPhone', vm.mainPhone)" required>
+                                    <option value="">선택</option>
+                                </select> -
+                                <input type="text" class="form-control" style="width:32%;" name="mainPhone" ng-model="vm.mainPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' ng-change="vm.lengthCheck('mainPhone', vm.mainPhone)" required> -
+                                <input type="text" class="form-control" style="width:32%;" name="mainPhone" ng-model="vm.mainPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' ng-change="vm.lengthCheck('mainPhone', vm.mainPhone)" required>
+                            </div>
+                            <input ng-if="!vm.modifyMainPhone" type="text" style="width:100%;" class="form-control" ng-value="vm.Org.maskingMainPhone" readonly/>
+                        </div> -->
+                    </div>
+                    <!-- <div ng-if="!vm.flagOfRegister" class="form-group" style="padding: 7px 0;">
+                        <label>기관활성</label>
+                        <div>
+                            <input type="radio" name="orgState" id="activate" value="ACTIVE" ng-model="vm.Org.checkState">
+                            <label for="activate" style="margin-right:10px">활성</label>
+                            <input type="radio" name="orgState" id="deactivate" value="INACTIVE" ng-model="vm.Org.checkState" ng-change="vm.deactivateInfo()">
+                            <label for="deactivate">비활성</label>
+                        </div>
+                    </div> -->
+                </div>
+                <div ng-if="vm.Org.type =='PARTNER'" class="col-md-4 form-group" style="overflow:hidden">
+                    <label class="required-label">활용예정 API 제공기관</label>
+                    <dd class="form-inline">
+                        <div class="bigCheckBtn radio_form" ng-repeat="provider in vm.providers">
+                            <input type="checkbox" name="selectRadio" id="{{provider.id}}" ng-model="provider.checked" ng-change="vm.checkProvider(provider)">
+                            <label for="{{provider.id}}" class="">{{provider.name}}</label>
+                        </div>
+                        <!-- <div class="new-form-group" ng-repeat="provider in vm.providers">
+                            <input type="checkbox" id="{{provider.id}}" ng-model="provider.checked" ng-change="vm.checkProvider()">
+                            <label for="{{provider.id}}" class="">{{provider.name}}</label>
+                        </div> -->
+                    </dd>
+                </div>
+                <div ng-if="vm.Org.type =='PROVIDER'" class="col-md-4 form-group" style="overflow:hidden">
+                    <div class="form-group" ng-class="{'has-error':form.orgCode.$dirty && form.orgCode.$invalid}">
+                        <label class="required-label">기관코드</label>
+                        <small class="color_red" ng-if="vm.Org.type =='PROVIDER' && (form.orgCode.$error.minlength || form.orgCode.$error.maxlength)">(3~15자 이내)</small>
+                        <small class="color_red" ng-if="vm.Org.type =='PROVIDER' && form.orgCode.$error.pattern">(잘못 입력하셨습니다.)</small>
+                        <input type="text" class="form-control" name="orgCode" ng-model="vm.Org.code" minlength="3" maxlength="15" limit='true' ng-pattern="/^[-A-Za-z0-9._]+$/" ng-required="vm.Org.type =='PROVIDER'" ng-disabled="!vm.flagOfRegister || vm.Org.type !='PROVIDER'">
+                    </div>
+                    <div class="form-group" ng-class="{'has-error':form.orgGwDomain.$dirty && form.orgGwDomain.$invalid}">
+                        <label class="required-label">기관 G/W 도메인명</label><small class="color_red">(영문대소숫자 - . 만 허용)</small>
+                        <small class="color_red" ng-if="vm.Org.type =='PROVIDER' && form.orgGwDomain.$error.pattern">(잘못 입력하셨습니다.)</small>
+                        <input type="text" class="form-control" name="orgGwDomain" ng-model="vm.Org.gatewayDomainName" limit='true' ng-pattern="/^[-A-Za-z0-9.*]+$/" ng-required="vm.Org.type =='PROVIDER'" ng-disabled="!vm.flagOfRegister || vm.Org.type !='PROVIDER'">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form id="fileForm">
+            <div ng-if="!vm.flagOfRegister && vm.Org.type=='PARTNER'" class="voffset3">
+                <label>기관인증자료</label>
+                <div class="voffset2">
+                    <p ng-repeat="file in vm.Org.attachFileList" ng-style="!$last && {'margin-bottom': '5px'}">
+                        <span ng-click="vm.fileDown(file)" class="file-list-wrap">
+                            <span class="file_name_info" >{{file.fileName.split('\\').pop()}}</span>
+                            <span class="file_size">{{vm.fileSize(file)}}</span>
+                        </span>
+                    </p>
+                </div>
+                <div class="voffset3">
+                    <div ng-repeat="file in vm.files" class="file-style-form" id="inputFile{{$index}}">
+                        <input id="hiddenInputFile-{{$index}}" class="form-control file-input" type="file" name="hiddenInputFile-{{$index}}" onchange="angular.element(this).scope().addFileInput(event)" ng-hide="true"/>
+                        <div class="input-group">
+                            <input id="viewInputFile{{$index}}" type="text" class="form-control" name="viewInputFile" placeholder="파일을 선택하세요" disabled>
+                            <span class="input-group-btn">
+                                <button ng-if="!file.data || vm.files.length==1" class="btn btn-default file-btn" type="button" ng-click="vm.deletion=false; vm.selectFile($index);">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                                <button ng-if="file.data" class="btn btn-danger file-btn" type="button" ng-click="vm.deletion=true; vm.delInput($index, vm.files);">
+                                    <i class="glyphicon glyphicon-minus"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div ng-if="vm.Org.type=='PARTNER'" class="table-responsive t_left voffset3">
+            <div>
+                <label class="control-label" style="vertical-align: -4px;">출금정보</label>
+            </div>
+            <form name="form2" novalidate>
+            <table class="table" style="border:0 !important">
+                <colgroup>
+                    <col style="width:21%">
+                    <col style="width:20%">
+                    <col style="width:28%">
+                    <col/>
+                    <col style="width:60px"/>
+                </colgroup>
+                <tbody>
+                <tr>
+                    <td style="border:0" ng-class="{'has-error' : form2.accountAlias.$invalid}">
+                        <input type="text" name="accountAlias" class="form-control" ng-model="vm.newW.accountAlias" placeholder="계좌별칭 입력" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" maxlength="10"/>
+                    </td>
+                    <td style="border:0" ng-class="{'has-error' : form2.bankName.$invalid}">
+                        <input type="text" name="bankName" class="form-control" ng-model="vm.newW.bankName" placeholder="은행 입력" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" maxlength="10"/>
+                    </td>
+                    <td style="border:0" ng-class="{'has-error' : form2.accountNumber.$invalid}">
+                       <input type="text" name="accountNumber" class="form-control" ng-model="vm.newW.accountNumber" placeholder="계좌번호 숫자만 입력" mask="9" repeat="20" minlength="1" maxlength="20" restrict="reject" limit="false" validate="false"/>
+                    </td>
+                    <td style="border:0" ng-class="{'has-error' : form2.description.$invalid}">
+                        <input type="text" name="description" class="form-control" ng-model="vm.newW.description" placeholder="설명 입력" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" maxlength="20"/>
+                    </td>
+                    <td style="border:0" class="t_center">
+                        <button type="button" class="btn-type2 color-type1" ng-click="vm.addWithdrawal()" ng-disabled="form2.$invalid || !vm.newW.accountAlias || !vm.newW.bankName || !vm.newW.accountNumber">추가
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </form>
+            <table class="table">
+                <colgroup>
+                    <col style="width:21%">
+                    <col style="width:20%">
+                    <col style="width:25%">
+                    <col/>
+                    <col style="width:128px"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>별칭</th>
+                    <th>은행</th>
+                    <th>계좌번호</th>
+                    <th>설명</th>
+                    <th>비고</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-if="vm.Org.orgWithdrawals.length > 0" ng-repeat="withdrawal in vm.Org.orgWithdrawals">
+                    <td>{{withdrawal.accountAlias}}
+                        <label ng-show="withdrawal.isDefault" class="label label-info" style="cursor:default">기본계좌</label>
+                    </td>
+                    <td>{{withdrawal.bankName}}</td>
+                    <td ng-if="!withdrawal.id">{{withdrawal.accountNumber}}</td>
+                    <td ng-if="withdrawal.id" class="t_center">
+                        <button uib-popover-template="vm.accountNumberPopover.templateUrl"
+                            popover-title="계좌번호 조회"
+                            popover-is-open="withdrawal.isOpen"
+                            popover-trigger="outsideClick"
+                            type="button"
+                            ng-click="vm.accountNumberSearch(withdrawal)"
+                            class="btn btn-default btn-xs">조회
+                        </button>
+                    </td>
+                    <td>{{withdrawal.description}}</td>
+                    <td class="t_left">
+                        <button type="button" class="btn btn-default btn-xs" ng-if="!withdrawal.isDefault" ng-click="vm.setDefaultWithdrawalAccount(withdrawal)">기본계좌지정</button>
+                        <button type="button" class="btn btn-default btn-xs pull-right" ng-if="!(withdrawal.isDefault)" ng-click="vm.delWithdrawal(withdrawal)">삭제</button>
+                    </td>
+                </tr>
+                <tr ng-if="!vm.Org.orgWithdrawals.length">
+                    <td class="t_center" colspan="5">등록된 출금 계좌가 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="t_left voffset3" ng-if="vm.Org.id">
+            <label>기관 소속 사용자</label>
+<!--             <button style="margin-left:10px" class="btn btn-default btn-xs" ng-click="vm.addUsers()">추가</button> -->
+            <div class="table-responsive voffset2">
+                <table class="table tableFixed">
+                    <colgroup>
+                        <col style="width:22%" />
+                        <col style="width:25%" />
+                        <col />
+                        <col style="width:121px" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th scope="col">권한</th>
+                            <th scope="col">닉네임</th>
+                            <th scope="col">이메일</th>
+                            <th scope="col">비고</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-style="user.state !='ACTIVE' && {'color':'#ddd'}" ng-repeat="user in vm.users">
+                            <td scope="row" style="text-align:left">{{user.role.name}}</td>
+                            <td scope="row" style="text-align:left">{{user.fullName}}
+                                <label ng-show="user.isManager" class="label label-info" style="cursor:default">관리자</label>
+                            </td>
+                            <td scope="row" style="text-align:left">{{user.email}}</td>
+                            <td class="text-center">
+                                <button type="button" ng-disabled="user.state !='ACTIVE'" ng-show="!user.isManager" class="btn btn-default btn-xs" ng-click="vm.setManager(user)">관리자지정</button>
+<!--                                 <button type="button" ng-show="!user.isManager" class="btn btn-danger btn-xs pull-right" ng-click="vm.delUser(user, $index)"><i class="glyphicon glyphicon-minus"></i></button> -->
+                            </td>
+                        </tr>
+                        <tr ng-if="vm.users.length == 0">
+                            <td class="t_center" colspan="4">등록된 사용자가 없습니다.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" ng-disabled="form.$invalid || (vm.flagOfRegister && vm.Org.type =='PARTNER' && !vm.providerChecked) ||  vm.lengthChecked" class="btn btn-portal modalBtn" ng-click="vm.uploadFiles()">
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>

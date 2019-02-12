@@ -1,0 +1,29 @@
+{
+    "agree": {
+        "list":{
+            "title": "동의서 목록",
+            "registration": "신규 등록"
+        },
+        "register":{
+            "title":"동의서 등록",
+            "name": "할인정책명",
+            "description": "정책 설명",
+            "rates": "할인율 (%)"
+        },
+        "edit":{
+            "title":"동의서 수정"
+        },
+        "view":{
+            "title":"동의서 상세보기"
+        },
+        "title": "제목",
+        "agreeVer": "버전",
+        "createdDate": "등록일",
+        "creator": "등록자",
+        "useYn": "사용유무",
+        "goToList":"목록가기",
+        "body": "동의서 내용",
+        "etc": "비고",
+        "providerName": "제공기관"
+    }
+}

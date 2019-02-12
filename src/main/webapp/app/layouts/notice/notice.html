@@ -1,0 +1,13 @@
+<dl>
+    <dt style="width:100%; height:39px; position:fixed; top:0px; padding:10px; background-color:#46567e">
+        <div><p class="color_white" style="font-weight:normal;">[공지] {{vm.notice.title}}</p></div>
+    </dt>
+    <dd style="width:99%; word-wrap: break-word; margin-top:37px; padding: 10px;">{{vm.htmlContents(vm.notice.contentsBody)}}
+        <div ng-if="!!vm.notice.postId" id="content" style="min-height: 269px;" ng-click="vm.goForum()"></div>
+        <div ng-if="!vm.notice.postId" id="content" style="min-height: 269px;"></div>
+    </dd>
+    <dd style="overflow:hidden; position:fixed; bottom:0px; width:100%; padding:10px; background-color:#f6f6f6; border-top: 1px solid #ddd">
+            <button type="button" class="btn btn-default btn-sm pull-left" ng-click="vm.closeDays('show'+vm.param)">오늘 하루 닫기</button>
+            <button type="button" class="btn btn-default btn-md pull-right" ng-click="vm.close('notice'+vm.param)">닫기</button>
+    </dd>
+</dl>

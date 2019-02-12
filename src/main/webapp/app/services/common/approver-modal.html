@@ -1,0 +1,56 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()"></button>
+    <h4 class="modal-title">승인진행상태</h4>
+</div>
+<div class="modal-body">
+    <table class="table tableFixed">
+        <colgroup>
+            <col style="width:5%"/>
+            <col style="width:10%"/>
+            <col style="width:15%"/>
+            <col style="width:100px"/>
+            <col style="width:140px"/>
+            <col/>
+        </colgroup>
+        <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Type</th>
+            <th scope="col" data-translate="approver.name">Name</th>
+            <th scope="col" data-translate="approver.decision">decision</th>
+            <th scope="col">일자</th>
+            <th scope="col">내용</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="approver in vm.approvers">
+            <td class="t_center">{{$index + 1}}</td>
+            <td class="t_center">{{ approver.typeName }}</td>
+            <td>
+                <span>{{approver.name}}</span>
+            </td>
+            <td class="t_center">
+                <span>{{ approver.decision.name }}</span>
+                <!--
+                <span ng-if="!approver.decision">승인진행중</span>
+                <span ng-if="approver.decision == 'CREATED'">승인요청</span>
+                <span ng-if="approver.decision == 'APPROVED'">승인완료</span>
+                <span ng-if="approver.decision == 'DENIED'">반려</span>
+                <span ng-if="approver.decision == 'CANCELED'">요청취소</span>
+                -->
+            </td>
+            <td class="t_center">{{approver.lastModifiedDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+            <td>{{approver.detailComment}}</td>
+        </tr>
+        <tr ng-if="vm.approvers <= 0">
+            <td class="t_center" colspan="5">승인내역이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+        <span data-translate="entity.action.close">Close</span>
+    </button>
+</div>
+

@@ -1,0 +1,15 @@
+
+    <ul class="menu-popover">
+        <li ng-click="vm.edit(vm.selectCluster)">
+            <i class="glyphicon glyphicon-pencil" style="color:#b7b7b7"></i> <span data-translate="entity.action.edit">수정하기</span>
+        </li>
+        <li ng-click="vm.remove('delete', vm.selectCluster)">
+            <i class="glyphicon glyphicon-trash" style="color:#b7b7b7"></i> <span data-translate="entity.action.delete">삭제하기</span>
+        </li>
+        <li ng-show="vm.selectCluster.sharable" ng-click="vm.shareCluster(vm.selectCluster)" has-authority="ROLE_ADMIN">
+            <i class="glyphicon glyphicon-asterisk" style="color:#b7b7b7"></i> <span data-translate="gateway.cluster.share.menu">공유하기</span>
+        </li>
+        <li ng-click="vm.add(vm.selectCluster)">
+            <i class="glyphicon glyphicon-log-out" style="color:#b7b7b7"></i> <span data-translate="gateway.register.title">게이트웨이 추가</span>
+        </li>
+    </ul>

@@ -1,0 +1,32 @@
+{
+   "forum": {
+    	"title": "포럼 커뮤니티",
+    	"register": {
+    		"title": "새로운 포럼 만들기",
+    		"menu": "새 포럼 등록",
+    		"namedTitle": "포럼 이름",
+    		"description": "포럼 설명",
+    		"owner": "포럼 소유기관"
+    	},
+    	"list": {
+    		"enter": "들어가기",
+    		"menu": "목록",
+    		"bno": "번호",
+    		"title": "제목",
+    		"writer": "등록자",
+    		"regdate": "등록일",
+    		"like": "좋아요",
+    		"view": "조회수"
+    	},
+        "viewAll":{
+            "title":"전체 글 보기"
+        },
+        "goList": "포럼 전체목록",
+        "openApiTitle":"최근 공개된 API",
+        "forumTitle":"Forum",
+        "noticeTitle":"공지사항",
+        "signUpTitle":"유앤아워스<br />OPEN API Developer Portal",
+        "signUp":"회원가입",
+        "signUpBtn":"회원가입 신청"
+    }
+}

@@ -1,0 +1,72 @@
+image: atomfrede/gitlab-ci-jhipster-stack
+
+cache:
+    key: "$CI_BUILD_REF_NAME"
+    paths:
+        - node_modules
+        - .maven
+        - src/main/webapp/bower_components
+
+stages:
+    - build
+    - test
+    - package
+    - release
+    - deploy
+
+before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - export MAVEN_USER_HOME=`pwd`/.maven
+    ###########################
+    - mkdir -p $HOME/.m2
+    - cp $PWD/.mvn/settings*.xml $HOME/.m2/
+    - mkdir -p src/main/webapp/bower_components
+    ###########################
+    - npm install
+
+########### BUILD ############
+
+maven-build:
+    stage: build
+    script:
+        - ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
+
+gulp-build:
+    stage: build
+    script:
+        - gulp build
+
+########### TEST ############
+
+maven-test:
+    stage: test
+    script:
+        - ./mvnw test -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/surefire-reports/*
+
+gatling-test:
+    stage: test
+    allow_failure: true
+    before_script:
+        - mkdir -p $HOME/.m2
+        - cp $PWD/.mvn/settings*.xml $HOME/.m2/
+        - mkdir -p src/main/webapp/bower_components
+        - npm install
+        - ./mvnw &
+    script:
+        - ./mvnw gatling:execute -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/gatling/*
+
+########### PACKAGE ############
+
+maven-package:
+    stage: package
+    script:
+        - ./mvnw package -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/*.war

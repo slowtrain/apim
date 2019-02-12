@@ -1,0 +1,95 @@
+<div class="wrap row" sc>
+    <div class="find-id-wrap">
+        <p class="title1">아이디 찾기</p>
+        <ul class="id_intro">
+            <li>1. 본인의 닉네임과 이메일, 휴대폰 번호를 정확히 기입하고 등록조회버튼을 누르십시오.</li>
+            <li>2. 본인의 등록정보가 조회되면, 아이디 앞자리를 확인할 수 있습니다.</li>
+        </ul>
+        <form name="form" role="form" novalidate>
+            <div ng-if="!vm.searchResult">
+                <ul class="id_option">
+                    <li>
+                        <div class="left_side">
+                            <label class="required-label">닉네임</label>
+                        </div>
+                        <div class="right_side">
+                            <input type="text" class="form-control" name="fullName" ng-model="vm.user.fullName" required/>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="left_side">
+                            <label class="required-label">이메일</label>
+                        </div>
+                        <div class="right_side">
+                            <input type="text" class="form-control" name="email" ng-model="vm.user.email" required/>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="left_side">
+                            <label class="required-label">휴대폰번호</label>
+                        </div>
+                        <div class="right_side form_set phone_set">
+                            <select class="form-control" name="cellPhone1" ng-model="vm.cellPhone[0]" ng-options="num for num in vm.cellIdentifyingNums track by num" ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required>
+                                <option value="">선택</option>
+                            </select>
+                            <input type="text" class="form-control center" name="cellPhone2" ng-model="vm.cellPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required>
+                            <input type="text" class="form-control" name="cellPhone3" ng-model="vm.cellPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required>
+                        </div>
+                    </li>
+                </ul>
+                <div class="btn_layout">
+                    <button class="btn-type1 just_right" ng-disabled="form.$invalid" ng-click="vm.searching()">등록조회</button>
+                </div>
+            </div>
+
+            <div ng-if="vm.searchResult" class="t_center">
+                <div class="alert t_center">
+                    <p><strong>{{vm.user.fullName}}</strong> 님의 아이디는 <strong>{{vm.response.login}}</strong> 입니다.</p>
+                </div>
+                <button class="btn-type1 just_right" ui-sref="login">로그인화면 가기</button>
+            </div>
+        </form>
+    </div>
+    <!-- <div class="col-md-10">
+        <h2><strong>아이디 찾기</strong></h2>
+        <div class="alert" style="background-color:#eee; color:#777777">
+            <p>1. 본인의 닉네임과 이메일, 휴대폰 번호를 정확히 기입하고 등록조회버튼을 누르십시오.</p>
+            <p>2. 본인의 등록정보가 조회되면, 아이디 앞 4자리를 확인할 수 있습니다.</p>
+        </div>
+
+        <form name="form" role="form" novalidate>
+            <div ng-if="!vm.searchResult">
+                <div class="form-group" ng-class="{'has-error' : form.fullName.$error.pattern}">
+                    <label>닉네임</label>
+                    <small class="color_red" ng-if="form.fullName.$error.required">*</small>
+                    <input type="text" class="form-control" name="fullName" ng-model="vm.user.fullName" required/>
+                </div>
+                <div class="form-group">
+                    <label>이메일</label>
+                    <small class="color_red" ng-if="form.email.$error.required">*</small>
+                    <input type="text" class="form-control" name="email" ng-model="vm.user.email" required/>
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label>휴대폰번호</label>
+                        <small class="color_red" ng-if="!vm.cellPhone[0] && !vm.cellPhone[1] && !vm.cellPhone[2]">*</small>
+                    </div>
+                    <div>
+                        <select class="form-control" name="cellPhone1" ng-model="vm.cellPhone[0]" ng-options="num for num in vm.cellIdentifyingNums track by num" ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required>
+                            <option value="">선택</option>
+                        </select> -
+                        <input type="text" class="form-control" style="width:15%" name="cellPhone2" ng-model="vm.cellPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required> -
+                        <input type="text" class="form-control" style="width:15%" name="cellPhone3" ng-model="vm.cellPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required>
+                    </div>
+                </div>
+                <button class="btn btn-portal voffset2" ng-disabled="form.$invalid" ng-click="vm.searching()">등록조회</button>
+            </div>
+            <div ng-if="vm.searchResult" class="t_center">
+                <div class="alert t_center" style="border:1px solid #19c6b4;">
+                    <p><strong>{{vm.user.fullName}}</strong> 님의 아이디는 <strong>{{vm.response.login}}</strong> 입니다.</p>
+                </div>
+                <button class="btn btn-portal voffset5" ui-sref="login"><i class="glyphicon glyphicon-share-alt"></i> 로그인화면 가기</button>
+            </div>
+        </form>
+    </div> -->
+</div>

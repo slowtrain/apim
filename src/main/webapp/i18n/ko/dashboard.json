@@ -1,0 +1,9 @@
+{
+    "dashboard": {
+        "tool":{
+            "conform": "승인",
+            "api":"api"
+        }
+
+    }
+}

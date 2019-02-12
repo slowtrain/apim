@@ -1,0 +1,34 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "사용자",
+            "createLabel": "사용자 추가",
+            "register": "신규 등록",
+            "edit": "사용자 정보 수정"
+        },
+        "created": "A new user is created with identifier {{ param }}",
+        "updated": "An user is updated with identifier {{ param }}",
+        "deleted": "An user is deleted with identifier {{ param }}",
+        "delete": {
+            "question": "{{ login }} 사용자를 삭제하시겠습니까?"
+        },
+        "detail": {
+            "title": "사용자"
+        },
+        "login": "아이디",
+        "fullName": "닉네임",
+        "email": "이메일",
+        "state": "상태",
+        "active": "활성",
+        "inactive": "비활성",
+        "registering": "등록진행중",
+        "withdrawing": "탈퇴진행중",
+        "org": "기관",
+        "roles": "역할",
+        "langKey": "언어",
+        "createdBy": "생성자",
+        "createdDate": "생성일",
+        "lastModifiedBy": "수정자",
+        "lastModifiedDate": "수정일"
+    }
+}

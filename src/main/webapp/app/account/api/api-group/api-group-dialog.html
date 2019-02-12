@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()"></button>
+    <h4 class="modal-title" id="myUserLabel" data-translate="apiGroup.title"">Api Group List</h4>
+</div>
+<div class="modal-body">
+	<div>
+	   	<div class="table-responsive voffset3">
+	       	<table class="table tableFixed">
+	           	<colgroup>
+		            <col style="width:10%"/>
+		            <col style="width:20%"/>
+		            <col style="width:37%"/>
+		            <col style="width:197px"/>
+		        </colgroup>
+		        <thead>
+			        <tr>
+	                    <th scope="col">No</th>
+	                    <th scope="col" data-translate="apiGroup.name">Name</th>
+	                    <th scope="col" data-translate="apiGroup.description">description</th>
+                    	<th scope="col" data-translate="apiList.actions">organization</th>
+		           </tr>
+	           </thead>
+                <tbody>
+                <tr ng-repeat="group in vm.groups">
+                    <td scope="row" class="t_center">{{$index + 1}}</td>
+                    <td>{{group.name}}</td>
+                    <td>{{group.description}}</td>
+                    <td>{{group.organization.name}}</td>
+                </tr>
+                <tr ng-if="vm.groups.length <= 0">
+                    <td colspan="4" class="t_center">그룹이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+	       </table>
+   		</div>
+        <div class="text-center">
+            <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+        </div>
+   	</div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+        <span data-translate="entity.action.close">Close</span>
+    </button>
+</div>

@@ -1,0 +1,40 @@
+{
+    "gateway": {
+        "title": "G/W 목록",
+        "register": {
+            "title": "G/W 추가",
+            "name": "G/W 이름",
+            "username": "사용자 이름",
+            "password": "비밀번호",
+            "service": "service",
+            "servers": "Available servers",
+            "error": "Warning: no server available!"
+        },
+        "update":{
+            "title": "G/W 수정"
+         },
+        "refresh": {
+            "button": "Refresh"
+        },
+        "cluster": {
+            "title": "G/W 클러스터 목록",
+            "description": "클러스터 설명",
+            "register": {
+                "title": "클러스터 신규등록",
+                "name": "이름"
+             },
+             "update":{
+                "title": "클러스터 수정"
+             },
+             "list": {
+                "enter": "소속 G/W 보기"
+             },
+             "share": {
+                "title": "클러스터 공유",
+                "menu": "API 등록 허용",
+                "inform": "사용허가",
+                "orglist": "기관목록"
+             }
+        }
+    }
+}

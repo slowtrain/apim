@@ -1,0 +1,39 @@
+<div style="width:300px">
+    <div>{{dynamicPopover.title}}
+        <button type="button" class="close" ng-click="api.isOpen = false"></button>
+    </div>
+    <div class="form-group scrollTable3">
+        <table class="table tableFixed">
+            <thead>
+            <tr>
+                <th scope="col">정책명</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr ng-if="!api.usablePlan && api.apiPlan">
+                <td >
+                    <label for="{{'scope'+$index}}" class="color_gray dotContainer" style="width:90%; vertical-align:-webkit-baseline-middle" title="{{api.apiPlan.name}}">{{api.apiPlan.name}}</label>
+                    <i title="상세보기" ng-click="vm.apiPlanInform=!vm.apiPlanInform; $event.stopPropagation()" style="top:2px" class="glyphicon glyphicon-info-sign"></i>
+                    <p ng-if="vm.apiPlanInform"><b>[변경시 사용제한 안내]</b> 해당 정책은 API 제공기관의 방침에 따라 새로 적용가능한 정책목록에서 제외되었습니다.
+                    그러나 이 정책을 사용하는 기존 앱은 다른 정책으로 변경치 않고 계속 사용 가능합니다.
+                    다만, 다른 정책으로 변경 적용한 이후에는 더 이상 해당 정책을 사용하실 수 없습니다.
+                    </p>
+                </td>
+            </tr>
+            <tr ng-repeat="plan in api.api.applicablePlans">
+                <td ng-click="api.apiPlan=plan; api.isOpen=false;" style="text-align:left;">
+                    <label class="dotContainer" ng-disabled="api.apiPlan.id == plan.id" style="width:90%; vertical-align:-13px">{{plan.name}}</label>
+                    <i title="상세보기" ng-click="plan.apiPlanInform=!plan.apiPlanInform; $event.stopPropagation()" style="top:5px" class="glyphicon glyphicon-info-sign"></i>
+                    <dl ng-if="plan.apiPlanInform" style="border:0px">
+                         <dd>할 당 량 : <span ng-if="!plan.quotaValue">제한없음</span><span ng-if="plan.quotaValue">{{plan.quotaValue | number}}건 / {{vm.filter(plan.quotaTimeUnit, 1)}}</span></dd>
+                         <dd>초당 처리량 : <span ng-if="!plan.maxRequestRate">제한없음</span><span ng-if="plan.maxRequestRate">{{plan.maxRequestRate | number}}건</span></dd>
+                         <dd>시간 제한 : <span ng-if="!plan.controlTime">제한없음</span><span ng-if="plan.controlTime">{{plan.startTime}} ~ {{plan.endTime}}</span></dd>
+                         <dd>요일 제한 : <span ng-if="!plan.controlDay">제한없음</span><span ng-if="plan.controlDay">{{vm.filter(plan.startDayOfWeek)}} ~ {{vm.filter(plan.endDayOfWeek)}}</span></dd>
+                     </dl>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

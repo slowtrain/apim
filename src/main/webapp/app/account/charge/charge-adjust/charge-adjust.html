@@ -1,0 +1,69 @@
+<div class="row wrap">
+    <div class="">
+        <!-- <h2><strong>과금 기본 통계</strong></h2> -->
+        <h2><strong data-translate="charge-adjust.title">chargeAdjust Lists</strong></h2>
+    </div>
+    <div class="">
+        <div class="searchField type2 typeNew">
+            <div class="dateContainer">
+                <dl class="datePickerField">
+                    <dd class="form-inline" style="width:260px">
+                        <label class="control" for="approvalRequester">요청월</label>
+                        <span class="input-group">
+                            <input type="text" class="form-control"
+                                   id="approvalRequester" readonly
+                                   uib-datepicker-popup="yyyy-MM"
+                                   ng-model="vm.condition.chargeMonth"
+                                   is-open="vm.dateOpen"
+                                   popup-placement="bottom-left"
+                                   on-open-focus="false"
+                                   datepicker-options="dateOptions"
+                                   close-text="닫기"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"
+                                        uib-is-class="'btn-info' for selectedDt, 'active' for activeDt on dt"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </span>
+                    </dd>
+                </dl>
+                <button type="button" ng-hide="vm.isAutoMode" class="btn search-btn" ng-click="vm.clickSearchButton(true)">검색</button>
+
+            </div>
+        </div>
+    </div>
+    <div class="text-center voffset3" ng-show="!vm.success">
+        <div class="searchField2" style="padding:23px; border:0px">{{ vm.alertMessage }}</div>
+    </div>
+    <div class="voffset3" ng-show="vm.success">
+        <div class="voffset1" style="padding: 0;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style="width:150px">기관</th>
+                    <th>API</th>
+                    <th style="width:115px">총요금</th>
+                    <th style="width:115px">최종요금</th>
+                    <th style="width:200px">조정사유</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="m in vm.metricsList">
+                    <td class="text-left">{{ m.orgName }}</td>
+                    <td class="text-left">{{ m.apiName }}</td>
+                    <td class="text-right">{{ m.totalAmount | number:0}}</td>
+                    <td class="text-right"><input type="text" class="form-control text-right" name="finalAmount" ng-model="m.finalAmount" ng-change="vm.changeAmount(this)" mask="9999999999" restrict='reject'></td>
+                    <td class="text-center"><input type="text" class="form-control" name="changeReason" ng-model="m.changeReason" ng-change="vm.changeAmount(this)"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center voffset5">
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+        <div class="btn-center-wrap">
+            <button type="button" class="btn-type1 just_right" ng-click="vm.clickUpdateButton()">저장</button>
+        </div>
+    </div>
+
+    <!--<button ng-click="vm.showApiTrend({orgId: 1, appId: 2, apiId: 3})">test</button>-->
+</div>

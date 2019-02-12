@@ -1,0 +1,141 @@
+<!-- <strong class="sub-title"> -->
+<!--     <i class="glyphicon glyphicon-menu-right"></i><small style="vertical-align:1px" ng-if="vm.state.forumId != 'all'"> [{{vm.state.forumOwner || '공통'}}]</small><span title="{{vm.listTitle}}"> {{(vm.listTitle.length >30)? (vm.listTitle | limitTo: 30)+"...": vm.listTitle}}</span> -->
+<!-- </strong> -->
+<div class="wrap">
+    <div class="col-md-12">
+        <span class="add_forum_btn">
+            <button ng-click="vm.edit()" ng-if="vm.isAdmin" class="btn btn-portal btn-flag-radius">포럼등록</button>
+        </span>
+        <div ng-if="vm.searchBoxView" class="searchBox">
+            <span ng-if="vm.state.forumId =='all'" class="form-inline">
+                <label>포럼</label>
+                <select style="width:22%;" class="input-sm form-control" ng-model="vm.forumSelected"
+                        ng-options="forum.id as forum.fullTitle for forum in vm.forums | orderBy: 'id' track by forum.id">
+                    <option value="">전체</option>
+                </select>
+            </span>
+            <span ng-if="vm.allowedSelectCategoryForums.indexOf(vm.state.forumTitle) > -1" class="form-inline">
+                <label>문의대상기관</label>
+                <select style="width:22%;" class="input-sm form-control" ng-model="vm.providerSelected"
+                        ng-options="provider as provider.name for provider in vm.providers track by provider.id">
+                    <option value="">전체</option>
+                </select>
+            </span>
+            <span class="form-inline">
+                <label>작성자</label>
+                <input type="text" class="input-sm form-control" style="width:20%" ng-model="vm.writerSelected" ng-keypress="($event.charCode==13)? vm.searching() : return" />
+            </span>
+            <span class="form-inline">
+                <label>글제목</label>
+                <input type="text" class="input-sm form-control" style="width:23%" ng-model="vm.postTitleSelected" ng-keypress="($event.charCode==13)? vm.searching() : return" />
+            </span>
+            <span class="btnBox">
+                <button type="button" class="btn search-btn" data-dismiss="modal" ng-click="vm.searching()">
+                    검색
+                </button>
+            </span>
+            <!-- <span class="btnBox" ng-click="vm.searching()">
+                <img src="/img/hana/search.png" class="icon-search"/>
+            </span> -->
+        </div>
+        <p class="searchInfo type2" ng-style="(vm.isAdmin) && {'margin-right':'109px'}">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>건의 글이 존재합니다.</span>
+            <!-- <span class="pull-right btn-xs-forum"> -->
+                <!-- <button class="btn btn-default btn-xs" ng-click="vm.searchBoxView = !vm.searchBoxView">
+                   <i class="glyphicon glyphicon-search"></i> {{vm.searchBoxView? '검색닫기' : '검색열기'}}
+               </button> -->
+            <!-- </span> -->
+        </p>
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:7%"/>
+                    <col/>
+                    <col style="width:13%"/>
+                    <col style="width:7%"/>
+                    <col ng-if="vm.allowedReplyWritingForums.indexOf(vm.state.forumTitle) > -1" style="width:7%"/>
+                    <col style="width:135px"/>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>조회수</th>
+                        <th ng-if="vm.allowedReplyWritingForums.indexOf(vm.state.forumTitle) > -1">댓글수</th>
+                        <th>작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="post in vm.postlist">
+                        <td class="t_center">{{vm.totalItems - $index - (vm.condition.page * vm.stateParams.size)}}</td>
+                        <td ng-click="vm.gotoDetail(post)" ng-style="(post.title == '비밀글입니다.') && {'cursor' : 'default'}">
+                            <span class="dotContainer" style="width:100%">
+                                <span title="{{post.forum.title}}" class="color_red" ng-if="vm.state.forumId == 'all'">
+                                    [{{(post.forum.title.length >15)? (post.forum.title | limitTo: 15)+"...": post.forum.title}}]
+                                </span>
+                                <span title="{{post.targetOrganization.name}}" class="color_red" ng-if="vm.state.forumId != 'all' && !!post.targetOrganization">
+                                    [{{(post.targetOrganization.name.length >15)? (post.targetOrganization.name | limitTo: 15)+"...": post.targetOrganization.name}}]
+                                </span>
+                                <span title="{{post.title}}">{{post.title}}</span>
+                            </span>
+                        </td>
+                        <td class="t_center">{{post.writer.fullName}}</td>
+                        <td class="t_center">{{post.viewCount}}</td>
+                        <td ng-if="vm.allowedReplyWritingForums.indexOf(vm.state.forumTitle) > -1" class="t_center">{{post.replyList.length}}</td>
+                        <td class="t_center">{{post.createdDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+                        <!-- <td class="t_center">
+                            <span ng-if="post.writer.login != vm.user.login || !vm.movePost">권한없음</span>
+                            <button ng-if="post.writer.login == vm.user.login && vm.movePost" class="btn btn-default btn-xs" ng-click="vm.selectForum(post);">이동하기</button>
+                        </td> -->
+                    </tr>
+                    <tr ng-if="vm.postlist.length <= 0">
+                        <td colspan="{{vm.allowedReplyWritingForums.indexOf(vm.state.forumTitle) > -1? 6 : 5}}" class="t_center">등록된 게시물이 존재하지 않습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- <button ng-if="vm.state.forumId =='all'" class="btn btn-default btn-xs pull-right refresh with-paging" ng-click="vm.goForumAll()">새로고침</button> -->
+        <div class="btn-with-paging">
+            <button ng-if="vm.state.forumId !='all'" class="btn-type1" ng-click="vm.goForumAll()">
+                전체보기
+            </button>
+            <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            <button ng-if="vm.state.isWritable" class="btn-type1 just_right pull-right"
+                   ui-sref="post.new({forumId: vm.state.forumId, forumTitle:vm.state.forumTitle, isWritable: vm.state.isWritable, page:vm.state.page})">글쓰기
+           </button>
+        </div>
+    </div>
+</div>
+<!--
+<div class="row wrap">
+    <div class="col-md-12">
+
+        <button ng-if="vm.isWritable" ui-sref="post.new({forumId: vm.state.forumId, forumTitle:vm.state.forumTitle, isWritable: vm.state.isWritable, page:vm.state.page})"
+                class="btn btn-portal btn-md">
+            <span data-translate="post.register.menu">Register</span>
+        </button>
+    </div>
+    <div class="col-md-12 voffset3">
+        <div class="list-group">
+            <dl ng-mousedown="vm.gotoDetail(post)" class="list-group-item" ng-repeat="post in vm.postlist">
+                <dt><span ng-if="vm.flag" style="font-size:0.8em">[<i>{{post.forum.title}}</i>]&emsp;</span>{{post.title}}
+                    <span style="display:none" id="content{{post.id}}"/>
+                </dt>
+                <dd>
+                    <i ng-class="{'glyphicon glyphicon-lock': post.private}"></i>
+                    &nbsp;{{vm.contentSlice(post)}} <i style="top: 3px" class="glyphicon glyphicon-option-horizontal"></i>
+                    <div>
+                        <p><span style="color:#2fb9c1">조회 :</span><span>{{post.viewCount}}번</span></p>
+                        <p><span style="color:#2fb9c1">답변 :</span><span>{{post.replyList.length}}건</span></p>
+                    </div>
+                </dd>
+                <dd><strong  style="color:#2fb9c1">{{post.writer.fullName}}</strong>&emsp;|&emsp;{{post.createdDate | date: 'yyyy-MM-dd HH:mm'}}</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="text-center">
+        <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.state.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+    </div>
+</div>
+-->

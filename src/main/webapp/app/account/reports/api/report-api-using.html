@@ -1,0 +1,233 @@
+<div class="row wrap" ng-if="vm.nonOrgAlert">
+    <div class="col-md-12">
+        <h2><strong>API 사용 통계</strong></h2>
+    </div>
+    <div class="col-md-12 text-center voffset3">
+        <div class="searchField2" style="padding:23px; border:0px">소속기관이 존재하지 않습니다.</div>
+    </div>
+</div>
+<div class="row wrap" ng-if="!vm.nonOrgAlert">
+    <div class="col-md-12">
+        <h2><strong>API 사용 통계</strong></h2>
+    </div>
+    <div class="adminReportWrap">
+        <div class="organArea">
+            <dl class="selectField">
+                <dt>
+                    <span class="numb">01</span>
+                    기관 선택
+                </dt>
+            </dl>
+            <p class="intro_title" ng-repeat="organization in vm.organizationList">
+                <label>{{organization.name}}</label>
+            </p>
+            <p class="intro_bot">내 기관의 앱과 매핑되어 있는 API의 사용통계를 확인할 수 있습니다.</p>
+        </div>
+        <div class="appArea">
+            <dl class="selectField">
+                <dt class="required-label"><span class="numb">02</span> 앱 선택</dt>
+                <dd>
+                    <span><input type="text" placeholder="앱 검색" ng-model="vm.searchAppText" ng-change="vm.checkingSearchText('app')"/>
+                        <div>
+                            <div class="inLeft new-form-group">
+                                <input type="checkbox" id="appAll" ng-disabled="vm.availableAppList.length == 0 || !vm.condition.orgIdList || vm.condition.orgIdList.length == 0 || !vm.resultSignFilteredApp" ng-model="vm.isAppAllChecked" ng-change="vm.checkingAllCheckBox('app')"/>
+                                <label for="appAll" ng-click="vm.getSizeChecked('org', vm.resultSignFilteredApp)">&nbsp;전체 선택</label>
+                            </div>
+                            <div class="inRight">
+                                <small ng-if="!!vm.searchAppText" class="selectedNumb">{{(!vm.availableAppList.length || !vm.resultSignFilteredApp)? 0 : vm.resultSizeOfApps}}개</small>
+                                <small title="현재 선택된 앱 수 : 선택기준 정렬" style="color: #3373b7; vertical-align: 2px;" ng-click="vm.arraySorting(vm.availableAppList, 'checked', vm.appOrderByChecked); vm.appOrderByChecked =!vm.appOrderByChecked">{{vm.condition.appIdList.length || 0}}</small> /
+                                <small title="현재 목록에 보이는 앱 수 : 이름기준 정렬" class="color_red" style="vertical-align: 2px;" ng-click="vm.arraySorting(vm.availableAppList, 'fullName', vm.appOrderByFullName); vm.appOrderByFullName =!vm.appOrderByFullName">{{(!vm.availableAppList.length)? 0 : vm.availableAppList.length}}</small>
+                            </div>
+                        </div>
+                    </span>
+                    <div id="appScroll">
+                        <p ng-repeat="app in vm.availableAppList | filter:vm.filterApp as appResults" ng-click="vm.getSizeChecked('org', true)" class="new-form-group">{{vm.filteringCheckSize('app', appResults)}}
+                            <input id="app-{{app.id}}" type="checkbox" ng-disabled="!vm.condition.orgIdList || vm.condition.orgIdList.length == 0" ng-model="app.checked" ng-change="vm.checkingOneCheckBox('app')"/>
+                            <label for="app-{{app.id}}">{{app.fullName}}</label>
+                        </p>
+                        <p ng-if="vm.availableAppList.length == 0" style="text-align:center;">
+                            앱이 존재하지 않습니다.
+                        </p>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+        <div class="apiArea">
+            <dl class="selectField">
+                <dt><span class="numb">03</span> API 선택 <span tooltip-placement="top" uib-tooltip="앱과 매핑되지 않은 API는 Grey 색으로 처리되어 있습니다." class="glyphicon glyphicon-question-sign"></span></dt>
+                <dd>
+                    <span><input type="text" placeholder="API 검색" ng-model="vm.searchApiText" ng-change="vm.checkingSearchText('api')"/>
+                        <div>
+                            <div class="inLeft new-form-group">
+                                <input type="checkbox" id="apiAll" ng-disabled="vm.availableApiList.length == 0 || !vm.condition.appIdList || vm.condition.appIdList.length == 0 || !vm.resultSignFilteredApi" ng-model="vm.isApiAllChecked" ng-change="vm.checkingAllCheckBox('api')"/>
+                                <label for="apiAll" ng-click="vm.getSizeChecked('app', vm.resultSignFilteredApi)">전체 선택</label>
+                            </div>
+                            <div class="inRight">
+                                <small class="selectedNumb" ng-if="!!vm.searchApiText">{{(!vm.availableApiList.length || !vm.resultSignFilteredApi)? 0 : vm.resultSizeOfApis}}개</small>
+                                <small title="현재 선택된 API 수 : 선택기준 정렬" ng-click="vm.arraySorting(vm.availableApiList, 'checked', vm.apiOrderByChecked); vm.apiOrderByChecked =!vm.apiOrderByChecked">{{vm.condition.apiIdList.length || 0}}</small> /
+                                <small title="현재 목록에 보이는 API 수 : 매핑기준 정렬" class="color_red" ng-click="vm.arraySorting(vm.availableApiList, 'selectedAppUnmapping', vm.apiOrderBySelectedAppUnmapping); vm.apiOrderBySelectedAppUnmapping =!vm.apiOrderBySelectedAppUnmapping; vm.getUnmappingListFlag=false; vm.getMappingListFlag = false; ">{{(!vm.availableApiList.length)? 0 : vm.availableApiList.length}}</small>
+<!--                                 <small title="매핑 된 API 수 : 매핑된 것만 보기" ng-style="vm.getMappingListFlag && {'color' : 'red'}; !vm.getMappingListFlag && {'color' : '#bbb'}" ng-click="vm.getMappingListFlag= !vm.getMappingListFlag; vm.getUnmappingListFlag = false; vm.searchApiText = null"> ({{(!vm.availableApiList.length)? 0 : (vm.availableApiList.length - vm.unmappedApis.length) || 0}} |</small> -->
+<!--                                 <small title="매핑 안 된 API 수 : 매핑 안 된 것만 보기" ng-style="vm.getUnmappingListFlag && {'color' : 'red'}; !vm.getUnmappingListFlag && {'color' : '#bbb'}" ng-click="vm.getUnmappingListFlag=!vm.getUnmappingListFlag; vm.getMappingListFlag = false; vm.searchApiText = null"> {{(!vm.availableApiList.length)? 0 : vm.unmappedApis.length || 0}})</small> -->
+                            </div>
+                        </div>
+                    </span>
+                    <div id="apiScroll">
+                        <p title="{{api.fullName}}" ng-repeat="api in vm.availableApiList | filter:vm.filterApi as apiResults"  ng-click="vm.getSizeChecked('app', true)" class="new-form-group">{{vm.filteringCheckSize('api', apiResults)}}
+                            <input type="checkbox" style="vertical-align:top" id="api-{{api.id}}" ng-disabled="!vm.condition.appIdList || vm.condition.appIdList.length == 0" ng-model="api.checked" ng-change="vm.checkingOneCheckBox('api')"/>
+                            <label for="api-{{api.id}}" ng-style="(api.appUnmapping || api.selectedAppUnmapping) && {'color' : '#ddd'}">{{api.fullName}}</label>
+                        </p>
+                        <p ng-if="vm.availableApiList.length == 0" style="text-align:center;">
+                            API가 존재하지 않습니다.
+                        </p>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="">
+        <div class="searchField no-border typeNew">
+            <div class="selectRadio">
+                <ul>
+                    <li style="padding: 3px">
+                        <div class="radio_form">
+                            <input type="radio" name="selectRadio" id="organization" value="ORGANIZATION" ng-model="vm.condition.groupBy" ng-change="vm.checkingChanged()" checked/>
+                            <label for="organization">기관별</label>
+                        </div>
+                    </li>
+                    <li style="padding: 3px">
+                        <div class="radio_form">
+                            <input type="radio" name="selectRadio" id="APP" value="APP" ng-model="vm.condition.groupBy" ng-change="vm.checkingChanged()"/>
+                            <label for="APP">APP별</label>
+                        </div>
+                    </li>
+                    <li style="padding: 3px">
+                        <div class="radio_form">
+                            <input type="radio" name="selectRadio" id="API" value="API" ng-model="vm.condition.groupBy" ng-change="vm.checkingChanged()"/>
+                            <label for="API">API별</label>
+                        </div>
+                    </li>
+                    <li style="padding: 3px">
+                        <div class="new-form-group">
+                            <input type="checkbox" id="daily" style="height: 13px; width: 13px" ng-model="vm.condition.daily" ng-change="vm.checkingChanged()">
+                            <label for="daily" style="font-size: 14px">날짜별</label>
+                        </div>
+                    </li>
+                    <li style="padding: 3px">
+                        <div class="new-form-group">
+                            <input type="checkbox" id="total" ng-model="vm.condition.total" ng-change="vm.checkingChanged()">
+                            <label for="total">합계</label>
+                        </div>
+                    </li>
+                    <li ng-hide="vm.condition.total" style="padding: 3px; float: right">
+                        <select ng-options="size for size in [1, 5, 10]" ng-model="vm.size" ng-change="vm.checkingChanged()">
+                        </select>
+                        <label style="vertical-align: -1px">&nbsp;페이지당 개수</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="dateContainer">
+                <dl class="datePickerField">
+                    <dd class="form-inline" style="width:561px">
+                        <label class="control" style="margin-right:10px">조회기간<small> (최대12개월) </small></label>
+                        <span class="input-group">
+                            <input type="text" class="form-control"
+                                   id="time" readonly
+                                   uib-datepicker-popup="yyyy-MM-dd"
+                                   datepicker-options="fromDateOptions"
+                                   ng-model="vm.condition.fromTime"
+                                   ng-change="vm.setToTime(); vm.checkingChanged()"
+                                   is-open="vm.fromDateOpen"
+                                   popup-placement="bottom-left"
+                                   on-open-focus="false"
+                                   close-text="닫기"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openFromDatePicker($event)"
+                                        uib-is-class="'btn-info' for selectedDt, 'active' for activeDt on dt"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </span><span style="vertical-align:middle"> ~ </span>
+                        <span class="input-group">
+                            <input type="text" class="form-control" ng-change="vm.checkingChanged()"
+                                   id="time" readonly
+                                   uib-datepicker-popup="yyyy-MM-dd"
+                                   datepicker-options="toDateOptions"
+                                   ng-model="vm.condition.toTime"
+                                   is-open="vm.toDateOpen"
+                                   popup-placement="bottom-left"
+                                   on-open-focus="false"
+                                   close-text="닫기"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openToDatePicker($event)"
+                                        uib-is-class="'btn-info' for selectedDt, 'active' for activeDt on dt">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                        </span>
+                    </dd>
+                </dl>
+                <button type="button" ng-hide="vm.isAutoMode" class="btn pull-left search-btn"ng-click="vm.checkingChangedInternal()">조회</button>
+                <div class="new-form-group">
+                    <input type="checkbox" id="autoCheck" ng-model="vm.isAutoMode">
+                    <label for="autoCheck">자동</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="reportCanvas">
+            <p>
+                <span class="radio_form">
+                    <input type="radio" name="chartCheck" id="attempted" value="attemptedCount" ng-model="vm.forChart.valueName" ng-change="vm.changeValueName()"/>
+                    <label for="attempted">요청건수</label>
+                </span>
+                <span class="radio_form">
+                    <input type="radio" name="chartCheck" id="authorizeFail" value="authorizeFailCount" ng-model="vm.forChart.valueName" ng-change="vm.changeValueName()"/>
+                    <label for="authorizeFail">인증실패</label>
+                </span>
+                <span class="radio_form">
+                    <input type="radio" name="chartCheck" id="authorized" value="authorizedCount" ng-model="vm.forChart.valueName" ng-change="vm.changeValueName()"/>
+                    <label for="authorized">인증건수</label>
+                </span>
+                <span class="radio_form">
+                    <input type="radio" name="chartCheck" id="error" value="errorCount" ng-model="vm.forChart.valueName" ng-change="vm.changeValueName()"/>
+                    <label for="error">에러건수</label>
+                </span>
+                <span class="radio_form">
+                    <input type="radio" name="chartCheck" id="completed" value="completedCount" ng-model="vm.forChart.valueName" ng-change="vm.changeValueName()"/>
+                    <label for="completed">완료건수</label>
+                </span>
+                <span class="radio_form">
+                    <input type="radio" name="chartCheck" id="front min" value="frontMinTime" ng-model="vm.forChart.valueName" ng-change="vm.changeValueName()"/>
+                    <label for="front min">최소응답시간</label>
+                </span>
+                <span class="radio_form">
+                    <input type="radio" name="chartCheck" id="front max" value="frontMaxTime" ng-model="vm.forChart.valueName" ng-change="vm.changeValueName()"/>
+                    <label for="front max">최대응답시간</label>
+                </span>
+                <span class="radio_form">
+                    <input type="radio" name="chartCheck" id="front average" value="frontAverageTime" ng-model="vm.forChart.valueName" ng-change="vm.changeValueName()"/>
+                    <label for="front average">평균응답시간</label>
+                </span>
+                <span class="radio_form">
+                    <input type="radio" name="chartCheck" id="back min" value="backMinTime" ng-model="vm.forChart.valueName" ng-change="vm.changeValueName()"/>
+                    <label for="back min">최소처리시간</label>
+                </span>
+                <span class="radio_form">
+                    <input type="radio" name="chartCheck" id="back max" value="backMaxTime" ng-model="vm.forChart.valueName" ng-change="vm.changeValueName()"/>
+                    <label for="back max">최대처리시간</label>
+                </span>
+                <span class="radio_form">
+                    <input type="radio" name="chartCheck" id="back average" value="backAverageTime" ng-model="vm.forChart.valueName" ng-change="vm.changeValueName()"/>
+                    <label for="back average">평균처리시간</label>
+                </span>
+            </p>
+            <div style="padding: 10px 0">
+                <nvd3 options="vm.options" data="vm.data" api="vm.chartApi"></nvd3>
+            </div>
+        </div>
+        <div ng-if="vm.totalItems > -1" class = "text-center voffset5">
+            <button ng-if="vm.afterSearch" type="button" class="btn btn-sm btn-exceldown voffset2" ng-click="vm.downloadExcel()">EXCEL</button>
+            <ul uib-pagination total-items = "vm.totalItems" items-per-page="vm.condition.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+        </div>
+    </div>
+</div>
+

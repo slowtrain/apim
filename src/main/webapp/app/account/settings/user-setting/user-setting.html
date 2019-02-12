@@ -1,0 +1,129 @@
+<div class="row wrap" sc>
+    <div class="col-md-12">
+        <h2><strong>내 정보 설정</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <form name="form" role="form" novalidate>
+            <div class="table-responsive">
+                <table class="table table_write">
+                    <colgroup>
+                        <col width="20%" />
+                        <col width="80%" />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th>아이디</th>
+                            <td>{{vm.settingsAccount.login}}</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label class="control-label" ng-class="vm.changePass && 'required-label'" for="password" data-translate="global.form.newpassword">New password</label>
+                                <button type="button" ng-if="!vm.changePass" class="btn btn-xs pull-right" ng-click="vm.changePass = true">변경</button>
+                                <button type="button" ng-if="vm.changePass" class="btn btn-default btn-xs pull-right" ng-click="vm.changePass = false; vm.password = null; vm.confirmPassword = null">취소</button>
+                            </th>
+                            <td class="form-inline" ng-class="{'has-error': form.password.$dirty && form.password.$invalid}">
+                                <input autocomplete="off" type="password" class="form-control" id="password" name="password" ng-pattern="vm.passwordRegex"
+                                       ng-model="vm.password" ng-required="vm.changePass" minlength="8" maxlength="20" ng-readonly="!vm.changePass">
+                                <small class="color_red" ng-if="vm.changePass" ng-show="form.password.$invalid">(영문숫자특수조합 8~20자)</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label class="control-label" for="confirmPassword" data-translate="global.form.confirmnewpassword">New password confirmation</label>
+                                <small class="color_red" ng-if="vm.changePass">*</small>
+                            </th>
+                            <td class="form-inline" ng-class="{'has-error': vm.password && vm.password != vm.confirmPassword}">
+                                <input autocomplete="off" type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                       ng-model="vm.confirmPassword" required  ng-readonly="!vm.changePass">
+                                <small class="color_red" ng-if="vm.changePass" ng-show="vm.password != vm.confirmPassword">(비밀번호가 같지 않습니다.)</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label class="control-label required-label" for="fullName"
+                                       data-translate="settings.form.fullname">Full Name</label>
+                            </th>
+                            <td class="form-inline">
+                                <input type="text" id="fullName" name="fullName" class="form-control"  ng-model="vm.settingsAccount.fullName" maxlength="30" minlength="2" limit='true' ng-pattern="/^[-가-힣A-Za-z0-9._ ]*$/" required>
+                                <small class="color_red" ng-if="form.fullName.$error.pattern">(잘못된 입력입니다.)</small>
+                                <small class="color_red" ng-if="form.fullName.$error.minlength || form.fullName.$error.maxlength">(2~30자 이내)</small>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <th>
+                                <label class="control-label">직위</label>
+                            </th>
+                            <td class="form-inline">
+                                <input type="text" class="form-control" name="grade" ng-model="vm.settingsAccount.grade" maxlength="15" minlength="2" limit='true' ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/">
+                                <small class="color_red" ng-if="form.grade.$error.pattern">(잘못된 입력입니다.)</small>
+                                <small class="color_red" ng-if="form.grade.$error.minlength || form.grade.$error.maxlength">(2~15자 이내)</small>
+                            </td>
+                        </tr> -->
+                        <tr>
+                            <th>
+                                <label class="control-label required-label" for="userEmail" data-translate="global.form.email">E-mail</label>
+                                <button type="button" class="btn btn-xs pull-right" ng-class="{'btn-success2': !vm.modifyEmail, 'btn-default': vm.modifyEmail}" ng-click="vm.modifyEmail = !vm.modifyEmail">{{(vm.modifyEmail)? '취소' : '수정'}}</button>
+                            </th>
+                            <td class="form-inline">
+                                <input style="width:50%" ng-if="vm.modifyEmail" id="userEmail" type="email" class="form-control" name="email"
+                                       ng-model="vm.email" ng-pattern="/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/" required/>
+                                <input style="width:50%" ng-if="!vm.modifyEmail" class="form-control" ng-value="vm.settingsAccount.maskingEmail" readonly/>
+                                <small class="color_red" ng-if="form.email.$error.pattern">(잘못된 이메일입니다.)</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>전화번호</label>
+                                <button type="button" class="btn btn-xs pull-right" ng-class="{'btn-success2': !vm.modifyMainPhone, 'btn-default': vm.modifyMainPhone}" ng-click="vm.modifyMainPhone = !vm.modifyMainPhone">{{(vm.modifyMainPhone)? '취소' : '수정'}}</button>
+                            </th>
+                            <td class="form-inline">
+                                <span ng-if="vm.modifyMainPhone">
+                                    <select class="form-control" name="mainPhone" ng-model="vm.mainPhone[0]" ng-options="num for num in vm.districtNums track by num">
+                                        <option value="">선택</option>
+                                    </select>
+                                    <input type="text" class="form-control center" name="mainPhone" ng-model="vm.mainPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false'>
+                                    <input type="text" class="form-control" name="mainPhone" ng-model="vm.mainPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true'>
+                                </span>
+                                <input style="width:50%" ng-if="!vm.modifyMainPhone" type="text" class="form-control" ng-value="vm.settingsAccount.maskingMainPhone" readonly/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label class="required-label">휴대폰번호</label>
+                                <button type="button" class="btn btn-xs pull-right" ng-class="{'btn-success2': !vm.modifyCellPhone, 'btn-default': vm.modifyCellPhone}" ng-click="vm.modifyCellPhone = !vm.modifyCellPhone">{{(vm.modifyCellPhone)? '취소' : '수정'}}</button>
+                            </th>
+                            <td class="form-inline" ng-class="{'has-error' : form.cellPhone2.$error.minlength || form.cellPhone3.$error.minlength}">
+                                <sapn ng-if="vm.modifyCellPhone" class="">
+                                    <select class="form-control" name="cellPhone1" ng-model="vm.cellPhone[0]" ng-options="num for num in vm.cellIdentifyingNums track by num" required>
+                                        <option value="">선택</option>
+                                    </select>
+                                    <input type="text" class="form-control center" name="cellPhone2" ng-model="vm.cellPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' required>
+                                    <input type="text" class="form-control" name="cellPhone3" ng-model="vm.cellPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' required>
+                                </sapn>
+                                <p>
+                                    <small class="color_red" ng-if="!vm.cellPhone[0] && vm.cellPhone[1] || !vm.cellPhone[0] && vm.cellPhone[2]">(통신사 번호를 선택바랍니다.)</small>
+                                    <small class="color_red" ng-if="form.cellPhone2.$error.minlength">(앞번호 3자이상 입력바랍니다.)</small>
+                                    <small class="color_red" ng-if="form.cellPhone3.$error.minlength">(뒷번호 4자리 입력바랍니다.)</small>
+                                </p>
+                                <input style="width:50%" ng-if="!vm.modifyCellPhone" type="text" class="form-control" ng-value="vm.settingsAccount.maskingCellPhone" readonly/>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <th style="border-bottom:1px solid #ddd !important;">팝업공지</th>
+                            <td style="border-bottom:1px solid #eee;">
+                                <input type="checkbox" id="checkInform" ng-model="vm.hideNotice">
+                                <label for="checkInform">팝업공지 안보기</label>
+                            </td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="btn-center-wrap">
+                <button type="button" ng-click="vm.withdraw()" class="btn-type1 just_left">탈퇴</button>
+                <button type="button" disabled class="btn-type1 just_right" ng-if="(vm.modifyCellPhone && !vm.cellPhone[0]) || (vm.modifyCellPhone && !vm.cellPhone[1]) || (vm.modifyCellPhone && !vm.cellPhone[2]) || (!vm.changePass && (form.email.$invalid || form.fullName.$invalid)) || (vm.changePass && (form.$invalid || (vm.password != vm.confirmPassword)))" data-translate="settings.form.button">Save</button>
+                <button type="button" ng-click="vm.save()" class="btn-type1 just_right" ng-if="!((vm.modifyCellPhone && !vm.cellPhone[0]) || (vm.modifyCellPhone && !vm.cellPhone[1]) || (vm.modifyCellPhone && !vm.cellPhone[2]) || (!vm.changePass && (form.email.$invalid || form.fullName.$invalid)) || (vm.changePass && (form.$invalid || (vm.password != vm.confirmPassword))))" data-translate="settings.form.button">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

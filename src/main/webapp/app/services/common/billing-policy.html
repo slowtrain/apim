@@ -1,0 +1,50 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true" ng-click="vm.clearTopModal()"></button>
+    <h4 class="modal-title">과금정책 보기</h4>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+        <label class="control-label" >과금정책명</label>
+        <span class="form-control" readonly>{{vm.api.billingPolicy.name}}</span>
+    </div>
+    <div class="form-group">
+        <label class="control-label" >기본요금 (원/건)</label>
+        <span class="form-control t_right" readonly>{{vm.api.billingPolicy.chargePerHit | number}}</span>
+    </div>
+    <div class="form-group">
+        <label class="control-label" >최소과금 (원)</label>
+        <span class="form-control t_right" readonly>{{vm.api.billingPolicy.leastAmount | number}}</span>
+    </div>
+    <div class="table-responsive">
+        <div>
+            <label class="control-label" style="vertical-align: -4px;">구간과금</label>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th style="width:50%">임계치 (건)</th>
+                <th style="width:50%">구간요금 (원/건)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="segments in vm.api.billingPolicy.segments">
+                <td class="t_right">
+                    {{segments.threshold | number}}
+                </td>
+                <td class="t_right">
+                    {{segments.chargePerHit | number}}
+                </td>
+            </tr>
+            <tr ng-if="vm.api.billingPolicy.segments.length == 0">
+                <td class='t_center' colspan="2">구간 과금이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clearTopModal()">
+        <span data-translate="entity.action.close">Close</span>
+    </button>
+</div>

@@ -1,0 +1,152 @@
+<!doctype html>
+<html class="no-js" ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <title swagger-translate="appTitle"></title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/content/css/vendor.css">
+    <link rel="stylesheet" href="css/swagger-ui.min.css">
+    <!--<link rel="stylesheet" href="css/demo.css">-->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="/bower_components/prettify-min/prettify.min.css">
+    <link rel="stylesheet" href="/content/css/brad.css">
+</head>
+<body>
+<div class="header">
+    <div class="container">
+        <h1 title="신한금융그룹" class="pull-left"></h1>
+        <span>API 테스트</span>
+    </div>
+</div>
+<div ng-controller="MyCtrl" class="container my-ctrl">
+    <!--<form name="urlForm" ng-submit="swaggerUrl=url" class="form-inline">
+        <input type="hidden" placeholder="swagger URL" class="form-control" id="url" name="url" ng-model="url" required>
+        <button type="button" ng-click="setKo()" class="btn btn-link pull-right" ng-disabled="getLang()=='ko'">
+            <span class="country ko"></span>
+            <span swagger-translate="korean"></span>
+        </button>
+        <button type="button" ng-click="setEn()" class="btn btn-link pull-right" ng-disabled="getLang()=='en'">
+            <span class="country en"></span>
+            <span swagger-translate="english"></span>
+        </button>
+   </form>-->
+
+    <h3 ng-show="isLoading" swagger-translate="loading"></h3>
+    <div class="table-responsive" style="margin-top:30px;">
+        <div style="font-size:20px; margin-bottom:10px">
+            HTTP 헤더
+            <button class="btn btn-xs btn-portal" ng-click="addHeaders()"><i class="glyphicon glyphicon-plus"></i> 추가</button>
+        </div>
+        <table class="table table-condensed">
+            <colgroup>
+                <col style="width:40%"/>
+                <col style="width:50%"/>
+                <col/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+                <th>비고</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="header in httpHeaders" ng-if="httpHeaders.length > 0">
+                <td><input type="text" class="form-control" ng-model="header.key"/></td>
+                <td style="border-left:1px solid #ddd"><input type="text" class="form-control" ng-model="header.value"/></td>
+                <td style="text-align:center; border-left:1px solid #ddd">
+                    <button class="btn btn-danger btn-xs" style="vertical-align: -7px;" ng-click="removeHeaders(header)"><i class="glyphicon glyphicon-minus"></i> 삭제</button>
+                </td>
+            </tr>
+            <tr ng-if="httpHeaders.length == 0">
+                <td colspan="3" style="text-align:center;">HTTP 헤더가 존재하지 않습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div swagger-ui url="swaggerUrl" loading="isLoading" api-explorer="true" trusted-sources="true" error-handler="myErrorHandler" permalinks="true"></div>
+</div>
+<div class="footer" style="position:relative; background-color:#f3f3f3; height:16px; margin-top:46px; padding:23px; bottom:0">COPYRIGHT (C) 2017 BY UNOURS ALL RIGHTS RESERVED.</div>
+<!-- dependencies -->
+<!-- angular-highlightjs 전에 선언되어야 함-->
+<script src="/content/javascript/formdata.js"></script>
+<script src="/bower_components/prettify-min/prettify.min.js"></script>
+
+<script src="/bower_components/angular/angular.js"></script>
+<script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
+<!--<script src="/bower_components/angular-ui-bootstrap/src/position/position.js"></script>-->
+<!--<script src="/bower_components/angular-ui-bootstrap/src/stackedMap/stackedMap.js"></script>-->
+<!--<script src="/bower_components/angular-ui-bootstrap/src/modal/modal.js"></script>-->
+<!--<script src="/bower_components/js-yaml/dist/js-yaml.min.js"></script>-->
+<script src="/content/javascript/marked.js"></script>
+<!-- angular-swagger-ui -->
+<script src="scripts/swagger-ui.js"></script>
+<script src="scripts/modules/swagger-external-references.min.js"></script>
+<script src="scripts/modules/swagger1-to-swagger2-converter.min.js"></script>
+<script src="scripts/modules/swagger-xml-formatter.min.js"></script>
+<script src="scripts/modules/swagger-yaml-parser.min.js"></script>
+<script src="scripts/modules/swagger-markdown.min.js"></script>
+<script src="scripts/modules/swagger-auth.min.js"></script>
+<script src="scripts/i18n/ko.js"></script>
+<script src="scripts/i18n/en.js"></script>
+<script type="text/javascript">
+
+    clientId = "54f0c455-4d80-421f-82ca-9194df24859d";//OTK Manager에서 발급 받은 ID
+    //authorization code 방식인 경우 토큰 요청을 위해 clientSecret이 필요함
+    clientSecret = "a0f2742f-31c7-436f-9802-b7015b8fd8e6";//OTK Manager에서 발급 받은 Secret
+    apiClientUrl = '/request_token';
+
+    angular
+        .module('myApp', ['ngSanitize', 'swaggerUi', 'swaggerUiAuthorization'])
+        .config(function (swaggerTranslatorProvider) {
+            swaggerTranslatorProvider
+                .setLanguage('ko')
+                .addTranslations('en', {
+                    appTitle: 'angular-swagger-ui',
+                    explore: 'Explore',
+                    loading: 'loading...',
+                    error: 'Failed to generate Swagger-UI: {{code}} {{message}}',
+                    french: 'french',
+                    english: 'english',
+                    japanese: 'japanese'
+                });
+
+        })
+        .controller('MyCtrl', function ($scope, swaggerTranslator) {
+            var apiId = window.api ? window.api : window.opener.apiConsoleApiId;
+
+            // init form
+            $scope.isLoading = false;
+            $scope.url = $scope.swaggerUrl = '/api/apis/' + apiId + "/swagger";
+//            $scope.url = $scope.swaggerUrl = '/api/apis/2/swagger';
+
+            // error management
+            $scope.myErrorHandler = function (message, code) {
+                alert(swaggerTranslator.translate('error', {
+                    code: code,
+                    message: message
+                }));
+            };
+            $scope.setEn = function () {
+                swaggerTranslator.useLanguage('en');
+            };
+            $scope.setKo = function () {
+                swaggerTranslator.useLanguage('ko');
+            };
+            $scope.getLang = function () {
+                return swaggerTranslator.language();
+            };
+
+            $scope.httpHeaders = [];
+            $scope.addHeaders = function () {
+                $scope.httpHeaders.push({key: "", value: ""});
+            };
+            $scope.removeHeaders = function (header) {
+                $scope.httpHeaders.splice(header, 1);
+            }
+        });
+    prettyPrint();
+</script>
+</body>
+</html>

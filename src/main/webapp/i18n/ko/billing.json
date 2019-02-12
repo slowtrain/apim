@@ -1,0 +1,21 @@
+{
+    "billing": {
+        "list":{
+            "title": "과금정책 목록"
+        },
+        "register":{
+            "title":"과금정책 등록"
+        },
+        "edit":{
+            "title":"과금정책 수정"
+        },
+        "form":{
+            "name": "과금정책명",
+            "chargePerHit": "기본요금 (원/건)",
+            "intervalBilling": "구간과금",
+            "threshold": "임계치 (건)",
+            "segChargePerHit": "구간요금 (원/건)",
+            "delete": "제거"
+        }
+    }
+}

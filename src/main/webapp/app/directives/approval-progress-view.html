@@ -1,0 +1,14 @@
+<span class="approvalLine" style="display:inline-block;">
+    <span ng-repeat="($index1, row) in progress" ng-class="row.classname">
+        <i ng-if="!isArray(row) && $index1 != 0" class="glyphicon glyphicon-option-horizontal"></i>
+        <i ng-if="!isArray(row)" title="{{row.name}}/{{onDisplay(row)}}"
+           ng-class="{'glyphicon': true, 'glyphicon-user': row.type == 'USER', 'glyphicon-tower': row.type == 'ORGANIZATION', 'target': true}"></i>
+        <span ng-if="isArray(row)" ng-class="row.length > 1 && 'two'">
+            <span ng-repeat="($index2, row2) in row" ng-class="row2.classname">
+                <i class="glyphicon glyphicon-option-horizontal" ng-if="$index1 != 0"></i>
+                <i title="{{row2.name}}/{{onDisplay(row2)}}"
+                   ng-class="{'glyphicon': true, 'glyphicon-user': row2.type == 'USER', 'glyphicon-tower': row2.type == 'ORGANIZATION', 'target': true}"></i>
+            </span>
+        </span>
+    </span>
+</span>

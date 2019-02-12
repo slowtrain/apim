@@ -1,0 +1,141 @@
+# ===================================================================
+# Spring Boot configuration for the "prod" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+logging:
+    path: /usr/local/tomcat/logs
+    file: portal.%d{yyyy-MM-dd}.log
+
+sms:
+    from-number: 820220100000 # yml 에서 0 으로 시작할 경우 제대로 인식되지 않아 82를 붙임
+    
+gateway:
+    enabled: true
+
+web-proxy:
+    replace-formats: 
+    remove-headers: 
+        - accept
+        - host
+
+spring:
+    devtools:
+        restart:
+            enabled: false
+        livereload:
+            enabled: false
+    datasource:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:mysql://192.168.24.193:3306,192.168.24.194:3306/unoportal?failOverReadOnly=false&secondsBeforeRetryMaster=0&queriesBeforeRetryMaster=0&autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false
+        username: portal
+        password: 1qaz2wsx
+        hikari:
+            data-source-properties:
+                cachePrepStmts: true
+                prepStmtCacheSize: 250
+                prepStmtCacheSqlLimit: 2048
+                useServerPrepStmts: true
+    h2:
+        console:
+            enabled: false
+    jpa:
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        database: MYSQL
+        show-sql: false
+        properties:
+            hibernate.id.new_generator_mappings: false # hibernate-sequence, mysql : false, Oracle, H2 : true
+            hibernate.cache.use_second_level_cache: true
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: false
+            hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
+            hibernate.cache.hazelcast.instance_name: portal
+            hibernate.cache.use_minimal_puts: true
+            hibernate.cache.hazelcast.use_lite_member: true
+    data:
+        elasticsearch:
+            cluster-name:
+            cluster-nodes: localhost:9300
+    mail:
+        host: localhost
+        port: 25
+        username: 
+        password: 
+    thymeleaf:
+        cache: true
+
+liquibase:
+    contexts: test
+    enabled: true
+
+server:
+    port: 8080
+    compression:
+        enabled: true
+        mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
+        min-response-size: 1024
+
+# ===================================================================
+# JHipster specific properties
+# ===================================================================
+
+jhipster:
+    http:
+        version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
+        cache: # Used by the CachingHttpHeadersFilter
+            timeToLiveInDays: 1
+#            timeToLiveInDays: 1461
+    cache: # Cache configuration
+        hazelcast: # Hazelcast distributed cache
+            time-to-live-seconds: 3600
+            backup-count: 1
+    cors:
+        allowed-origins: "*"
+        allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+        allowed-headers: "*"
+        exposed-headers:
+        allow-credentials: true
+        max-age: 1800
+    security:
+        remember-me:
+            # security key (this key should be unique for your application, and kept secret)
+            key: c314b83ab1813e77ae6c6bbdf6cfca6f9f37046d
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: hello2@localhost
+        base-url: http://my-server-url-to-change # Modify according to your server's URL
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+        graphite:
+            enabled: false
+            host: localhost
+            port: 2003
+            prefix: hello2
+        prometheus:
+            enabled: false
+            endpoint: /prometheusMetrics
+        logs: # Reports Dropwizard metrics in the logs
+            enabled: false
+            report-frequency: 60 # in seconds
+    logging:
+        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+            enabled: false
+            host: localhost
+            port: 5000
+            queue-size: 512
+
+application:
+    production: prod
+    mail: 
+        base-url: 
+        enabled: false
+    production-server1: 192.168.24.191  # Lock Schedule Job, CacheConfiguration
+    production-server2: 192.168.24.192
+    gateway-monitoring-url: https://opengw.shinhan.com:8443
+    block-multi-login: true

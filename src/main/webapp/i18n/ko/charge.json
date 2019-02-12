@@ -1,0 +1,24 @@
+{
+    "charge-account": {
+        "title": "출금 계좌 관리"
+    },
+    "charge-manage": {
+        "title": "과금 청구 조회"
+    },
+    "charge-adjust": {
+        "title": "과금 조정 관리"
+    },
+    "charge-search": {
+        "title": "사용 과금 조회"
+    },
+    "apiList": {
+        "appList":{
+            "title": "사용앱 목록"
+        }
+    },
+    "appManage": {
+        "organization": "기관명",
+        "name": "앱 이름",
+        "status": "상태"
+    }
+}

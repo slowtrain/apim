@@ -1,0 +1,118 @@
+<!--suppress ALL -->
+<nav class="navbar navbar-default" role="navigation">
+    <div class="nav-login">
+        <div>
+            <div class="logo-container">
+                <a ui-sref="home" ui-sref-opts="{reload: true}"><img src = "/img/shinhan/shinhan_logo.png"></a>
+            </div>
+            <div class="navbar-container navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
+                <ul class="nav navbar-nav">
+                    <li ng-repeat="menu in vm.menus" uib-dropdown ng-mouseover="menu.isopen = true" ng-mouseleave="menu.isopen = false" ng-class="{'active': vm.isActive(menu.name), 'open': menu.isopen}">
+                        <a ng-if="menu.secondDepth" id="{{menu.name}}" href="" ng-focus="menu.isopen = true" ng-click="vm.collapseNavbar(menu); vm.secondFilter(menu)" has-authority="{{menu.authority}}">
+                            <span class="hidden-sm" data-translate="global.menu.{{menu.name}}.main">Menu Name</span>
+                        </a>
+                        <a ng-if="menu.contents" id="{{menu.name}}" href="" ng-focus="menu.isopen = true" ng-blur="!menu.contents.length? menu.isopen = false : null" has-authority="{{menu.authority}}" ng-click="menu.isopen=false; vm.gotoContents(menu)">
+                            <span class="hidden-sm" data-translate="global.menu.{{menu.name}}.main">Menu Name</span>
+                        </a>
+                        <a ng-if="!menu.secondDepth && !menu.contents" ng-blur="menu.isopen = false" ui-sref="{{menu.url}}" ui-sref-opts="{reload: true}" ng-click="vm.cocollapseNavbar(menu); vm.forumInit(menu.url)" has-authority="{{menu.authority}}">
+                            <span class="hidden-sm" data-translate="global.menu.{{menu.name}}.main">Menu Name</span>
+                        </a>
+
+                        <ul ng-if="menu.secondDepth" uib-dropdown-menu aria-labelledby="{{menu.name}}">
+                            <li ng-repeat="($secondIdx, second) in menu.secondDepth | filter: vm.authorityFilter" ng-style="menu.name=='informations' && {'width': '190px'}" uib-dropdown ng-mouseover="second.isopen = true" ng-mouseleave="second.isopen = false" ng-class="{'open': second.isopen}">
+                                <a ng-if="!account.role || !vm.ofPartner" href="" ng-focus="second.isopen = true" ng-blur="vm.setBlur(menu, second, $secondIdx)" id="{{second.name}}" ui-sref="{{second.url}}" ui-sref-opts="{reload: true}" ng-click="vm.collapseNavbar(menu)" data-translate="global.menu.{{menu.name}}.sub.{{second.name}}.title">Second Menu Name</a>
+                                <a ng-if="vm.ofPartner" href="" ng-focus="second.isopen = true" ng-blur="vm.setBlur(menu, second, $secondIdx)" id="{{second.name}}" ng-click="vm.stateChange(menu, second)" data-translate="global.menu.{{menu.name}}.sub.{{second.name}}.title">Second Menu Name</a>
+                                <i ng-if="second.thirdDepth" class="glyphicon glyphicon-menu-right"></i>
+                                <ul ng-if="second.thirdDepth" ng-style="menu.name=='informations' && {'left': '189px'}" uib-dropdown-menu aria-labelledby="{{second.name}}" class="third-drop-down">
+                                    <li has-authority="{{third.authority}}" uib-dropdown ng-repeat="third in second.thirdDepth | filter: vm.exclude">
+                                        <a href="" ui-sref="{{third.url}}" ng-blur="vm.setBlur(menu, second, $secondIdx, third)" ui-sref-opts="{reload: true}" data-translate="global.menu.{{menu.name}}.sub.{{second.name}}.sub.{{third.name}}">Third Menu Name</a>
+                                        <p ng-if="!$last" class="divider"></p>
+                                    </li>
+                                </ul>
+                                <p ng-if="!$last" class="divider"></p>
+                            </li>
+                        </ul>
+                        <ul ng-if="menu.contents" uib-dropdown-menu aria-labelledby="{{menu.name}}">
+                            <li ng-repeat="content in menu.contents" uib-dropdown ng-mouseover="content.isopen = true" ng-mouseleave="content.isopen = false" ng-class="{'open': content.isopen}">
+                                <a href="" ng-focus="content.isopen = true" ng-blur="vm.setBlur(menu, content, $index)" id="{{content.id}}" ng-click="menu.isopen=false; vm.gotoContents(menu, content)">{{content.title}}</a>
+                                <p ng-if="!$last" class="divider"></p>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="login-container" ng-switch="vm.isAuthenticated()">
+                <div class="btn-group btn-group-xs" role="group" ng-switch-when="false">
+                    <button ui-sref="login" ui-sref-opts="{reload: true}" type="button" class="btn btn-default btn-portal"><strong>로그인</strong></button>
+                    <button ui-sref="register" ui-sref-opts="{reload: true}" type="button" class="btn btn-default"><strong>회원가입</strong></button>
+                </div>
+                <span has-authority="ROLE_HASLOGIN" style="padding-right:20px;"><strong class="loginColor">{{ loginId()}}</strong> 님, 반갑습니다!</span>
+                <button style="border-radius:3px" ng-click="linkCheck('logout', 'account')" has-authority="ROLE_HASLOGIN" type="button" class="btn btn-default btn-xs btn-portal"><strong>로그아웃</strong></button>
+            </div>
+        </div>
+        <!--<div>
+            <span ng-switch="vm.isAuthenticated()">
+                <a ng-click="linkCheck('login', 'account')" ng-switch-when="false"><i class="glyphicon glyphicon-log-in"></i> 로그인</a>
+                <a ui-sref="register" class="color_yellow" ng-switch-when="false"><i class="glyphicon glyphicon-user"></i> 회원가입</a>
+                <span has-authority="ROLE_HASLOGIN" class="color_white" style="padding-right:20px;">{{ loginName() }}({{ loginId()}}) 님, 반갑습니다!</span>
+                <a ui-sref="admin-organizations" has-authority="ROLE_ADMIN" class="color_yellow"><i class="glyphicon glyphicon-king"></i> 운영자</a>
+                <a ng-click="vm.stateChange()" has-authority="ROLE_HASLOGIN"><i class="glyphicon glyphicon-user"></i> 계정</a>
+                <a ng-click="linkCheck('logout', 'account')" has-authority="ROLE_HASLOGIN"><i class="glyphicon glyphicon-log-out"></i> 로그아웃</a>
+            </span>
+        </div>-->
+    </div>
+    <div class="container">
+
+    </div>
+</nav>
+<!-- <div class="nav_sub_wrap">
+    <div class="nav_sub">
+        <p class="title_1">admin</p>
+    </div>
+</div> -->
+<!--<div class="locations" ng-if="vm.$state.current.name != 'home'">
+    <ul>
+        <li ng-repeat="depth in vm.depths"
+            ng-if="vm.$state.current.name != 'register' &&
+            vm.$state.current.name != 'requestReset' &&
+            vm.$state.current.name != 'error' &&
+            vm.$state.current.name != 'activate' &&
+            vm.$state.current.name != 'accessdenied'">
+            <div ng-if="$index == 0"><a ui-sref="home" ng-click="vm.collapseNavbar()" class="glyphicon glyphicon-home"></a></div>
+            <div ng-if="$index == 1">
+                <a ng-click="vm.menuOpen('firstDepthView')">
+                    <span ng-if="vm.parent.parent != 'app'" data-translate="global.menu.{{vm.parent.parent}}.main"></span>
+                    <span ng-if="vm.parent.parent == 'app'" data-translate="global.menu.{{vm.parent.name}}.main"></span>
+                    <i class="glyphicon" ng-class="{'glyphicon-chevron-down':vm.firstDepthView, 'glyphicon-chevron-up':!vm.firstDepthView}"></i>
+                </a>
+                <ul ng-class="{'on': vm.firstDepthView}">
+                    <li ng-repeat="menu in vm.firstDepth" ng-hide="vm.isAdmin && menu.url == 'appManage'" has-authority="{{menu.authority}}">
+                        <a ui-sref="{{menu.url}}" data-translate="global.menu.{{menu.name}}.main" ng-click="vm.forumInit(menu.url);"></a>
+                    </li>
+                </ul>
+            </div>
+            <div ng-if="$index == 2">
+                <a ng-click="vm.menuOpen('secondDepthView')">
+                    <span data-translate="global.menu.{{vm.parent.parent}}.sub.{{vm.parent.name}}.title"></span>
+                    <i class="glyphicon" ng-if="vm.secondDepth" ng-class="{'glyphicon-chevron-down':vm.secondDepthView, 'glyphicon-chevron-up':!vm.secondDepthView}"></i>
+                </a>
+                <ul ng-class="{'on': vm.secondDepthView}">
+                    <li ng-repeat="menu in vm.secondDepth">
+                        <a has-authority="{{menu.authority}}" ui-sref="{{menu.url}}" data-translate="global.menu.{{vm.parent.parent}}.sub.{{menu.name}}.title"></a>
+                    </li>
+                </ul>
+            </div>
+            <div ng-if="$index == 3">
+                <a ng-click="vm.menuOpen('thirdDepthView')">
+                    <span data-translate="global.menu.{{vm.parent.parent}}.sub.{{vm.parent.name}}.sub.{{vm.$state.current.name}}"></span>
+                    <i class="glyphicon" ng-if="vm.thirdDepth" ng-class="{'glyphicon-chevron-down':vm.thirdDepthView, 'glyphicon-chevron-up':!vm.thirdDepthView}"></i>
+                </a>
+                <ul ng-class="{'on': vm.thirdDepthView}">
+                    <li ng-repeat="menu in vm.thirdDepth | filter: vm.exclude">
+                        <a has-authority="{{menu.authority}}" ui-sref="{{menu.url}}" data-translate="global.menu.{{vm.parent.parent}}.sub.{{vm.parent.name}}.sub.{{menu.name}}"></a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>-->

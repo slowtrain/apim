@@ -1,0 +1,84 @@
+<jhi-alert></jhi-alert>
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong data-translate="approval.title">Approval Lists</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <div class="searchBox">
+            <span class="form-inline">
+                <label for="approvalTypes" data-translate="approval.type">분류</label>
+                <select id="approvalTypes" class="form-control input-sm" ng-model="vm.approvalType"
+                        ng-options="type.type as type.name for type in vm.approvalTypes track by type.type">
+                    <option value="">전체</option>
+                </select>
+            </span>
+            <span class="form-inline">
+                <label for="approvalUserId">요청자</label>
+                <input type="text" class="form-control input-sm" id="approvalUserId" name="login" ng-model="vm.login" ng-keypress="($event.charCode==13)? vm.searching() : return"/>
+            </span>
+            <span class="form-inline">
+                <label for="approvalTitle" data-translate="approval.list_title">제목</label>
+                <input type="text" style="width:40%;" class="form-control input-sm" id="approvalTitle" name="apiUrl" ng-model="vm.title" ng-keypress="($event.charCode==13)? vm.searching() : return">
+            </span>
+            <span class="btnBox">
+                <button type="button" class="btn search-btn" data-dismiss="modal" ng-click="vm.searching()">
+                    검색
+                </button>
+            </span>
+        </div>
+        <p class="searchInfo type2">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 대기중인 승인목록이 존재합니다.</span>
+        </p>
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:8%"/>
+                    <col style="width:22%"/>
+                    <col/>
+                    <col style="width:11%"/>
+                    <col style="width:14%"/>
+                    <col style="width:115px"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col" id="approvalType" ng-mousedown="vm.sorting('approvalType')"><span data-translate="approval.type">분류</span><i id="approvalType" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th scope="col" id="title" ng-mousedown="vm.sorting('title')"><span data-translate="approval.list_title">제목</span><i id="title" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th scope="col" id="detailComment" ng-mousedown="vm.sorting('detailComment')"><span data-translate="approval.content">내용</span><i id="detailComment" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th scope="col" id="requester" ng-mousedown="vm.sorting('requester.login','requester')"><span data-translate="approval.requester">요청자</span><i id="requester" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th scope="col" id="createdDate" ng-mousedown="vm.sorting('createdDate')"><span data-translate="approval.created_date">요청일자</span><i id="createdDate" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th scope="col" data-translate="approval.etc">비고</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="approval in vm.Approvals">
+                    <td scope="row">{{approval.type}}</td>
+                    <td class="hover" ng-click="vm.showDetail(approval)"><span class="dotContainer" style="width:98%">{{approval.title}}</span></td>
+                    <td>{{approval.detailComment}}</td>
+                    <td>{{approval.requester.login}}</td>
+                    <td>{{approval.createdDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+                    <td class="t_center question">
+                        <span uib-popover-template="vm.tooltipPopover.templateUrl"
+                                ng-mouseover="vm.showApproverPopover(approval);"
+                                ng-mouseleave="vm.hideApproverPopover(approval);"
+                                popover-title="승인자목록"
+                                popover-is-open="approval.isApproverOpen"
+                                popover-enable="approval.isApproverOpen"
+                                popover-placement="bottom-right"
+                                type="button"
+                                class="glyphicon glyphicon-question-sign">
+                        </span>
+                        <button has-authority="ROLE_HASLOGIN" class="btn btn-default btn-xs" ng-click="vm.decide(approval, 'approve')" data-translate="approvalModal.approve">승인</button>
+                        <button has-authority="ROLE_HASLOGIN" class="btn btn-default btn-xs" ng-click="vm.decide(approval, 'deny')" data-translate="approvalModal.deny">반려</button>
+                    </td>
+                </tr>
+                <tr ng-if="vm.Approvals <= 0">
+                    <td colspan="6" class="t_center">대기중인 승인내역이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center">
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+{
+    "discount": {
+        "list":{
+            "title": "할인정책 목록",
+            "registration": "신규 등록"
+        },
+        "register":{
+            "title":"할인정책 등록/수정",
+            "name": "할인정책명",
+            "description": "정책 설명",
+            "rates": "할인율 (%)"
+        }
+    }
+}

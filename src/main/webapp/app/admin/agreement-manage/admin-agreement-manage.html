@@ -1,0 +1,126 @@
+<jhi-alert></jhi-alert>
+<div class="row wrap">
+    <div ng-hide="vm.showDiv">
+        <div class="col-md-12">
+            <h2><strong>동의서 목록</strong></h2>
+        </div>
+        <div class="col-md-12">
+            <p class="searchInfo">
+                <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 동의서가 존재합니다.</span>
+                <button ng-click="vm.addAgree()" class="btn btn-portal btn-flag-radius pull-right">
+                    <span>동의서 등록</span>
+                </button>
+            </p>
+            <div class="table-responsive voffset3">
+                <table class="table tableFixed">
+                    <colgroup>
+                        <col style="width:50px"/>
+                        <col/>
+                        <col style="width:7%"/>
+                        <col style="width:100px"/>
+                        <col style="width:140px"/>
+                        <col style="width:9%"/>
+                        <col style="width:160px"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th id="title" ng-mousedown="vm.sorting('title')"><span data-translate="agree.title">Title</span><i id="title"
+                                                                                                                            class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                        </th>
+                        <th id="agreeVer" ng-mousedown="vm.sorting('agreeVer')"><span data-translate="agree.agreeVer">Title</span><i id="agreeVer"
+                                                                                                                                     class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                        </th>
+                        <th id="agreeGb" ng-mousedown="vm.sorting('agreeGb')"><span>동의</span><i id="agreeGb" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                        <th id="createdDate" ng-mousedown="vm.sorting('createdDate')"><span data-translate="agree.createdDate">Title</span><i id="createdDate"
+                                                                                                                                              class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                        </th>
+                        <th id="useYn" ng-mousedown="vm.sorting('useYn')"><span data-translate="agree.useYn">Title</span><i id="useYn"
+                                                                                                                            class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                        </th>
+                        <th data-translate="agree.etc">Etc</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="agree in vm.agreeList">
+                        <td scope="row" class="t_center">{{(vm.totalItems - (vm.stateParams.page)*(vm.stateParams.size))-$index}}</td>
+                        <td>{{agree.title}}</td>
+                        <td class="t_right">{{agree.agreeVer}}</td>
+                        <td>{{(agree.agreeGb == 0)? '수집':'제3자 제공'}}</td>
+                        <td class="t_center">{{agree.createdDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+                        <td class="t_center">
+                            <span ng-if="agree.useYn=='Y'">사용중</span>
+                            <!--                                <i ng-class="{'glyphicon-ok': agree.useYn=='Y' }" class="glyphicon"></i> -->
+                            <button ng-hide="agree.useYn=='Y'" class="btn btn-default btn-xs" ng-click="vm.setForAgree(agree)">사용</button>
+                        </td>
+                        <td class="t_center">
+                            <button class="btn btn-default btn-xs" ng-click="vm.editAgree(agree, 'edit')">수정</button>
+                            <button class="btn btn-default btn-xs" ng-click="vm.delAgree(agree)">삭제</button>
+                            <button class="btn btn-danger btn-xs" ng-click="vm.showAgreeBody(agree)" data-translate="entity.action.content">show agree body</button>
+                        </td>
+                    </tr>
+                    <tr ng-if="vm.agreeList.length <= 0">
+                        <td colspan="7" class="t_center">등록하신 동의서가 존재하지 않습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="vm.showDiv">
+        <form name="form" novalidate>
+            <div class="col-md-12">
+                <h2><span data-translate="agree.{{vm.mode}}.title">Register</span></h2>
+                <button type="button" ng-click="vm.loadAll()"
+                        class="btn btn-default">
+                    <span data-translate="agree.goToList">Back to List</span>
+                </button>
+                <div style="line-height: 39px" class="pull-right">
+                    <input type="radio" name="agreeType" id="gatheringInfo" value="0" ng-model="vm.agree.agreeGb"
+                           ng-init="(vm.mode=='edit' || vm.mode=='view')? vm.agree.agreeGb: vm.agree.agreeGb='0'" ng-disabled="vm.mode=='view'" required>
+                    <label for="gatheringInfo" style="margin-right:10px; vertical-align:2px;">수집 동의</label>
+                    <input type="radio" name="agreeType" id="providingInfo" value="1" ng-model="vm.agree.agreeGb" ng-disabled="vm.mode=='view'" required>
+                    <label for="providingInfo" style="vertical-align:2px;">제3자 제공 동의</label>
+                </div>
+            </div>
+            <div class="col-md-12 voffset3">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <label class="required-label" data-translate="agree.title">title</label>
+                        <small class="color_red" ng-if="form.title.$error.minlength || form.title.$error.maxlength">(3~80자 이내)</small>
+                        <small class="color_red" ng-if="form.title.$error.pattern">(잘못 입력하셨습니다.)</small>
+                        <input type="text" name="title" class="form-control" ng-model="vm.agree.title" minlength="3" maxlength="80" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" ng-readonly="vm.readOnly" required>
+                    </li>
+                    <li class="list-group-item">
+                        <label class="required-label">동의서 내용</label>
+                        <small class="color_red" ng-if="form.body.$error.pattern">(잘못 입력하셨습니다.)</small>
+                        <textarea id="body" name="body" class="form-control" rows="10" ng-model="vm.agree.body" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" ng-readonly="vm.readOnly" required></textarea>
+                    </li>
+                </ul>
+                <div ng-if="vm.readOnly" style="text-align:right;">
+                    <button type="button" class="btn btn-default" ng-click="vm.delAgree(vm.agree)">
+                        <span class="glyphicon glyphicon-remove"></span>&nbsp;
+                        <span data-translate="entity.action.delete">Delete</span>
+                    </button>
+                    <button type="button" class="btn btn-portal" ng-click="vm.editAgree(vm.agree, 'edit')">
+                        <span class="glyphicon glyphicon-pencil"></span>&nbsp;
+                        <span data-translate="entity.action.update">Update</span>
+                    </button>
+                </div>
+                <div ng-if="!vm.readOnly" style="text-align:right;">
+                    <button type="button" class="btn btn-default" ng-click="vm.clear()">
+                        <span class="glyphicon glyphicon-ban-circle"></span>
+                        <span data-translate="entity.action.reset">Reset</span>
+                    </button>
+                    <button type="button" class="btn btn-portal" ng-disabled="form.$invalid" ng-click="vm.save()">
+                        <span class="glyphicon glyphicon-save"></span>
+                        <span data-translate="entity.action.save">Save</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<form name="form" role="form" novalidate>
+
+    <div class="modal-header">
+
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" ng-click="vm.clear()"></button>
+
+        <h4 ng-if="!vm.flag" class="modal-title" id="myUserLabel">기관할인 설정 등록</h4>
+        <h4 ng-if="vm.flag" class="modal-title" id="myUserLabel">기관할인 설정 변경</h4>
+    </div>
+    <div id="applyingDiscountPolicy" class="modal-body">
+        <div class="form-group">
+            <label class="voffset4">사용 기관</label>
+            <select class="form-control" name="org" ng-model="vm.selectedOrganization" ng-change="vm.findApisByUserOrganization(vm.selectedOrganization)"
+                    ng-options="organization.name for organization in vm.useOrgs | orderBy: 'name' track by organization.id">
+                    <option value="">▶ 먼저 할인 적용할 기관을 선택하세요.</option>
+            </select>
+        </div>
+        <div class="form-group" ng-style="!vm.selectedOrganization && {'opacity' : '0.3'}">
+            <label class="voffset4">할인적용 API</label>
+            <select class="form-control" name="api" ng-model="vm.selectedApi"
+                    ng-options="api.name for api in vm.useApis | orderBy: 'name' track by api.id" ng-disabled="!vm.selectedOrganization || !vm.useApi.length">
+                    <option value="">{{vm.useApis.length==0? "▶ 적용할 API가 없습니다. 이미 적용된 API목록은 수정화면에서만 보입니다." : "▶ 할인 적용할 API를 선택하세요. 이미 적용된 API목록은 수정화면에서만 보입니다."}}</option>
+            </select>
+        </div>
+        <div class="form-group" ng-style="!vm.selectedApi && {'opacity' : '0.3'}">
+            <label class="voffset4">할인정책 적용</label>
+            <select class="form-control" name="policy" ng-model="vm.selectedDiscountPolicy"
+                    ng-options="policy.name for policy in vm.discountPolicies | orderBy: 'name' track by policy.id" ng-disabled="!vm.selectedApi">
+                    <option value="">▶ 적용할 할인정책을 선택하세요.</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="modal-footer voffset4">
+        <button ng-click="vm.save()" ng-disabled="form.$invalid" class="btn btn-portal modalBtn">
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>
+</form>
+
+
+

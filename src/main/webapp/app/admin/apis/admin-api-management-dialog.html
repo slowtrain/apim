@@ -1,0 +1,259 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true" ng-click="vm.clear()"></button>
+    <h4 class="modal-title" id="myUserLabel"
+        data-translate="apiList.detail.title">API 상세</h4>
+</div>
+<div class="modal-body row pad0">
+    <div class="apiInfoTop">
+        <div class="form-box form-box-shadow">
+            <div class="form-group">
+                <label class="control-label" for="apiName" data-translate="apiList.register.name">API name</label>
+                <span class="check-span new-form-group">
+                    <input type="checkbox" id="isPrivate" name="isPrivate" ng-model="vm.api.isPrivate" disabled/>
+                    <label for="isPrivate" data-translate="apiList.register.isPrivate" style="font-size:14px;">Is Private</label>
+                </span>
+                <input type="text" class="form-control" id="apiName" name="apiName" ng-model="vm.api.name" disabled/>
+            </div>
+            <div class="form-group">
+                <label for="proxyURLInput" class="control-label">G/W URL</label>
+                <p class="innerInput">
+                    <span style="font-size:10px; line">https://Gateway_URL:8443/</span>
+                    <input type="text" id="proxyURLInput" name="proxyURLInput" class="form-control proxyurl-input"
+                           ng-model="vm.api.urlPattern" disabled/>
+                </p>
+            </div>
+            <div>
+                <label for="apiRequestURL" class="control-label" data-translate="apiList.apiRequestURL">API Request URL</label>
+                <input type="text" id="apiRequestURL" name="apiRequestURL" class="form-control" ng-model="vm.api.routingUrl" disabled/>
+            </div>
+        </div>
+    </div>
+    <div class="apiinfoBottom">
+        <div>
+            <div class="form-box">
+                <div class="form-group">
+                    <label for="apiDescription" class="control-label" data-translate="apiList.description">API 설명</label>
+                    <textarea id="apiDescription" class="form-control newTextArea" ng-model="vm.api.description" rows="6" disabled></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" data-translate="apiList.plans">API Plans</label>
+                    <div class="list-adjust" style="margin-top:5px; min-height: 36px;">
+                        <div class="apiPlanWrap" ng-repeat="plan in vm.api.applicablePlans" ng-init="vm.api.applicablePlans[0].apiPlanInform = false">
+                            <button type="button" ng-class="{'on' : plan.apiPlanInform}" class="btn btn-default btn-xs apiplan" ng-click="plan.apiPlanInform = !plan.apiPlanInform">
+                                <span class="dotContainer text-left">{{plan.name}}</span>
+                            </button>
+                            <dl class="apiplanDl" ng-if="plan.apiPlanInform">
+                                <dd>
+                                    <span class="leftKey">할 당 량</span>
+                                    <span ng-if="!plan.quotaValue">제한없음</span>
+                                    <span ng-if="plan.quotaValue">{{plan.quotaValue | number}}건 / {{vm.filter(plan.quotaTimeUnit, 1)}}</span>
+                                </dd>
+                                <dd>
+                                    <span class="leftKey">초당 처리량</span>
+                                    <span ng-if="!plan.maxRequestRate">제한없음</span>
+                                    <span ng-if="plan.maxRequestRate">{{plan.maxRequestRate | number}}건</span>
+                                </dd>
+                                <dd>
+                                    <span class="leftKey">시간 제한</span>
+                                    <span ng-if="!plan.controlTime">제한없음</span>
+                                    <span ng-if="plan.controlTime">{{plan.startTime}} ~ {{plan.endTime}}</span></dd>
+                                <dd>
+                                    <span class="leftKey">요일 제한</span>
+                                    <span ng-if="!plan.controlDay">제한없음</span>
+                                    <span ng-if="plan.controlDay">{{vm.filter(plan.startDayOfWeek)}} ~ {{vm.filter(plan.endDayOfWeek)}}</span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="billingPolicy" class="control-label" data-translate="apiList.billingPolicy">BillingPolicy</label>
+                    <p ng-if="vm.api.billingPolicy" style="padding:10px;">
+                        · {{vm.api.billingPolicy.name}}
+                        <button ng-click="vm.showBillingPolicies();"
+                                class="btn btn-default btn-xs pull-right"
+                                id="billingPolicyButton"
+                                data-translate="entity.action.billingPolicy">show billingPolicies content
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="form-box">
+                <div class="form-group">
+                    <label for="terms" class="control-label" data-translate="apiList.terms">Terms</label>
+                    <p ng-if="vm.api.termsOfUse" class="no_term">
+                        · {{vm.api.termsOfUse.name}}
+                        <button ng-click="vm.showTermsContent();"
+                                class="btn btn-default btn-xs"
+                                style="vertical-align: 2px; border-radius: 2px; float: right; margin-right: -10px;"
+                                data-translate="entity.action.term">약관보기
+                        </button>
+                    </p>
+                    <p style="padding:10px;" ng-if="!vm.api.termsOfUse">
+                        <small class="color_red"> · (없음)</small>
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">API 명세서</label>
+                    <small>(WADL | Swagger)</small>
+                    <div>
+                        <p class="voffset2" ng-if="vm.api.specFile">
+                            <span ng-click="vm.fileDown(vm.api.specFile)" class="file-list-wrap">
+                                <!-- <span class="label label-info">1</span> -->
+                                <span class="file_name_info">{{vm.api.specFile.fileName.split('\\').pop()}}</span>
+                                <span class="file_size">{{vm.fileSize(vm.api.specFile)}}</span>
+                            </span>
+                        </p>
+                        <p style="padding:10px;" ng-if="!vm.api.specFile">
+                            <small class="color_red"> · (없음)</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">API 설명서</label>
+                    <div>
+                        <p class="voffset2" ng-repeat="file in vm.api.attachFileList">
+                            <span ng-click="vm.fileDown(file)" class="file-list-wrap">
+                                <span class="file_name_info">{{file.fileName.split('\\').pop()}}</span>
+                                <span class="file_size">{{vm.fileSize(file)}}</span>
+                            </span>
+                        </p>
+                        <p style="padding:10px;" ng-if="!vm.api.attachFileList.length">
+                            <small class="color_red"> · (없음)</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group voffset4">
+                    <label class="control-label">추가설정 (Attack 방어)</label>
+                    <!-- <input ng-hide="false" type="checkbox" id="apiAddSettings" ng-model="vm.AddSettingsView" ng-init="vm.AddSettingsView=false"/> -->
+                    <button class="btn btn-default btn-xs pull-right" ng-show="!vm.AddSettingsView" ng-click="vm.AddSettingsView=true" ng-init="vm.AddSettingsView=false">펼침</button>
+                    <button class="btn btn-default btn-xs pull-right" ng-show="vm.AddSettingsView" ng-click="vm.AddSettingsView=false">닫힘</button>
+                </div>
+                <div class="registerModal attacksForm checkFormType" ng-if="vm.AddSettingsView">
+                    <dl>
+                        <dt><span>SQL Attacks</span>
+                            <button uib-popover-template="vm.sqlhelpPopover.templateUrl"
+                                    popover-title="도움말 : SQL Attacks"
+                                    popover-is-open="vm.isSqlHelpOpen"
+                                    popover-trigger="outsideClick"
+                                    type="button"
+                                    class="helppop">?
+                            </button>
+                        </dt>
+                        <dd ng-class="vm.api.sqlInjectionProtection.msSql && 'checked'">
+                            <input id="msSql" type="checkbox" ng-model="vm.api.sqlInjectionProtection.msSql" disabled/>
+                            <label for="msSql">Known MS SQL Server Exploits Protection</label>
+                        </dd>
+                        <dd ng-class="vm.api.sqlInjectionProtection.oraSql && 'checked'">
+                            <input id="oraSql" type="checkbox" ng-model="vm.api.sqlInjectionProtection.oraSql" disabled/>
+                            <label for="oraSql">Known Oracle Exploit Protection</label>
+                        </dd>
+                        <dd ng-class="vm.api.sqlInjectionProtection.standardSql && 'checked'">
+                            <input id="standardSql" type="checkbox" ng-model="vm.api.sqlInjectionProtection.standardSql" disabled/>
+                            <label for="standardSql">Standard SQL Injection Attack Protection</label>
+                        </dd>
+                        <dd ng-class="vm.api.sqlInjectionProtection.invasiveSql && 'checked'">
+                            <input id="invasiveSql" type="checkbox" ng-model="vm.api.sqlInjectionProtection.invasiveSql" disabled/>
+                            <label for="invasiveSql">Invasive SQL Injection Attack Protection</label>
+                        </dd>
+                    </dl>
+                    <dl class="voffset1">
+                        <dt><span>Injection Attacks</span>
+                            <button uib-popover-template="vm.injectionhelpPopover.templateUrl"
+                                    popover-title="도움말 : Injection Attacks"
+                                    popover-is-open="vm.isInjectionHelpOpen"
+                                    popover-trigger="outsideClick"
+                                    type="button"
+                                    class="helppop">?
+                            </button>
+                        </dt>
+                        <dd ng-class="vm.api.codeInjectionProtection.htmlJavascript && 'checked'">
+                            <input id="htmlJavascript" type="checkbox" ng-model="vm.api.codeInjectionProtection.htmlJavascript" disabled/>
+                            <label for="htmlJavascript">HTML/JavaScript Injection</label>
+                        </dd>
+                        <dd ng-class="vm.api.codeInjectionProtection.phpEval && 'checked'">
+                            <input id="phpEval" type="checkbox" ng-model="vm.api.codeInjectionProtection.phpEval" disabled/>
+                            <label for="phpEval">PHP eval Injection</label>
+                        </dd>
+                        <dd ng-class="vm.api.codeInjectionProtection.shell && 'checked'">
+                            <input id="shell" type="checkbox" ng-model="vm.api.codeInjectionProtection.shell" disabled/>
+                            <label for="shell">Shell Injection</label>
+                        </dd>
+                        <dd ng-class="vm.api.codeInjectionProtection.ldapDn && 'checked'">
+                            <input id="ldapDn" type="checkbox" ng-model="vm.api.codeInjectionProtection.ldapDn" disabled/>
+                            <label for="ldapDn">LDAP DN Injection</label>
+                        </dd>
+                        <dd ng-class="vm.api.codeInjectionProtection.ldapSearch && 'checked'">
+                            <input id="ldapSearch" type="checkbox" ng-model="vm.api.codeInjectionProtection.ldapSearch" disabled/>
+                            <label for="ldapSearch">LDAP Search Injection</label>
+                        </dd>
+                        <dd ng-class="vm.api.codeInjectionProtection.xpath && 'checked'">
+                            <input id="xpath" type="checkbox" ng-model="vm.api.codeInjectionProtection.xpath" disabled/>
+                            <label for="xpath">XPath Injection</label>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="form-box">
+                <div ng-show="vm.gatewayClusters.length != 1" class="form-group">
+                    <label for="gatewayCluster" class="control-label" style="margin-bottom:8px">G/W 클러스터</label>
+                    <input type="text" class="form-control" ng-model="vm.api.gatewayCluster" disabled/>
+                </div>
+                <div class="form-group">
+                    <label for="fragment" class="control-label" data-translate="apiList.fragment" required>Fragment</label>
+                    <input type="text" class="form-control" ng-model="vm.api.fragments[0].fragment.name" disabled/>
+                </div>
+
+                <div ng-if="vm.api.fragments[0].fragment">
+                    <label class="control-label" style="margin-bottom:8px">옵션설정</label>
+                    <div class="registerModal checkFormType radio voffset2" ng-repeat="parameter in vm.api.fragments[0].parameters">
+                        <dl ng-if="!vm.forPartner && parameter.label.indexOf('신한') < 0 && parameter.key != 'organizationcode' && parameter.key !=  'apiScope'"> <!-- organizationcode는 서버에서 입력하는 값 -->
+                            <dt ng-hide="vm.api.fragments[0].parameters[$index-1].key=='message.limit.check' && vm.api.fragments[0].parameters[$index-1].value=='false'">{{parameter.label}}</dt>
+                            <dd ng-hide="vm.api.fragments[0].parameters[$index-1].key=='message.limit.check' && vm.api.fragments[0].parameters[$index-1].value=='false'">
+                                <input ng-if="parameter.type == 'string'" type="text" class=" msg_sizeform-control"
+                                       ng-model="parameter.value" disabled/>
+                                <input ng-if="parameter.type == 'int' && !(vm.api.fragments[0].parameters[$index-1].key=='message.limit.check' && vm.api.fragments[0].parameters[$index-1].value=='false')" type="text" class=" msg_size form-control"
+                                       style="text-align:right" ng-init="vm.toNumFormat(parameter)"
+                                       ng-model="parameter.value" disabled/>
+                                   <span ng-if="parameter.type != 'string' && parameter.type != 'int'">
+                                        <input id="gatewayT_{{$index}}" name="gateway_{{$index}}" type="radio"
+                                               ng-model="parameter.value" value="true" disabled/>
+                                        <label for="gatewayT_{{$index}}">True</label>
+                                        <input id="gatewayF_{{$index}}" name="gateway_{{$index}}" type="radio"
+                                               ng-click="(parameter.key=='message.limit.check')? vm.api.fragments[0].parameters[$index+1].value='' : vm.abcd();"
+                                               ng-model="parameter.value" value="false" disabled/>
+                                        <label for="gatewayF_{{$index}}">False</label>
+                                    </span>
+                            </dd>
+                        </dl>
+                        <dl ng-show="parameter.key == 'apiScope'">
+                            <dt>로그인 타입</dt>
+                            <dd ng-if="vm.existingScope">
+                                <select id="scope" name="scope" class="form-control"
+                                        ng-options="scope.scope as scope.name for scope in vm.scopes"
+                                        ng-model="parameter.value" disabled>
+                                    <option value="">-사용 안함-</option>
+                                </select>
+                            </dd>
+                            <dd ng-if="!vm.existingScope">
+                                <input class="form-control" ng-model="parameter.value" disabled>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+        <span class="ng-scope">닫기</span>
+    </button>
+</div>

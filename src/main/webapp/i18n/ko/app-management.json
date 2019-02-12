@@ -1,0 +1,84 @@
+{
+    "appMine": {
+        "title": "내가 만든 앱 목록",
+        "description": "앱 설명",
+        "register": {
+            "title": "신규등록",
+            "name": "앱 이름",
+            "version": "앱 버전(필수 - 정수값만 입력해수세요)"
+        }
+    },
+    "appOrg": {
+        "title": "기관이 만든 앱 목록",
+        "description": "앱 설명",
+        "register": {
+            "title": "신규등록",
+            "name": "앱 이름",
+            "version": "앱 버전(필수 - 정수값만 입력해수세요)"
+        }
+    },
+    "appManage": {
+        "title": "전체 앱 목록",
+        "description": "앱 설명",
+        "register": {
+            "title": "신규등록",
+            "name": "앱 이름",
+            "version": "앱 버전(필수 - 정수값만 입력해수세요)",
+            "organization": "제작기관"
+        },
+        "request": {
+            "main": "승인요청",
+            "title": "제목",
+            "comment": "내용",
+            "cluster": "등록대상"
+        },
+        "info": {
+            "title": "상세정보 등록",
+            "basic": "기본정보",
+            "api": "API 정보",
+            "certi": "인증 정보",
+            "name": "이름",
+            "description": "설명",
+            "secret": "시크릿",
+            "issue": "발급",
+            "appKey": "앱 승인 키",
+            "callBack": "콜백 URL [사용자인증코드(auth_code) 및 API호출토큰(access_token) 데이터를 받기 위한 이용기관의 서비스 URL 정보]",
+            "scope": "Scope [access_token 발급시에 지정하는 API 호출 범위(권한), 디폴트 : public security]",
+            "append": "추가",
+            "correct": "수정"
+        },
+        "approval": {
+            "lineName": "승인라인명",
+            "lineModify": "승인자 변경",
+            "lineAdd": "승인자 등록/변경",
+            "reqApproval": "승인요청"
+        },
+        "secret": {
+            "title": "시크릿",
+            "inputPassword": "비밀번호를 입력하세요.",
+            "search": "조회",
+            "retry": "앱키 발급 후 재시도하세요."
+        },
+        "id": "앱 아이디",
+        "name": "앱 이름",
+        "version": "앱 버전",
+        "status": "상태",
+        "actions": "비고",
+        "ownerGroup": "앱 소유자 그룹",
+        "organization": "기관명",
+        "consentTerm": "약관동의"
+    },
+    "appAllManagement": {
+        "title": "앱 목록",
+        "description": "앱 목록 조회",
+        "register": {
+            "title": "신규등록",
+            "name": "앱 이름(필수)",
+            "version": "앱 버전(필수 - 정수값만 입력해수세요)"
+        }
+    },
+    "appDetail": {
+        "title": "앱 상세보기",
+        "description": "앱 상세정보 조회"
+    }
+}

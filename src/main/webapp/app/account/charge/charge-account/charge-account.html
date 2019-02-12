@@ -1,0 +1,61 @@
+<div class="row wrap">
+    <div class="">
+        <!-- <h2><strong>과금 기본 통계</strong></h2> -->
+        <h2><strong data-translate="charge-account.title">chargeAccount Lists</strong></h2>
+    </div>
+    <div class="">
+        <div class="searchBox">
+            <span class="form-inline">
+                <label class="control" for="apiName">API 명</label>
+                <input type="text" name="apiName" id="apiName" class="input-sm form-control" style="width:23%" ng-model="vm.condition.apiName" ng-keypress="($event.charCode==13)? vm.clickSearchButton(true) : return" />
+            </span>
+            <span class="btnBox">
+                <button type="button" class="btn search-btn" ng-click="vm.clickSearchButton(true)">검색</button>
+                <!-- <button type="button" class="btn search-btn" data-dismiss="modal" ng-click="vm.searching()">검색</button> -->
+            </span>
+        </div>
+        <!-- <div class="searchField type2 typeNew">
+            <div class="dateContainer">
+                <label class="control" for="apiName">API 명</label>
+                <input type="text" name="apiName" id="apiName" class="input-sm form-control" style="width:23%" ng-model="vm.condition.apiName" ng-keypress="($event.charCode==13)? vm.clickSearchButton(true) : return" />
+                <button type="button" class="btn btn-default pull-left search-btn" ng-click="vm.clickSearchButton(true)">조회</button>
+                <button type="button" class="btn btn-default pull-left" ng-click="vm.clickUpdateButton()"><i class="glyphicon glyphicon-search"></i>저장</button>
+            </div>
+        </div> -->
+    </div>
+    <div class=" text-center voffset3" ng-show="!vm.success">
+        <div class="searchField2" style="padding:23px; border:0px">{{ vm.alertMessage }}</div>
+    </div>
+    <div class=" voffset3" ng-show="vm.success">
+        <div class=" voffset1" style="padding: 0;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style="width:150px">기관</th>
+                    <th>API 명</th>
+                    <th style="width:200px">계좌정보</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="m in vm.metricsList">
+                    <td class="text-left">{{ m.api.organization.name }}</td>
+                    <td class="text-left">{{ m.api.name }}</td>
+                    <td class="text-center">
+                        <select id="approvalTypes" class="form-control input-sm" ng-model="m.orgWithdrawalTemp.id" ng-change="vm.changeAlias(this)"
+                                ng-options="orgWithdrawal.id as orgWithdrawal.accountAlias for orgWithdrawal in m.organization.orgWithdrawals">
+                                <option value="">등록 계좌 없음</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center voffset5">
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="btn-center-wrap">
+        <button type="button" class="btn-type1 just_right" ng-click="vm.clickUpdateButton()">저장</button>
+    </div>
+    <!--<button ng-click="vm.showApiTrend({orgId: 1, appId: 2, apiId: 3})">test</button>-->
+</div>

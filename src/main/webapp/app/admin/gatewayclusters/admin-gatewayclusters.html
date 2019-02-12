@@ -1,0 +1,71 @@
+<jhi-alert></jhi-alert>
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong>G/W 클러스터</strong></h2>
+        <p class="searchInfo">
+            <small ng-if="vm.isOpenMonitoring" class="current-time"><span class="color_red">호출시각</span>&emsp;{{vm.currentDate | date: 'yyyy-MM-dd HH:mm:ss'}}</small>
+            <button ng-click="vm.add()" class="btn btn-portal btn-flag-radius btn-md pull-right voffset3">
+                <span data-translate="gateway.cluster.register.title">Register</span>
+            </button>
+            <!-- <button ng-click="vm.isOpenMonitoring = !vm.isOpenMonitoring; vm.showGWMonitoring()" class="btn btn-info btn-flag-radius2 btn-md pull-right voffset3" style="margin-right:5px;">
+                <span ng-if="!vm.isOpenMonitoring">G/W 모니터링 보기</span>
+                <span ng-if="vm.isOpenMonitoring">G/W 모니터링 닫기</span>
+            </button> -->
+        </p>
+    </div>
+
+    <div ng-if="vm.isOpenMonitoring" class="col-md-12">
+        <div class="table-responsive">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:11%"/>
+                    <col style="width:45%"/>
+                    <col style="width:50%"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">기관</th>
+                    <th scope="col">최근 재기동 시각</th>
+                    <th scope="col">최근 상태체크 시각</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="result in vm.results">
+                    <td>{{result.org}}</td>
+                    <td class="t_center">{{result.uptime  | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                    <td class="t_center">{{result.statustimestamp  | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                </tr>
+                <tr ng-if="vm.results.length <= 0">
+                    <td colspan="3" class="t_center">모니터링 결과가 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-4 voffset5" ng-repeat="cluster in vm.clusters">
+        <dl class="card-ui list-type">
+            <dt class="card-heard">
+                <i class="glyphicon glyphicon-menu-hamburger menu"
+                   popover-is-open="cluster.selected"
+                   popover-trigger="outsideClick"
+                   uib-popover-template="vm.dynamicPopover.templateUrl" ng-click="vm.viewMenu(cluster)"></i>
+                <span class="title">{{cluster.name}}</span>{{cluster.description}}
+                <!--
+                                <span ng-show="cluster.sharable" has-authority="ROLE_ADMIN"
+                                      class="text-success pull-right"
+                                      data-translate="gateway.cluster.share.inform">사용허가</span>
+                -->
+            </dt>
+            <dd ng-repeat="gateway in cluster.gateways">
+                <strong>
+                    {{gateway.name}}
+                    <a ng-click="vm.edit(cluster, gateway)" title="수정"><i class="glyphicon glyphicon-pencil" style="color:gray"></i></a>
+                    <a ng-click="vm.remove('delete', cluster, gateway)" title="삭제"><i class="glyphicon glyphicon-trash" style="color:gray"></i></a>
+                </strong>
+                {{gateway.url}}
+            </dd>
+            <dd ng-if="cluster.gateways.length <= 0" class="empty">게이트웨이가 존재하지 않습니다.</dd>
+        </dl>
+    </div>
+</div>

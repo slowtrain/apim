@@ -1,0 +1,606 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0",
+        "title": "P2P Lending"
+    },
+    "host": "ap.jbfg.openbank.com:8181",
+    "basePath": "/api/bankingservice/p2plending",
+    "schemes": ["http"],
+    "paths": {
+        "/applyP2pLending": {
+            "post": {
+                "operationId": "applyP2pLending",
+                "consumes": ["application/json"],
+                "parameters": [{
+                    "name": "obpCustNo",
+                    "in": "formData",
+                    "description": "OBP 고객번호",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanPurposeCode",
+                    "in": "formData",
+                    "description": "대출목적코드",
+                    "required": true,
+                    "type": "string",
+                    "items": {
+                        "type": "string",
+                        "enum": ["01", "02", "03", "04", "05", "06", "07", "99"]
+                    }
+                }, {
+                    "name": "loanApplicationAmount",
+                    "in": "formData",
+                    "description": "대출신청금액",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "repaymentMethodCode",
+                    "in": "formData",
+                    "description": "상환방식코드",
+                    "required": true,
+                    "type": "string",
+                    "items": {
+                        "type": "string",
+                        "enum": ["01", "02", "03"]
+                    }
+                }, {
+                    "name": "repaymentTermMonthsCount",
+                    "in": "formData",
+                    "description": "상환기간개월수",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "yicmAmount",
+                    "in": "formData",
+                    "description": "연소득금액",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "loanApplicantName",
+                    "in": "formData",
+                    "description": "대출신청인명",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanApplicantBirthday",
+                    "in": "formData",
+                    "description": "대출신청인생년월일",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanProvisionBankcd",
+                    "in": "formData",
+                    "description": "대출지급은행코드",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanProvisionAccountNo",
+                    "in": "formData",
+                    "description": "대출 지급 계좌번호",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanCreditGradeCode",
+                    "in": "formData",
+                    "description": "대출신용등급코드",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "kcbCreditGradeCode",
+                    "in": "formData",
+                    "description": "KCB신용등급코드",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "niceCreditGradeCode",
+                    "in": "formData",
+                    "description": "NICE신용등급코드",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "decisionLoanTheRateOfInterest",
+                    "in": "formData",
+                    "description": "결정대출이율",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "monthRepaymentAmount",
+                    "in": "formData",
+                    "description": "월상환금액",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "loanApplicationDate",
+                    "in": "formData",
+                    "description": "대출신청일자",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "linkedBankApprovalYesOrNo",
+                    "in": "formData",
+                    "description": "연계은행승인여부",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanStatusCode",
+                    "in": "formData",
+                    "description": "대출상태코드",
+                    "required": true,
+                    "type": "string",
+                    "items": {
+                        "type": "string",
+                        "enum": ["01", "02", "03", "04", "99"]
+                    }
+                }, {
+                    "name": "applicationNo",
+                    "in": "formData",
+                    "description": "신청번호",
+                    "required": false,
+                    "type": "string"
+                }, {
+                    "name": "virtualAccountNo",
+                    "in": "formData",
+                    "description": "가상계좌번호",
+                    "required": false,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Loan"
+                        }
+                    }
+                },
+                "security": [{
+                    "otk_auth2": ["oob"],
+                    "otk_auth": ["oob"]
+                }]
+            }
+        },
+        "/callbackP2PLendingExecution": {
+            "post": {
+                "operationId": "callbackP2PLendingExecution",
+                "consumes": ["application/json"],
+                "parameters": [{
+                    "name": "applicationNo",
+                    "in": "formData",
+                    "description": "대출신청고유번호",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "counselNo",
+                    "in": "formData",
+                    "description": "대출상담번호",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "pledgeOfferAmount",
+                    "in": "formData",
+                    "description": "담보제공희망금액",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "pledgeOfferApplyOn",
+                    "in": "formData",
+                    "description": "담보제공신청일자",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "monthCountOfPeriod",
+                    "in": "formData",
+                    "description": "P2P상환개월수",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "p2PAmount",
+                    "in": "formData",
+                    "description": "P2P원금",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "pledgeOfferFee",
+                    "in": "formData",
+                    "description": "담보제공수수료",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "pledgeFee",
+                    "in": "formData",
+                    "description": "담보수수료",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "adjustFee",
+                    "in": "formData",
+                    "description": "정산수수료",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "adjustAmountAfterTax",
+                    "in": "formData",
+                    "description": "투자자정산금액",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "adjustAmount",
+                    "in": "formData",
+                    "description": "세전투자정산금액",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "incomeTax",
+                    "in": "formData",
+                    "description": "소득세액",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "residenceTax",
+                    "in": "formData",
+                    "description": "주민세액",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "rateOfOverdue",
+                    "in": "formData",
+                    "description": "투자자수익연체비율",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "executionResult",
+                    "in": "formData",
+                    "description": "대출실행결과코드",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "executionOn",
+                    "in": "formData",
+                    "description": "대출실행일자",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "p2PLendingAccount",
+                    "in": "formData",
+                    "description": "P2P대출계좌번호",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "totInvestorCount",
+                    "in": "formData",
+                    "description": "총투자자수",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "continuityYN",
+                    "in": "formData",
+                    "description": "정보연속여부",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "investorCount",
+                    "in": "formData",
+                    "description": "전문투자자수",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "pledges",
+                    "in": "formData",
+                    "description": "담보정보",
+                    "required": true,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/getP2pLendingListWithDigitalAccountId/{digitalAccountId}": {
+            "get": {
+                "operationId": "getP2pLendingListWithDigitalAccountId",
+                "consumes": ["application/json"],
+                "parameters": [{
+                    "name": "digitalAccountId",
+                    "in": "path",
+                    "description": "디지털계정ID",
+                    "required": true,
+                    "type": "string",
+                    "default": "001-20160821-124852-0000028"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/preRegistP2pLending": {
+            "post": {
+                "operationId": "preRegistP2pLending",
+                "consumes": ["application/json"],
+                "parameters": [{
+                    "name": "obpCustNo",
+                    "in": "formData",
+                    "description": "OBP 고객번호",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanPurposeCode",
+                    "in": "formData",
+                    "description": "대출목적코드",
+                    "required": true,
+                    "type": "string",
+                    "items": {
+                        "type": "string",
+                        "enum": ["01", "02", "03", "04", "05", "06", "07", "99"]
+                    }
+                }, {
+                    "name": "loanApplicationAmount",
+                    "in": "formData",
+                    "description": "대출신청금액",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "repaymentMethodCode",
+                    "in": "formData",
+                    "description": "상환방식코드",
+                    "required": true,
+                    "type": "string",
+                    "items": {
+                        "type": "string",
+                        "enum": ["01", "02", "03"]
+                    }
+                }, {
+                    "name": "repaymentTermMonthsCount",
+                    "in": "formData",
+                    "description": "상환기간개월수",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "yicmAmount",
+                    "in": "formData",
+                    "description": "연소득금액",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "loanApplicantName",
+                    "in": "formData",
+                    "description": "대출신청인명",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanApplicantBirthday",
+                    "in": "formData",
+                    "description": "대출신청인생년월일",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanProvisionBankcd",
+                    "in": "formData",
+                    "description": "대출지급은행코드",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanProvisionAccountNo",
+                    "in": "formData",
+                    "description": "대출 지급 계좌번호",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanCreditGradeCode",
+                    "in": "formData",
+                    "description": "대출신용등급코드",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "kcbCreditGradeCode",
+                    "in": "formData",
+                    "description": "KCB신용등급코드",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "niceCreditGradeCode",
+                    "in": "formData",
+                    "description": "NICE신용등급코드",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "decisionLoanTheRateOfInterest",
+                    "in": "formData",
+                    "description": "결정대출이율",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "monthRepaymentAmount",
+                    "in": "formData",
+                    "description": "월상환금액",
+                    "required": true,
+                    "type": "number"
+                }, {
+                    "name": "loanApplicationDate",
+                    "in": "formData",
+                    "description": "대출신청일자",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "linkedBankApprovalYesOrNo",
+                    "in": "formData",
+                    "description": "연계은행승인여부",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "loanStatusCode",
+                    "in": "formData",
+                    "description": "대출상태코드",
+                    "required": true,
+                    "type": "string",
+                    "items": {
+                        "type": "string",
+                        "enum": ["01", "02", "03", "04", "99"]
+                    }
+                }, {
+                    "name": "applicationNo",
+                    "in": "formData",
+                    "description": "신청번호",
+                    "required": false,
+                    "type": "string"
+                }, {
+                    "name": "virtualAccountNo",
+                    "in": "formData",
+                    "description": "가상계좌번호",
+                    "required": false,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+
+        "otk_auth2": {
+            "type": "oauth2",
+            "authorizationUrl": "https://172.30.1.91:8443/auth/oauth/v2/authorize",
+            "tokenUrl":"https://172.30.1.91:8443/auth/oauth/v2/token",
+            "flow": "accessCode",
+            "scopes": {
+                "oob": "default",
+                "test": "test"
+            }
+        },
+        "otk_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "https://172.30.1.91:8443/auth/oauth/v2/authorize",
+            "flow": "implicit",
+            "scopes": {
+                "oob": "default",
+                "test": "test"
+            }
+        },
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        }
+    },
+    "definitions": {
+        "Loan": {
+            "properties": {
+                "applicationNo": {
+                    "type": "string",
+                    "description": "대출 신청 번호"
+                },
+                "bankOfPayback": {
+                    "type": "string",
+                    "description": "대출 상환 은행코드"
+                },
+                "rateOfInterest": {
+                    "type": "number",
+                    "description": "대출 이율"
+                },
+                "investigationResult": {
+                    "type": "string",
+                    "description": "대출 심사 결과 코드"
+                },
+                "expiredOn": {
+                    "type": "string",
+                    "description": "대출 만기 일자"
+                },
+                "applyAmount": {
+                    "type": "number",
+                    "description": "대출 금액"
+                },
+                "paybackAccountNo": {
+                    "type": "string",
+                    "description": "대출 상환 계좌 번호"
+                },
+                "monthlyPaybackAmount": {
+                    "type": "string",
+                    "description": "월 상환 금액"
+                },
+                "repaymentMethodDivision": {
+                    "type": "string",
+                    "description": "상환 방법 구분코드"
+                },
+                "usageDivision": {
+                    "type": "string",
+                    "description": "대출 용도 구분코드"
+                },
+                "linkedBankApprovedOn": {
+                    "type": "string",
+                    "description": "연계 은행 승인 일자"
+                },
+                "state": {
+                    "type": "string",
+                    "description": "대출 상태코드"
+                },
+                "paybackOn": {
+                    "type": "number",
+                    "description": "대출 상환 일자"
+                },
+                "investorCollectionEndedOn": {
+                    "type": "string",
+                    "description": "투자자 모집 종료 일시"
+                },
+                "approvedAmount": {
+                    "type": "number",
+                    "description": "대출 승인 금액"
+                },
+                "counselNo": {
+                    "type": "string",
+                    "description": "대출 상담 번호"
+                },
+                "payedOn": {
+                    "type": "string",
+                    "description": "대출 지급 일자"
+                },
+                "investorCollectionStartedOn": {
+                    "type": "string",
+                    "description": "투자자 모집 시작 일시"
+                },
+                "bankOfAccountPayable": {
+                    "type": "string",
+                    "description": "대출 지급 은행코드"
+                },
+                "bankAdjustmentRateOfInterest": {
+                    "type": "number",
+                    "description": "은행 정산 이율"
+                },
+                "monthCountOfPeriod": {
+                    "type": "number",
+                    "description": "대출 기간 개월수"
+                },
+                "accountNoPayable": {
+                    "type": "string",
+                    "description": "대출 지급 계좌번호"
+                },
+                "ciNo": {
+                    "type": "string",
+                    "description": "CI 번호"
+                },
+                "linkedBankApproved": {
+                    "type": "string",
+                    "description": "연계은행 승인 여부"
+                },
+                "applicantWorkSiteName": {
+                    "type": "string",
+                    "description": "대출 신청인 직장 명"
+                },
+                "totalAdjustmentRateOfInterest": {
+                    "type": "number",
+                    "description": "총 정산 이율"
+                },
+                "approvedRateOfInterest": {
+                    "type": "number",
+                    "description": "대출 승인 이율"
+                }
+            },
+            "type": "object"
+        }
+    }
+}

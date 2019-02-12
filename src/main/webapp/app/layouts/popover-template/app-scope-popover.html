@@ -1,0 +1,35 @@
+<div style="width:300px;">
+    <div>{{dynamicPopover.title}}</div>
+    <div class="form-group">
+
+        <div class="scrollTable" style="max-height:300px;">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:40px"/>
+                    <col style="width:183px"/>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col"><input type="checkbox" id="allSelect" ng-model="vm.allSelect" ng-click="vm.checkAll(vm.allSelect)"/>
+                        </th>
+                        <th scope="col"><label for="allSelect">SCOPE 이름</label></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="scope in vm.scopes">
+                        <td class="t_center"><input type="checkbox" id="{{'scope'+$index}}" ng-checked="(scope.isDisabled)? false: vm.allSelect" ng-model="scope.checked" ng-disabled="scope.isDisabled"/></td>
+                        <td style="text-align:left;">
+                            <label for="{{'scope'+$index}}" ng-disabled="scope.isDisabled" class="dotContainer" style="width:90%; vertical-align:-13px" title="{{scope.scope}} ({{scope.name}})">{{scope.scope}} ({{scope.name}})</label>
+                            <i title="상세보기" ng-click="scope.openInform =!scope.openInform" style="top:5px" class="glyphicon glyphicon-info-sign"></i>
+                            <p ng-if="scope.openInform">- {{scope.name}} : {{scope.description}}</p>
+                        </td>
+                    </tr>
+                    <tr ng-if="vm.scopes.length==0">
+                        <td colspan="2" class="t_center">SCOPE이 존재하지 않습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <button type="button" class="btn btn-danger form-control voffset2" ng-click="vm.applicationScopes()" data-translate="entity.action.apply">적용하기</button>
+    </div>
+</div>

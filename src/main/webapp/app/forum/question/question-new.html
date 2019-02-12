@@ -1,0 +1,92 @@
+<div class="wrap">
+    <div class="col-md-12">
+        <!-- <p class="searchInfo  post-btn-box">&nbsp; 글쓰기 -->
+        <!-- <button class="pull-right btn btn-default btn-xs" ng-style="(vm.isAdmin) && {'margin-right':'109px'}"
+                ui-sref="question({forumTitle:vm.state.forumTitle, sort:vm.state.sort})">
+            <i class="glyphicon glyphicon-th-list"></i> 목록
+        </button> -->
+        <!-- </p> -->
+
+        <div class="table-responsive voffset3" style="overflow: visible">
+            <form name="form" novalidate>
+                <table class="table table_write">
+                    <colgroup>
+                        <col style="width:20%" />
+                        <col style="width:80%" />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th>
+                                <label class="required-label" data-translate="question.view.title">title</label>
+                            </th>
+                            <td>
+                                <input type="text" id="questionTitle" name="questionTitle" class="form-control"  ng-model="vm.question.title" minlength="1" maxlength="80" limit='true' placeholder="제목을 입력하세요." required>
+                                <small class="color_red" ng-if="form.questionTitle.$error.minlength || form.questionTitle.$error.maxlength">(1~80자 이내)</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label class="required-label" data-translate="question.view.password">password</label>
+                            </th>
+                            <td>
+                                <input type="text" id="questionPassword" name="questionPassword" class="form-control"  ng-model="vm.question.password" minlength="4" maxlength="20" limit='true' required>
+                                <small class="color_red" ng-if="form.questionPassword.$error.minlength || form.questionPassword.$error.maxlength">(비밀번호는 4~20자 이내입니다.)</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label class="required-label" data-translate="question.view.email">email</label>
+                            </th>
+                            <td>
+                                <input type="email" id="questionEmail" name="questionEmail" class="form-control"  ng-model="vm.question.email" limit='true'
+                                ng-pattern="/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/" required>
+                                <small class="color_red" ng-if="form.questionEmail.$error.pattern">(잘못된 이메일입니다.)</small>
+                            </td>
+                        </tr>
+                        <tr  height="320px">
+                            <th>
+                                <label class="required-label" data-translate="question.view.content">content</label>
+                            </th>
+                            <td>
+                                <textarea id="questionContent" name="questionContent" class="form-control" ng-model="vm.question.content" style="height:300px" maxlength="3000" limit='true' ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"></textarea>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td colspan="2" style="border:0px !important;">
+                                <p class="t_center" style="height:50px; margin-top:25px; margin-left:200px;">
+                                    <button type="button" class="btn btn-portal modalBtn" disabled ng-if="!vm.question.title || !vm.question.password || !vm.question.email || !vm.question.content || form.$invalid">
+                                        <span data-translate="entity.action.save">Save</span>
+                                    </button>
+                                    <button type="button" class="btn btn-portal modalBtn" ng-click="vm.save()" ng-if="!(!vm.question.title || !vm.question.password || !vm.question.email || !vm.question.content || form.$invalid)">
+                                        <span data-translate="entity.action.save">Save</span>
+                                    </button>
+                                    <button type="button" class="btn btn-default modalBtn cancel" ng-click="vm.clear()">
+                                        <span data-translate="entity.action.cancel">cancel</span>
+                                    </button>
+                                </p>
+                            </td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </form>
+            <div class="btn-layout">
+                <div class="left-side">
+                    <button ui-sref="question({forumTitle:vm.state.forumTitle, sort:vm.state.sort})" type="button" class="btn-type1" href="#/forum-community">목록</button>
+                </div>
+                <div class="right-side">
+                    <button type="button" class="btn-type1 just_left" ng-click="vm.clear()">
+                        <span data-translate="entity.action.cancel">cancel</span>
+                    </button>
+                    <button type="button" class="btn-type1 just_right" disabled ng-if="!vm.question.title || !vm.question.password || !vm.question.email || !vm.question.content || form.$invalid">
+                        <span data-translate="entity.action.save">Save</span>
+                    </button>
+                    <button type="button" class="btn-type1 just_right" ng-click="vm.save()" ng-if="!(!vm.question.title || !vm.question.password || !vm.question.email || !vm.question.content || form.$invalid)">
+                        <span data-translate="entity.action.save">Save</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

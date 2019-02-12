@@ -1,0 +1,34 @@
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" ng-click="vm.clear()"></button>
+        <h4 class="modal-title" id="myUserLabel"
+            data-translate="apiService.forum.title">API Forum List</h4>
+    </div>
+    <div class="modal-body">
+	    <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:50%"/>
+                    <col/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th data-translate="apiService.forum.name">Name</th>
+                    <th data-translate="apiService.forum.organization">Organization</th>
+                </tr>
+                </thead>
+                <tbody>
+	                <tr ng-repeat="forum in vm.forumList">
+	                    <td class="t_left hover" ui-sref="post({forumId: forum.id})" ng-click="vm.clear()">{{forum.title}}</td>
+	                    <td class="t_left">{{forum.owner.name}}</td>
+	                </tr>
+                </tbody>
+            </table>
+        </div>
+	</div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+            <span data-translate="entity.action.close">Close</span>
+        </button>
+    </div>
+

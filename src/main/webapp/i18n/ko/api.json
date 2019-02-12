@@ -1,0 +1,103 @@
+{
+    "apiList": {
+      	"title": "API 목록",
+        "description":"API 설명",
+        "definition": "API 명세서(필수)",
+      	"register":{
+        	"title": "신규등록",
+            "name":"API 이름",
+            "version":"API 버전",
+            "isPrivate": "비공개"
+        },
+        "request": {
+        	"main": "승인요청",
+        	"title": "제목",
+        	"comment": "내용",
+        	"cluster": "등록대상"
+        },
+        "approval":{
+            "lineName":"승인라인명",
+            "lineModify":"승인자 변경",
+            "lineAdd":"승인자 등록/변경",
+            "reqApproval":"승인요청"
+        },
+      	"detail":{
+        	"title": "API 상세보기",
+            "version":"API 버전",
+        	"plans":"적용할 사용정책"
+        },
+      	"appList":{
+        	"title": "사용앱 목록"
+        },
+        "id": "API 아이디",
+      	"name": "API 이름",
+      	"version": "버전",
+        "ownerGroup":"API 소유자 그룹",
+        "apiAddSettings":"추가설정 보기",
+        "addSSL":"SSL을 사용하시겠습니까?",
+        "addApiKey":"ApiKey를 사용하시겠습니까?",
+        "addOAuth":"OAuth을 사용하시겠습니까?",
+        "requiredAuthentication":"API 인증 방식",
+        "SQLAttacks":"SQL Attack(공격)",
+        "InjectionAttacks":"Injection 공격",
+        "yes":"예",
+        "no":"아니오",
+        "plans":"적용할 사용정책",
+        "selectPlans":"선택",
+        "proxyURL":"프록시 URL",
+        "proxyURL_short":"프록시 URL (필수)",
+        "proxyURLTitle":"프록시 URL",
+        "apiRequestURL":"API 호출 URL",
+        "actions": "비고",
+        "title2": "승인라인 변경",
+        "filter": "Filter (by prefix)",
+        "status":"상태",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties",
+            "planName":"정책명",
+            "lineNull":"승인라인이 존재하지 않습니다."
+        },
+        "gatewayClusterInfo":"G/W 클러스터 정보설정",
+        "fragment":"FRAGMENT",
+        "argument":"추가설정",
+        "terms":"약관",
+        "billingPolicy": "과금정책",
+        "updateDate": "수정일자",
+        "updater": "수정자",
+        "isPrivate": "공개여부",
+        "organization": "기관"
+    },
+    "apiGroup":{
+        "title": "API 그룹 목록",
+        "name":"API 그룹 이름",
+        "description":"API 그룹 설명",
+        "apiList":"선택한 API 목록",
+        "addApiGroup":"API 그룹 등록",
+        "addGroup":{
+            "name":"API 그룹 이름(필수)",
+            "selectAPIs":"API 선택(필수)"
+        }
+    },
+    "apiTerms":{
+        "title": "API 이용약관 목록",
+        "register":{
+            "title": "이용약관 신규등록",
+            "menu": "신규등록"
+        },
+        "edit":{
+            "title": "약관 수정하기"
+        },
+        "view":{
+            "title": "약관 내용보기"
+        },
+        "name":"약관 이름",
+        "content": "약관 내용",
+        "list":"목록가기",
+        "addApiGroup":"API 그룹 등록",
+        "addGroup":{
+            "name":"API 그룹 이름(필수)",
+            "selectAPIs":"API 선택(필수)"
+        }
+    }
+}

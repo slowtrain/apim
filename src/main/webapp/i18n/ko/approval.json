@@ -1,0 +1,48 @@
+{
+    "approval": {
+        "title": "대기중인 승인 목록",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
+        },
+        "type": "분류",
+        "requester": "요청자",
+        "list_title": "제목",
+        "created_date": "요청일자",
+        "content": "요청내용",
+        "etc": "비고",
+        "status": "승인진행상태"
+    },
+    "approvalRequest": {
+        "title": "나의 승인요청 목록"
+    },
+    "approvalLine": {
+        "title1": "기관 승인라인 목록",
+        "title2": "기관 승인라인 변경",
+        "title3": "기관 승인라인 선택",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
+        }
+    },
+    "approvalModal": {
+        "approve": "승인",
+        "title": "제목",
+        "comment": "내용",
+        "deny" : "반려",
+        "approver": "승인자목록"
+    },
+    "approvalHistory": {
+        "title": "승인진행상황 조회"
+    },
+    "approvalRequester": "승인요청자",
+    "approver": {
+        "title": "승인목록",
+        "name": "이름",
+        "decision": "상태",
+        "lastModifiedDate": "승인일자",
+        "comment": "승인내용"
+    }
+}

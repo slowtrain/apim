@@ -1,0 +1,48 @@
+<jhi-alert></jhi-alert>
+<form name="registerForm" role="form"  novalidate ng-submit="vm.save()">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()"></button>
+        <h4 class="modal-title" id="myUserLabel" data-translate="gateway.cluster.share.title">Title</h4>
+    </div>
+
+    <div class="modal-body">
+        <div style="border-left: 2px solid #fd890c; line-height: 14px; padding-left: 5px; margin-bottom:10px">기관목록</div>
+        <div class="form-inline">
+            <span ng-repeat="org in vm.orgList" class="input-group" style="width:49%; margin:5px 5px 0 0">
+                 <span class="input-group-addon" style="width:20px;">
+                    <input type="checkbox" id="{{org.id}}" ng-model="org.checked">
+                </span>
+                <label for="{{org.id}}" class="form-control">{{org.name}}</label>
+            </span>
+        </div>
+        <!--<div style="text-align: center" class="voffset1">
+            <h3><span class="label label-default" data-translate="gateway.cluster.share.orglist">Organization List</span></h3>
+        </div>
+        <hr>
+        <div class="voffset3" style="overflow:hidden">
+            <dl class="col-md-6 voffset2" ng-repeat="org in vm.orgList">
+                <span ng-if="$index %2 ==0" class="input-group pull-left" style="display: inline-flex;">
+                    <span class="input-group-addon" style="padding: 10px 20px 6px 10px;">
+                        <input type="checkbox" id="{{org.id}}" ng-model="org.checked">
+                    </span>
+                    <label for="{{org.id}}" class="form-control" style="padding: 8px;">{{org.name}}</label>
+                </span>
+                <span ng-if="$index %2 ==1" class="input-group" style="display: inline-flex;">
+                    <span class="input-group-addon" style="padding: 10px 20px 6px 10px;">
+                        <input type="checkbox" id="{{org.id}}" ng-model="org.checked">
+                    </span>
+                    <label for="{{org.id}}" class="form-control" style="padding: 8px;">{{org.name}}</label>
+                </span>
+            </dl>
+        </div>-->
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-portal modalBtn">
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>
+</form>

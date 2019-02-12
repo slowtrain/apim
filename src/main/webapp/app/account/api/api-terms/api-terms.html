@@ -1,0 +1,246 @@
+<div class="row wrap">
+    <div ng-hide="vm.showDiv">
+        <div class="col-md-12">
+            <h2><strong data-translate="apiTerms.title">apiTerms List</strong></h2>
+        </div>
+        <div class="col-md-12">
+            <p class="searchInfo">
+                <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 API 이용약관이 존재합니다.</span>
+                <button has-authority="ROLE_API_CREATE" ng-click="vm.addTerms()" class="btn btn-portal btn-flag-radius pull-right">
+                    <span>API 이용약관 등록</span>
+                </button>
+            </p>
+            <div class="table-responsive voffset3">
+                <table class="table tableFixed">
+                    <colgroup>
+                        <col style="width:60px"/>
+                        <col/>
+                        <col style="width:100px"/>
+                        <col style="width:123px"/>
+                        <col style="width:160px"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th id="name" ng-mousedown="vm.sorting('name')"><span data-translate="apiTerms.name">Name</span><i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                        <th>수정일자</th>
+                        <th>수정자</th>
+                        <th data-translate="apiList.actions">Etc</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="terms in vm.termsList">
+                        <td scope="row" class="t_center">{{(vm.totalItems - (vm.condition.page)*(vm.stateParams.size))-$index}}</td>
+                        <td class="hover" ng-click="vm.showTermsContent(terms)">{{terms.name}}</td>
+                        <td>{{terms.lastModifiedDate | date: 'yyyy-MM-dd'}}</td>
+                        <td>{{terms.lastModifiedBy}}</td>
+                        <td class="t_center">
+                            <button ng-if="account.role.code == 'ROLE_OFFER_MANAGER'" has-authority="ROLE_API_MODIFY" class="btn btn-default btn-xs" ng-click="vm.editTerms(terms, 'edit')" >수정</button>
+                            <button has-authority="ROLE_API_DELETE" class="btn btn-danger btn-xs" ng-click="vm.delTerms(terms)">삭제</button>
+                            <button class="btn btn-default btn-xs" ng-click="vm.showTermsContent(terms)" data-translate="entity.action.term">show terms content</button>
+                        </td>
+                    </tr>
+                    <tr ng-if="vm.termsList.length <= 0">
+                        <td colspan="5" class="t_center">등록하신 API 이용약관이 존재하지 않습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="vm.showDiv">
+        <div class="col-md-12">
+            <h2><strong data-translate="apiTerms.{{vm.mode}}.title">Register</strong></h2>
+            <!-- <button type="submit" ng-click="vm.loadAll()"
+                    class="btn btn-default">
+                <span data-translate="apiTerms.list">Back to List</span>
+            </button> -->
+        </div>
+        <div class="col-md-12 voffset3">
+
+        <!--ie9 파일업로드 오류시 ajaxForm함수에서 error를 타려면, 해당html의 textarea[0]이 disply none이어야 한다.-->
+            <textarea style="display:none;"></textarea>
+
+            <table class="table table_write">
+                <colgroup>
+                    <col style="width:20%;">
+                    <col style="width:80%;">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th><label for="name" data-translate="apiTerms.name" class="required-label">name</label></th>
+                        <td>
+                            <form name="form" novalidate>
+                                <small class="color_red" ng-if="form.name.$error.minlength || form.name.$error.maxlength">(3~80자 이내)</small>
+                                <small class="color_red" ng-if="form.name.$error.pattern">(잘못 입력하셨습니다.)</small>
+                                <input type="text" name="name" class="form-control"  ng-model="vm.terms.name" ng-readonly="vm.readOnly" minlength="3" maxlength="80" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label class="required-label">내용</label></th>
+                        <td>
+                            <div ng-if="!vm.readOnly" id="summernoteEditor">
+                                <small ng-if="check_ie9" class="ie9-inform"><i class="glyphicon glyphicon-triangle-right"></i> IE 10이상과 크롬에서 이미지추가기능이 가능합니다.</small>
+                                <summernote height="300" config="vm.summernoteToolbar" ng-model="vm.terms.content"></summernote>
+                            </div>
+                            <div ng-if="vm.readOnly" class="form-control ql-editor" id="contentsBody" style="height:400px; overflow:hidden"
+                                 ng-readonly="vm.readOnly">
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- <tr ng-if="vm.readOnly"> -->
+                    <tr ng-if="vm.readOnly">
+                        <th></th>
+                        <td>
+                            <div ng-if="vm.readOnly">
+                                <button type="button" class="btn btn-danger" ng-click="vm.delTerms(vm.terms)">
+                                    <span class="glyphicon glyphicon-remove"></span>&nbsp;
+                                    <span data-translate="entity.action.delete">Delete</span>
+                                </button>
+                                <button type="button" class="btn btn-portal" ng-click="vm.readOnlyToggle()">
+                                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;
+                                    <span data-translate="entity.action.update">Update</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label class="voffset2">첨부파일<small class="color_red">(PDF)</small>
+                        </label>
+                        </th>
+                        <td>
+                            <button uib-popover-template="vm.iePdfviewHelpPopover.templateUrl"
+                                    popover-title="도움말"
+                                    popover-is-open="vm.isOpen"
+                                    popover-trigger="outsideClick"
+                                    popover-placement="right"
+                                    ng-click = "vm.isOpen = !vm.isOpen"
+                                    type="button"
+                                    class="btn btn-default no-open-file">
+                                <i class="glyphicon glyphicon-question-sign"></i> 파일이 열리지 않을 때
+                            </button>
+                            <div ng-if="vm.terms.attachFileList.length > 0" class="mt_10">
+                                <span class="voffset2" ng-repeat="file in vm.terms.attachFileList">
+                                    <span ng-click="vm.fileDown(file)" class="file-list-wrap">
+                                        <span class="file_name_info">{{file.fileName.split('\\').pop()}}</span>
+                                        <span class="file_size">{{vm.fileSize(file)}}</span>
+                                        <i ng-if="!vm.readOnly" class="glyphicon glyphicon-remove" ng-click="vm.delFile(file, $index)"></i>
+                                    </span>
+                                </span>
+                            </div>
+                            <form ng-show="!vm.readOnly" id="fileForm">
+                                <div ng-repeat="file in vm.files" id="inputFile{{$index}}" class="voffset2">
+                                    <input id="hiddenInputFile-{{$index}}" class="form-control file-input" type="file" name="file-input" accept="application/pdf" onchange="angular.element(this).scope().addFileInput(event, true)" ng-hide="true"/>
+                                    <div class="input-group">
+                                        <input id="viewInputFile{{$index}}" type="text" class="form-control" name="viewInputFile" placeholder="파일을 선택하세요" disabled>
+                                        <span class="input-group-btn">
+                                            <button ng-if="!file.data || vm.files.length==1" class="btn btn-default file-btn" type="button" ng-click="vm.deletion=false; vm.selectFile($index);">
+                                                <i class="glyphicon glyphicon-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <ul class="list-group">
+                <li class="list-group-item">
+                    <label for="name" data-translate="apiTerms.name" class="required-label">name</label>
+                    <small class="color_red" ng-if="form.name.$error.minlength || form.name.$error.maxlength">(3~80자 이내)</small>
+                    <small class="color_red" ng-if="form.name.$error.pattern">(잘못 입력하셨습니다.)</small>
+                    <input type="text" name="name" class="form-control"  ng-model="vm.terms.name" ng-readonly="vm.readOnly" minlength="3" maxlength="80" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required>
+                </li>
+                <li class="list-group-item">
+                    <label class="required-label">내용</label>
+                    <div ng-if="!vm.readOnly" id="summernoteEditor">
+                        <small ng-if="check_ie9" class="ie9-inform"><i class="glyphicon glyphicon-triangle-right"></i> IE 10이상과 크롬에서 이미지추가기능이 가능합니다.</small>
+                        <summernote height="300" config="vm.summernoteToolbar" ng-model="vm.terms.content"></summernote>
+                    </div>
+                    <div ng-if="vm.readOnly" class="form-control ql-editor" id="contentsBody" style="height:400px; overflow:hidden"
+                         ng-readonly="vm.readOnly">
+                    </div>
+                </li>
+            </ul> -->
+            <!-- <div ng-if="vm.readOnly" style="text-align:right;">
+                <button type="button" class="btn btn-danger" ng-click="vm.delTerms(vm.terms)">
+                    <span class="glyphicon glyphicon-remove"></span>&nbsp;
+                    <span data-translate="entity.action.delete">Delete</span>
+                </button>
+                <button type="button" class="btn btn-portal" ng-click="vm.readOnlyToggle()">
+                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;
+                    <span data-translate="entity.action.update">Update</span>
+                </button>
+            </div> -->
+        </form>
+            <!-- <div>
+                <label class="voffset2">첨부파일<small class="color_red">(PDF)</small>
+                    &nbsp;
+                    <button uib-popover-template="vm.iePdfviewHelpPopover.templateUrl"
+                            popover-title="도움말"
+                            popover-is-open="vm.isOpen"
+                            popover-trigger="outsideClick"
+                            popover-placement="right"
+                            ng-click = "vm.isOpen = !vm.isOpen"
+                            type="button"
+                            class="btn btn-default btn-xs">
+                        <i class="glyphicon glyphicon-question-sign"></i> 파일이 열리지 않을 때
+                    </button>
+                </label>
+                <div ng-if="vm.terms.attachFileList.length > 0">
+                    <span style="line-height:14px; width:80%; margin-left:20px; display:flex" class="voffset2" ng-repeat="file in vm.terms.attachFileList">
+                        <span ng-click="vm.fileDown(file)" class="file-list-wrap">
+                            <span class="file_name_info">{{file.fileName.split('\\').pop()}}</span>
+                            <span class="file_size">{{vm.fileSize(file)}}</span>
+                        </span>
+                        <i ng-if="!vm.readOnly" class="glyphicon glyphicon-remove" style="margin-left:10px; line-height:11px;" ng-click="vm.delFile(file, $index)"></i>
+                    </span>
+                </div>
+                <form ng-show="!vm.readOnly" id="fileForm">
+                    <div ng-repeat="file in vm.files" id="inputFile{{$index}}" class="voffset2">
+                        <input id="hiddenInputFile-{{$index}}" class="form-control file-input" type="file" name="file-input" accept="application/pdf" onchange="angular.element(this).scope().addFileInput(event, true)" ng-hide="true"/>
+                        <div class="input-group">
+                            <input id="viewInputFile{{$index}}" type="text" class="form-control" name="viewInputFile" placeholder="파일을 선택하세요" disabled>
+                            <span class="input-group-btn">
+                                <button ng-if="!file.data || vm.files.length==1" class="btn btn-default file-btn" type="button" ng-click="vm.deletion=false; vm.selectFile($index);">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div> -->
+            <div class="btn-layout" ng-if="!vm.readOnly">
+                <div class="left-side">
+                    <button type="submit" ng-click="vm.loadAll()" class="btn-type1">
+                        <span data-translate="apiTerms.list">Back to List</span>
+                    </button>
+                </div>
+                <div class="right-side">
+                    <button type="button" class="btn-type1 just_left" ng-click="vm.clear()">
+                        <span data-translate="entity.action.reset">Reset</span>
+                    </button>
+                    <button type="button" class="btn-type1 just_right" ng-disabled="form.$invalid" ng-click="vm.save()">
+                        <span data-translate="entity.action.save">Save</span>
+                    </button>
+                </div>
+                <div class="right-side" ng-if="vm.readOnly">
+                    <button type="button" class="btn btn-danger" ng-click="vm.delTerms(vm.terms)">
+                        <span class="glyphicon glyphicon-remove"></span>&nbsp;
+                        <span data-translate="entity.action.delete">Delete</span>
+                    </button>
+                    <button type="button" class="btn btn-portal" ng-click="vm.readOnlyToggle()">
+                        <span class="glyphicon glyphicon-pencil"></span>&nbsp;
+                        <span data-translate="entity.action.update">Update</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

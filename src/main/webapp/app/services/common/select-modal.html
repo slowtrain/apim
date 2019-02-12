@@ -1,0 +1,74 @@
+<form name="form" novalidate>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()"></button>
+    <h4 ng-if="vm.items.category=='orgAddUsers'" class="modal-title">{{vm.items.data.name}}</h4>
+    <h4 ng-if="vm.items.category=='approvalLine'" class="modal-title">{{(vm.items.data)? '승인라인 변경': '승인라인 등록'}}</h4>
+    <h4 ng-if="vm.items.category !='orgAddUsers' && vm.items.category !='approvalLine'" class="modal-title" data-translate="entity.modal.header.{{vm.items.category}}">title</h4>
+</div>
+<div class="modal-body pb_0">
+    <div class="form-group" ng-if="!vm.viewType">
+        <label for="approvalName" class="form-label required-label" ng-if="vm.items.category == 'approvalLine'">승인라인 이름</label>
+        <label for="approvalName" class="form-label required-label" ng-if="vm.items.category == 'apiGroup'">API 그룹명</label>
+        <small class="color_red" ng-if="form.approvalName.$error.minlength || form.approvalName.$error.maxlength">(3~30자 이내)</small>
+        <small class="color_red" ng-if="form.approvalName.$error.pattern">(잘못 입력하셨습니다.)</small>
+        <input type="text" name="approvalName" id="approvalName" class="form-control" ng-model="vm.itemName" minlength="3" maxlength="30" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required>
+    </div>
+    <div class="form-group" ng-if="vm.items.category == 'apiGroup'">
+        <label for="itemDescription" class="form-label">그룹 설명</label>
+        <small class="color_red" ng-if="form.itemDescription.$error.minlength || form.itemDescription.$error.maxlength">(100자 이내)</small>
+        <small class="color_red" ng-if="form.itemDescription.$error.pattern">(잘못 입력하셨습니다.)</small>
+        <textarea id="itemDescription" name="itemDescription" class="form-control" ng-model="vm.itemDescription" maxlength="100" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" ></textarea>
+    </div>
+    <table class="table tableFixed">
+        <colgroup>
+            <col style="width:50%"/>
+            <col style="width:50%"/>
+        </colgroup>
+        <thead>
+            <tr>
+                <th scope="col">
+                    <span ng-if="vm.items.category == 'approvalLine' || vm.items.category == 'request'">계정</span>
+                    <span ng-if="vm.items.category == 'apiGroup'">선택가능 API목록 </span>
+                    <span ng-if="vm.items.category == 'orgAddUsers'">선택가능한 목록</span>
+                </th>
+                <th scope="col">
+                    <span ng-if="vm.items.category == 'approvalLine' || vm.items.category == 'request'">승인자</span>
+                    <span ng-if="vm.items.category == 'apiGroup'">그룹 API</span>
+                    <span ng-if="vm.items.category == 'orgAddUsers'">추가 목록</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="border-right">
+                <div ui-sortable="vm.sortableOptions" class="apps-container" ng-model="vm.sourceList">
+                    <div ng-click="vm.selectUserList($event, $index, source)" style="text-align:left !important;" class="app dotContainer" ng-repeat="source in vm.sourceList">
+                        {{source.name}} {{source.login?'(':''}}{{source.grade?source.grade+", ":""}}{{source.login}}{{source.login?')':''}}
+                        <span class="toRight"></span>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div ui-sortable="vm.sortableOptions" class="apps-container" ng-model="vm.targetList">
+                    <!-- <div ng-click="vm.clicklineValue($event, $index)" class="app left_app" ng-repeat="target in vm.targetList"> -->
+                    <div ng-click="vm.removeMember($index, target)" class="app left_app" ng-repeat="target in vm.targetList">
+                        <span class="toLeft"></span>
+                        {{target.name}} {{target.login?'(':''}}{{target.grade?target.grade+", ":""}}{{target.login}}{{target.login?')':''}}
+                        <!-- <i  ng-click="vm.removeMember($index, target)" class="glyphicon glyphicon-trash addclass"></i> -->
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-portal modalBtn" ng-disabled="form.$invalid || !vm.targetList.length" ng-click="vm.confirm()">
+        <span data-translate="entity.action.apply">Modify</span>
+    </button>
+    <button type="button" class="btn btn-default btn-md modalBtn cancel" ng-click="vm.clear()">
+        <span data-translate="entity.action.cancel">Cancel</span>
+    </button>
+</div>
+</form>

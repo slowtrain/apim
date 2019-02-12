@@ -1,0 +1,62 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()"></button>
+    <h4 class="modal-title" data-translate="apiList.approval.lineAdd">승인라인 변경</h4>
+</div>
+<div class="modal-body">
+    <div class="form-group" ng-if="!vm.viewType">
+        <label for="approvalName" class="form-label">승인라인 이름</label>
+        <input type="text" id="approvalName" class="form-control" ng-model="vm.selectLine" required>
+    </div>
+    <table class="table tableFixed">
+        <colgroup>
+            <col style="width:25%"/>
+            <!--<col style="width:50%"/>-->
+        </colgroup>
+        <thead>
+            <tr>
+                <th scope="col">승인라인 이름</th>
+                <th scope="col">승인자 목록</th>
+                <!--<th scope="col">비고</th>-->
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="line in vm.lineList">
+            <td scope="row" ng-click="vm.selectApprovalLine(line)">
+                <span>{{line.name}}</span>
+                <!--<div ui-sortable="vm.sortableOptions" class="apps-container" ng-model="vm.clickedlineList" app-column="b">-->
+                    <!--<div ng-click="vm.clicklineValue($event, $index)" class="app" ng-repeat="app in vm.clickedlineList">-->
+                        <!--{{line.name}}-->
+                        <!--&lt;!&ndash;<button ng-click="vm.removeMember($index, app)" class="glyphicon glyphicon-trash addclass"></button>&ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
+            </td>
+            <!--<td>-->
+                <!--<div ui-sortable="vm.sortableOptions" class="apps-container" ng-model="vm.availableList"-->
+                     <!--app-column="a">-->
+                    <!--<div ng-click="vm.selectUserList($event, $index, app)" class="app"-->
+                         <!--ng-repeat="app in vm.availableList">{{app.firstName}}-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</td>-->
+            <td class="t_left" ng-click="vm.selectApprovalLine(line)">
+                <span ng-repeat="user in line.users">{{user.fullName}} ({{user.grade?user.grade+", ":""}}{{user.login}})
+                    <i ng-class="{'glyphicon-arrow-right': ($index + 1) < line.users.length, 'glyphicon-ok': ($index + 1) == line.users.length}"
+                       class="glyphicon"></i>
+                </span>
+            </td>
+        </tr>
+        <tr ng-if="!vm.lineList.length">
+            <td colspan="2" class="t_center">승인라인이 존재하지 않습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-portal modalBtn" ng-click="vm.confirm()">
+        <span data-translate="entity.action.apply">Modify</span>
+    </button>
+    <button type="button" class="btn btn-default btn-md modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+        <span data-translate="entity.action.cancel">Cancel</span>
+    </button>
+</div>

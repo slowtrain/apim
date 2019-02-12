@@ -1,0 +1,55 @@
+<form name="form" novalidate>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()"></button>
+    <h4 class="modal-title">{{vm.title}}</h4>
+</div>
+<div class="modal-body">
+    <table class="table tableFixed">
+        <colgroup>
+            <col/>
+        </colgroup>
+        <thead>
+            <tr>
+                <th scope="col" style="line-height:27px">
+                    <span>API 그룹</span>
+                    <small uib-popover-template="vm.contentsMappingApigroupPopover.templateUrl"
+                            popover-title="선택한 API 그룹"
+                            popover-is-open="vm.openSelectedPopover"
+                            popover-trigger="outsideClick"
+                            popover-placement="bottom-right"
+                            ng-click="vm.openSelectedPopover = true"
+                            ng-hide="!vm.result.length"
+                            class="color_red" style="margin-left:25px;"> {{vm.result.length}}개 선택
+                    </small>
+                    <input class="form-control input-sm pull-right" style="width:65.1%" type="text" placeholder="그룹 이름 찾기" ng-model="vm.searchGroup.name"/>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td style="vertical-align: top !important; border-right:0">
+                <div style="padding:15px" ng-repeat="group in vm.apiGroups">
+                    <div style="background-color:#eee; padding:9px; border-radius:2px" ng-click="group.checked = !group.checked">
+                        <span class="dotContainer" style="width:88%;">{{group.key}}</span>
+                        <i ng-class="!group.checked || !!vm.searchGroup.name? 'glyphicon glyphicon-minus' : 'glyphicon glyphicon-plus'" style="color:#b3abab"></i>
+                    </div>
+                    <div ng-show="!group.checked || !!vm.searchGroup.name" class="hover api-relate-group new-form-group" ng-repeat="value in group.values | filter : vm.searchGroup | orderBy: 'name' as searchResult">
+                        <input id="value{{value.id}}" type="checkbox" ng-model="value.checked" ng-change="vm.checkingOneCheckBox(value)"/>
+                        <label for="value{{value.id}}" class="">{{value.name}}</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-portal modalBtn" ng-click="vm.save()">
+        <span data-translate="entity.action.apply">Modify</span>
+    </button>
+    <button type="button" class="btn btn-default btn-md modalBtn cancel" ng-click="vm.clear()">
+        <span data-translate="entity.action.cancel">Cancel</span>
+    </button>
+</div>
+</form>

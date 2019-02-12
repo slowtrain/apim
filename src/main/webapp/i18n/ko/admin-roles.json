@@ -1,0 +1,29 @@
+{
+    "roleManagement": {
+        "title": "역할 관리",
+        "roleKinds": "사용자 분류별 역할",
+        "register": {
+            "title": "역할추가",
+            "name": "역할 이름",
+            "description": "역할 설명",
+            "code": "역할 코드명"
+        },
+        "edit": {
+            "title": "역할 수정",
+            "save": "변경 저장"
+        },
+        "list": {
+            "title": "역할 목록"
+        }
+    },
+    "authManagement": {
+        "title": "권한 관리",
+        "register": {
+            "title": "변경저장",
+            "name": "이름"
+        },
+        "list": {
+            "title": "권한 목록"
+        }
+    }
+}

@@ -1,0 +1,62 @@
+<!-- <strong class="sub-title"> -->
+<!--     <i class="glyphicon glyphicon-menu-right"></i><small style="vertical-align:1px" ng-if="vm.state.forumId != 'all'"> [{{vm.state.forumOwner || '공통'}}]</small><span title="{{vm.listTitle}}"> {{(vm.listTitle.length >30)? (vm.listTitle | limitTo: 30)+"...": vm.listTitle}}</span> -->
+<!-- </strong> -->
+<div class="wrap">
+    <div class="col-md-12">
+        <p class="searchInfo" ng-style="(vm.isAdmin) && {'margin-right':'109px'}">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>건의 글이 존재합니다.</span>
+        </p>
+            <div class="searchBox">
+                <span class="form-inline">
+                    <label>글제목</label>
+                    <input type="text" class="input-sm form-control" style="width:23%" ng-model="vm.titleSelected" ng-keypress="($event.charCode==13)? vm.searching() : return" />
+                </span>
+                <!-- <span class="form-inline">
+                    <label>작성자</label>
+                    <input type="text" class="input-sm form-control" style="width:20%" ng-model="vm.writerSelected" ng-keypress="($event.charCode==13)? vm.searching() : return" />
+                </span> -->
+                <span class="btnBox">
+                    <button type="button" class="btn search-btn" data-dismiss="modal" ng-click="vm.searching()">검색</button>
+                </span>
+            </div>
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:80px"/>
+                    <col />
+                    <!-- <col style="width:13%"/> -->
+                    <col style="width:135px"/>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>제목</th>
+                        <!-- <th>작성자</th> -->
+                        <th>작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="question in vm.questionList">
+                        <td class="t_center">{{vm.totalItems - $index - (vm.condition.page * vm.stateParams.size)}}</td>
+                        <td ng-click="vm.showPassword(question.id)" ng-style="(question.title == '비밀글입니다.') && {'cursor' : 'default'}">
+                            <span class="dotContainer" style="width:100%">
+                                <span title="{{question.title}}">{{question.title}}</span>
+                            </span>
+                        </td>
+                        <!-- <td class="t_center">{{question.writer.login}}</td> -->
+                        <td class="t_center">{{question.createdDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+                    </tr>
+                    <tr ng-if="vm.questionList.length <= 0">
+                        <td colspan="3" class="t_center">등록된 게시물이 존재하지 않습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="btn-with-paging">
+            <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            <button class="btn-type1 just_right pull-right"
+                       ui-sref="question.new({forumId: vm.state.forumId, forumTitle:vm.state.forumTitle, page:vm.state.page})">글쓰기
+               </button>
+        </div>
+    </div>
+</div>

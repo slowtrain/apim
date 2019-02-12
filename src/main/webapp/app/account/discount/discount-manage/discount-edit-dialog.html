@@ -1,0 +1,38 @@
+<form name="form" role="form" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" ng-click="vm.clear()"></button>
+        <h4 class="modal-title" id="myUserLabel"
+            data-translate="discount.register.title">Policy Register</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="control-label required-label" data-translate="discount.register.name">policy name</label>
+            <small class="color_red" ng-if="form.policyName.$error.minlength || form.policyName.$error.maxlength">(3~30자 이내)</small>
+            <small class="color_red" ng-if="form.policyName.$error.pattern">(잘못 입력하셨습니다.)</small>
+            <input type="text" class="form-control" name="policyName" ng-model="vm.discountPolicy.name" minlength="3" maxlength="30" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="discount.register.description">policy description</label>
+            <small class="color_red" ng-if="form.policyDescription.$error.minlength || form.policyDescription.$error.maxlength">(100자 이내)</small>
+            <small class="color_red" ng-if="form.policyDescription.$error.pattern">(잘못 입력하셨습니다.)</small>
+            <textarea class="form-control" name="policyDescription" ng-model="vm.discountPolicy.description" maxlength="100" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"></textarea>
+        </div>
+        <div class="form-group form-inline" ng-class="{'has-error' : form.discountRates1.$dirty && form.discountRates1.$invalid || form.discountRates2.$dirty && form.discountRates2.$invalid}">
+            <label class="control-label">할인율 (%)</label>
+            <small class="color_red">범위: 0.01~100.00 [소숫점둘째자리 허용]</small>
+            <input type="text" name="discountRates1" style="width:60px; font-size: 20px; line-height: 22px; ime-mode: disabled;" class="form-control t_right voffset2" mask="999" maxlength="3" restrict="reject" limit="true" validate="false" ng-model="vm.rates[0]" ng-change="vm.checkRates()" required/>
+            <span style="font-size:32px; vertical-align: -18px"> .</span>
+            <input type="text" name="discountRates2" style="width:50px; font-size: 20px; line-height: 22px; ime-mode: disabled;" class="form-control voffset2" placeholder="00" mask="99" maxlength="2" restrict="reject" limit="true" validate="false" ng-model="vm.rates[1]" ng-change="vm.checkRates()"/>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-portal modalBtn" ng-disabled="form.$invalid" ng-click="vm.save()">
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>
+</form>
+

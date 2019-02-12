@@ -1,0 +1,34 @@
+{
+    "planRegister":"정책 등록",
+    "actions":"비고",
+    "registerTitle":"사용정책 등록하기",
+    "apiPlans":{
+        "title":"API 사용정책 목록",
+        "name":"API 사용정책",
+        "description":"정책 안내",
+        "quotaValue":"할당량",
+        "maxRequestRate":"사용량",
+        "timeLimit":"시간제한",
+        "dayLimit":"요일제한",
+        "sharing": "공유",
+        "default": "기본",
+        "register":{
+            "title":"제목",
+            "description":"정책 설명",
+            "quotaValueSet":"할당량 설정",
+            "quotaValueUseCycle":"사용주기",
+            "quotaValueRate":"사용량(최대 2,000,000,000건)",
+            "maxRequestRateSet":"사용량 제한 설정",
+            "requestPerSecond":"초당 요청건수",
+            "timeLimitSet":"시간 제한 설정",
+            "dayLimitSet":"요일 제한 설정",
+            "startDayOfWeek":"시작 요일",
+            "endDayOfWeek":"종료 요일",
+            "defaultPlan":"기본 사용정책"
+        }
+    },
+    "accountPlans": {
+        "title": "기관 사용정책 목록",
+        "name":"기관 사용정책"
+    }
+}

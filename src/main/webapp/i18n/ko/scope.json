@@ -1,0 +1,18 @@
+{
+    "home": {
+        "info":{
+            "use":"OPEN API<p>이용방법</p>",
+            "step1":"회원가입",
+            "step2":"App 등록",
+            "step3":"API키 발급",
+            "step4":"App 서비스",
+            "developerGuide":"<i>tip</i><strong>개발가이드</strong>유앤아워스 OPEN API를 이용하여 더 쉽게<br />애플리케이션을 제작하는 방법을 안내해드립니다."
+        },
+        "openApiTitle":"최근 공개된 API",
+        "forumTitle":"Forum",
+        "noticeTitle":"공지사항",
+        "signUpTitle":"유앤아워스<br />OPEN API Developer Portal",
+        "signUp":"회원가입",
+        "signUpBtn":"회원가입 신청"
+    }
+}

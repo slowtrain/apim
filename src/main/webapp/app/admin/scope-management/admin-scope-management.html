@@ -1,0 +1,51 @@
+<jhi-alert></jhi-alert>
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong>SCOPE 목록</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <p class="searchInfo">
+            <span>총 <span class="color_red">{{vm.scopes.length}}</span>개의 SCOPE이 존재합니다.</span>
+            <button ng-click="editScope()" class="btn btn-portal btn-flag-radius pull-right">SCOPE 등록</button>
+        </p>
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:5%"/>
+                    <col style="width:15%"/>
+                    <col style="width:15%"/>
+                    <col/>
+                    <col style="width:95px"/>
+                </colgroup>
+                <tr>
+                    <th>No</th>
+                    <th id="name" ng-mousedown="vm.sorting('name')">이름<i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th id="scope" ng-mousedown="vm.sorting('scope')">SCOPE<i id="scope" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th id="description" ng-mousedown="vm.sorting('description')">설명<i id="description" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th>비고</th>
+                </tr>
+                <tbody ng-if="vm.scopes.length > 0">
+                <tr ng-repeat="scope in vm.scopes">
+                    <td class="t_center">{{vm.totalItems - (vm.condition.page*vm.size) - $index}}</td>
+                    <td>{{scope.name}}</td>
+                    <td>{{scope.scope}}</td>
+                    <td>{{scope.description}}</td>
+                    <td class="t_center">
+                        <button class="btn btn-default btn-xs" ng-click="editScope(scope)">수정</button>
+                        <button class="btn btn-default btn-xs" ng-click="deleteScope(scope)">삭제</button>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody ng-if="vm.scopes.length == 0">
+                <tr>
+                    <td colspan="5" class="t_center">SCOPE이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="text-center">
+        <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+    </div>
+</div>
+

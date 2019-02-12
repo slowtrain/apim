@@ -1,0 +1,139 @@
+<form name="form" role="form" ng-submit="vm.save(vm.planType)" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true" ng-click="vm.clear()"></button>
+        <h4 class="modal-title" id="myUserLabel">사용정책 등록 / 수정</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="control-label required-label" data-translate="apiPlans.register.title">제목</label>
+            <small class="color_red" ng-if="form.title.$error.minlength || form.title.$error.maxlength">(3~30자 이내)</small>
+            <small class="color_red" ng-if="form.title.$error.pattern">(잘못 입력하셨습니다.)</small>
+            <input type="text" name="title" class="form-control" ng-model="vm.plan.name" minlength="3" maxlength="30" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required>
+        </div>
+        <!-- <div class="form-group">
+            <input id="defaultPlan" type="checkbox" ng-model="vm.plan.defaultPlan">
+            <label for="defaultPlan" class="control-label" data-translate="apiPlans.register.defaultPlan">기본 사용정책</label>
+        </div> -->
+        <div class="form-group">
+            <label class="control-label" data-translate="apiPlans.register.description">API 사용정책 설명</label>
+            <small class="color_red" ng-if="form.description.$error.minlength || form.description.$error.maxlength">(100자 이내)</small>
+            <small class="color_red" ng-if="form.description.$error.pattern">(잘못 입력하셨습니다.)</small>
+            <p><textarea rows="4" name="description" class="form-control" ng-model="vm.plan.description" maxlength="100" limit='true' ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" ></textarea></p>
+        </div>
+        <div class="policy_setup">
+            <div class="left_set">
+                <div class="form-group">
+                    <!-- <input id="quotaValue" type="checkbox" ng-model="vm.plan.quotaEnabled" ng-click="vm.plan.quotaTimeUnit = null; vm.plan.quotaValue=null"/> -->
+                    <div class="setup_right">
+                        <p class="radio_btn" ng-class="{'on' : vm.plan.quotaEnabled || vm.plan.quotaTimeUnit || vm.plan.quotaValue}" ng-click="vm.plan.quotaEnabled = true">ON</p>
+                        <p class="radio_btn second" ng-class="{'on' : !vm.plan.quotaEnabled && !vm.plan.quotaTimeUnit && !m.plan.quotaValue}" ng-init="vm.plan.quotaEnabled = false" ng-click="vm.plan.quotaEnabled = false;vm.plan.quotaTimeUnit = null;vm.plan.quotaValue = null">OFF</p>
+                        <!-- <input type="radio" value="TRUE" class="radio_type1" name="set1" id="set1" ng-model="vm.plan.quotaEnabled">
+                        <input type="radio" value="FALSE" class="radio_type1 second" name="set1" id="set2" ng-model="vm.plan.quotaEnabled" ng-init="vm.plan.quotaEnabled = 'FALSE'"> -->
+                    </div>
+                    <p class="form_title1">할당량 설정</p>
+                    <!-- <label for="set1">ON</label> -->
+                    <!-- <label for="set2">OFF</label> -->
+                    <!-- <label for="quotaValue" class="control-label" data-translate="apiPlans.register.quotaValueSet">할당량 설정</label> -->
+                    <!-- <dl ng-if="vm.plan.quotaEnabled"> -->
+                    <dl>
+                        <dt ng-hide="vm.plan.quotaEnabled || vm.plan.quotaTimeUnit || vm.plan.quotaValue"></dt>
+                        <dd>
+                            <label class="control-label" data-translate="apiPlans.register.quotaValueUseCycle" style="display:block;">사용주기</label>
+                        </dd>
+                        <dd ng-class="{'has-error' : form.quotaValueUseCycle.$invalid}">
+                            <select name="quotaValueUseCycle" class="form-control" ng-model="vm.plan.quotaTimeUnit" ng-options="data.val as data.name for data in vm.quotaValueUseCycleOption" ng-required="vm.plan.quotaEnabled" ng-change="(vm.plan.quotaTimeUnit==null)? vm.plan.quotaValue=null: null;">
+                                <option value="">-선택-</option>
+                            </select>
+                        </dd>
+                        <dd class="voffset2">
+                            <label>할당량 <small>(9자릿수 이내)</small></label>
+                        </dd>
+                        <dd ng-class="{'has-error' : form.planQuotaValue.$invalid}">
+                            <input id="number" name="planQuotaValue" class="form-control t_right" style="ime-mode: disabled; display:inline-block;" ng-keypress="vm.keypressWatch($event)" ng-keyup="vm.keyupWatch($event, vm.quotaValueLimit, 1)" ng-model="vm.plan.quotaValue" ng-disabled="!vm.plan.quotaTimeUnit" ng-required="vm.plan.quotaTimeUnit"> 건
+                        </dd>
+                    </dl>
+                </div>
+                <div class="form-group form-inline">
+                    <!-- <input id="maxRequestRate" type="checkbox" ng-model="vm.plan.rateLimitEnabled" ng-click="vm.plan.maxRequestRate = null"/> -->
+                    <!-- <label for="maxRequestRate" class="control-label">처리량 제한 설정</label> -->
+                    <!-- <dl ng-if="vm.plan.rateLimitEnabled"> -->
+                    <!-- <p class="form_title1">처리량 제한 설정</p>
+                    <div class="setup_right">
+                        <p class="radio_btn" ng-class="{'on' : vm.plan.rateLimitEnabled || form.planMaxRequestRate.$invalid}" ng-click="vm.plan.rateLimitEnabled = true;">ON</p>
+                        <p class="radio_btn second" ng-class="{'on' : !vm.plan.rateLimitEnabled && !form.planMaxRequestRate.$invalid}" ng-init="vm.plan.quotaEnabled = false" ng-click="vm.plan.rateLimitEnabled = false;vm.plan.maxRequestRate = null">OFF</p>
+                    </div>
+                    <dl>
+                        <dt ng-show="!vm.plan.rateLimitEnabled"></dt>
+                        <dd>
+                            <label style="display:block;">초당 처리량 <small>(9자릿수 이내)</small></label>
+                        </dd>
+                        <dd ng-class="{'has-error' : form.planMaxRequestRate.$invalid}">
+                            <input id="number" name="planMaxRequestRate" class="form-control t_right" style="ime-mode: disabled;display:inline-block;" ng-keypress="vm.keypressWatch($event)" ng-keyup="vm.keyupWatch($event, vm.maxRequestRateLimit, 2)" ng-model="vm.plan.maxRequestRate" ng-required="vm.plan.rateLimitEnabled"> 건
+                        </dd>
+                    </dl> -->
+                </div>
+            </div>
+            <div class="right_set">
+                <div class="form-group" ng-if="vm.planType == 'apiPlan'">
+                    <!-- <input id="timeLimit" type="checkbox" ng-model="vm.plan.controlTime" ng-click="vm.initTime()"/> -->
+                    <!-- <label for="timeLimit" class="control-label" data-translate="apiPlans.register.timeLimitSet">시간 제한 설정</label> -->
+                    <p class="form_title1">시간 제한 설정</p>
+                    <div class="setup_right">
+                        <p class="radio_btn" ng-class="{'on' : vm.plan.controlTime}" ng-click="vm.plan.controlTime = true;">ON</p>
+                        <p class="radio_btn second" ng-class="{'on' : !vm.plan.controlTime}" ng-init="vm.vm.plan.controlTime = false" ng-click="vm.plan.controlTime = false;vm.initTime();">OFF</p>
+                    </div>
+                    <!-- <div ng-if="vm.plan.controlTime" style="overflow:hidden;"> -->
+                    <div ng-show="!vm.plan.controlTime" class="bg"></div>
+                    <div style="overflow:hidden; margin-bottom:44px;">
+                        <div class="f_left">
+                            <label>시작시간</label>
+                            <div uib-timepicker ng-model="vm.startTime" hour-step="hstep" minute-step="mstep" second-step="sstep" show-seconds="true" show-meridian="false"></div>
+                        </div>
+                        <div class="f_left" style="margin-left:10px;">
+                            <label>종료시간</label>
+                            <div uib-timepicker ng-model="vm.endTime" hour-step="hstep" minute-step="mstep" second-step="sstep" show-seconds="true" show-meridian="false"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline" ng-if="vm.planType == 'apiPlan'">
+                    <!-- <input id="dayLimit" type="checkbox" ng-model="vm.plan.controlDay" ng-click="vm.plan.startDayOfWeek = null; vm.plan.endDayOfWeek = null"/> -->
+                    <!-- <label for="dayLimit" class="control-label" data-translate="apiPlans.register.dayLimitSet">요일 제한 설정</label> -->
+                    <p class="form_title1">요일 제한 설정</p>
+                    <div class="setup_right">
+                        <p class="radio_btn" ng-class="{'on' : vm.plan.controlDay || vm.plan.startDayOfWeek || vm.plan.endDayOfWeek}" ng-click="vm.plan.controlDay = true">ON</p>
+                        <p class="radio_btn second" ng-class="{'on' : !vm.plan.controlDay && !vm.plan.startDayOfWeek && !vm.plan.endDayOfWeek}" ng-click="vm.plan.controlDay = false;vm.plan.startDayOfWeek = null;vm.plan.endDayOfWeek = null;" ng-init="vm.plan.controlDay = false">OFF</p>
+                    </div>
+                    <!-- <p ng-if="vm.plan.controlDay"> -->
+                    <div ng-hide="vm.plan.controlDay || vm.plan.startDayOfWeek || vm.plan.endDayOfWeek" class="bg"></div>
+                    <p style="padding-top: 23px;">
+                        <label for="startDay" data-translate="apiPlans.register.startDayOfWeek">시작 요일</label>
+                        <dummy ng-class="{'has-error': vm.plan.controlDay && !vm.plan.startDayOfWeek}">
+                            <select id="startDay" class="form-control" ng-model="vm.plan.startDayOfWeek" ng-options="data.val as data.name for data in vm.dayLimitOption" ng-required="vm.plan.controlDay">
+                                <option value="">-선택-</option>
+                            </select>
+                        </dummy>
+                        &nbsp;
+                        <label for="endDay" data-translate="apiPlans.register.endDayOfWeek">종료 요일</label>
+                        <dummy ng-class="{'has-error': vm.plan.controlDay && !vm.plan.endDayOfWeek}">
+                            <select id="endDay" class="form-control" ng-model="vm.plan.endDayOfWeek" ng-options="data.val as data.name for data in vm.dayLimitOption" ng-required="vm.plan.startDayOfWeek">
+                                <option value="">-선택-</option>
+                            </select>
+                        </dummy>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-portal modalBtn" ng-disabled="form.$invalid">
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>
+</form>
+
+
+

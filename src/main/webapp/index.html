@@ -1,0 +1,449 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>신한 Open API Market</title>
+    <meta name="description" content="">
+    <meta name="google" value="notranslate">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css content/css/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css">
+    <link rel="stylesheet" href="bower_components/swiper/dist/css/swiper.css">
+    <link rel="stylesheet" href="bower_components/summernote/dist/summernote.css">
+    <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css">
+    <link rel="stylesheet" href="bower_components/angular-gridster/dist/angular-gridster.css">
+    <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css">
+    <!-- endinject -->
+    <!-- endbuild -->
+    <link rel="stylesheet" href="bower_components/summernote/dist/summernote.css">
+    <link rel="stylesheet" href="content/css/vendor.css">
+    <link rel="stylesheet" href="content/css/main.css">
+    <link rel="stylesheet" href="content/css/brad.css">
+</head>
+<body ng-app="portalApplicationApp" ng-strict-di>
+<!--[if lt IE 9]>
+<div style='font-size:20px; text-align:center'>
+    <br/>
+    <p>본 사이트는 크롬(Chrome) 브라우저 또는 최소한 IE9 이상에서 작동합니다.</p>
+    <p>만일 IE를 계속 사용하시려면, 브라우저를 최신으로 업데이트해 주세요.</p><br/>
+    <p><a href="http://browsehappy.com/">Upgrade your browser</a></p>
+</div>
+<![endif]-->
+<div ui-view="navbar" ng-cloak ng-class="state.current.name != 'notice' && 'navWrap'"></div>
+<div class="row-container">
+    <div ui-view="mainContainer" ng-if="state.current.name == 'home' || state.current.name == 'notice'" class="main-container"><!-- Angular main views --></div>
+    <div ui-view="contentAll" class="contentAll-container"></div>
+    <div class="container lnbParent" ng-show="!(state.current.name == 'home' || state.current.name == 'apiService' || state.current.name == 'post')">
+    <!-- <div class="container lnbParent" ng-show="state.current.name != 'apiService'"> -->
+        <!-- <div ui-view="lnbBack" class="lnb-backdrop"></div> -->
+        <div ui-view="lnb" class="col-md-2 lnb-container"><!-- lnb views --></div>
+        <div ui-view="content" id="uiViewContent" class="content-container"><!-- Angular views --></div>
+    </div>
+</div>
+<div ui-view="footer" class="footer" ng-cloak></div>
+
+<!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
+<script>
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+    e.src='//www.google-analytics.com/analytics.js';
+    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-XXXXX-X');ga('send','pageview');
+</script>-->
+
+<script src="content/javascript/jquery.js"></script>
+<script src="content/javascript/jquery-ui.js"></script>
+<script src="content/javascript/angular.js"></script>
+<script src="content/javascript/summernote.js"></script>
+<script src="content/javascript/summernote-ko-KR.js"></script>
+<script src="content/javascript/angular-summernote.js"></script>
+<script src="content/javascript/jquery.form.js"></script>
+
+<!-- content:js -->
+<script src="content/javascript/typedarray.js"></script>
+<script src="content/javascript/siteSecurity.js"></script>
+<script src="content/javascript/numeral.js"></script>
+<script src="content/javascript/ngMask.js"></script>
+<script src="content/javascript/marked.js"></script>
+<script src="content/javascript/formdata.js"></script>
+<script src="content/javascript/classList.js"></script>
+<script src="content/javascript/Blob.js"></script>
+<script src="content/app.module.js"></script>
+<script src="content/app.state.js"></script>
+<!-- endinject -->
+
+<script src="content/app.constants.js"></script>
+
+<!-- build:js app/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/messageformat/messageformat.js"></script>
+<script src="bower_components/json3/lib/json3.js"></script>
+<script src="bower_components/sockjs-client/dist/sockjs.js"></script>
+<script src="bower_components/stomp-websocket/lib/stomp.min.js"></script>
+<script src="bower_components/jquery-ui/jquery-ui.js"></script>
+<script src="bower_components/javascript-detect-element-resize/detect-element-resize.js"></script>
+<script src="bower_components/d3/d3.js"></script>
+<script src="bower_components/nvd3/build/nv.d3.js"></script>
+<script src="bower_components/jsog/lib/JSOG.js"></script>
+<script src="bower_components/swiper/dist/js/swiper.js"></script>
+<script src="bower_components/prettify-min/prettify.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/summernote/dist/summernote.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-aria/angular-aria.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-cache-buster/angular-cache-buster.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js"></script>
+<script src="bower_components/ngstorage/ngStorage.js"></script>
+<script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-translate/angular-translate.js"></script>
+<script src="bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js"></script>
+<script src="bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+<script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/bootstrap-ui-datetime-picker/dist/datetime-picker.js"></script>
+<script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+<script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
+<script src="bower_components/angular-ui-sortable/sortable.js"></script>
+<script src="bower_components/angular-gridster/src/angular-gridster.js"></script>
+<script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/tg-angular-validator/dist/angular-validator.js"></script>
+<script src="bower_components/ng-busy/build/angular-busy.js"></script>
+<script src="bower_components/angular-busy/dist/angular-busy.js"></script>
+<script src="bower_components/ng-idle/angular-idle.js"></script>
+<script src="bower_components/angular-summernote/dist/angular-summernote.js"></script>
+<!-- endinject -->
+<!-- inject:js -->
+<script src="app/swagger/scripts/swagger-ui.min.js"></script>
+<script src="app/swagger/scripts/swagger-ui.js"></script>
+<script src="app/swagger/scripts/modules/swagger1-to-swagger2-converter.min.js"></script>
+<script src="app/swagger/scripts/modules/swagger-yaml-parser.min.js"></script>
+<script src="app/swagger/scripts/modules/swagger-xml-formatter.min.js"></script>
+<script src="app/swagger/scripts/modules/swagger-markdown.min.js"></script>
+<script src="app/swagger/scripts/modules/swagger-external-references.min.js"></script>
+<script src="app/swagger/scripts/modules/swagger-auth.min.js"></script>
+<script src="app/swagger/scripts/i18n/ko.js"></script>
+<script src="app/swagger/scripts/i18n/en.js"></script>
+<script src="app/services/user.service.js"></script>
+<script src="app/services/roleAuth.service.js"></script>
+<script src="app/services/role.service.js"></script>
+<script src="app/services/report-token.service.js"></script>
+<script src="app/services/report-billing.service.js"></script>
+<script src="app/services/question.service.js"></script>
+<script src="app/services/profiles/profile.service.js"></script>
+<script src="app/services/profiles/page-ribbon.directive.js"></script>
+<script src="app/services/post.service.js"></script>
+<script src="app/services/organization.service.js"></script>
+<script src="app/services/metrics.service.js"></script>
+<script src="app/services/forum.service.js"></script>
+<script src="app/services/common/user-modal.controller.js"></script>
+<script src="app/services/common/terms-modal.controller.js"></script>
+<script src="app/services/common/select-modal.controller.js"></script>
+<script src="app/services/common/select-approval-line-modal.controller.js"></script>
+<script src="app/services/common/request-approval.controller.js"></script>
+<script src="app/services/common/modal.controller.js"></script>
+<script src="app/services/common/list-modal.controller.js"></script>
+<script src="app/services/common/approver-modal.controller.js"></script>
+<script src="app/services/code.service.js"></script>
+<script src="app/services/billing-metrics.service.js"></script>
+<script src="app/services/billing-charge.service.js"></script>
+<script src="app/services/auth/sessions.service.js"></script>
+<script src="app/services/auth/register.service.js"></script>
+<script src="app/services/auth/principal.service.js"></script>
+<script src="app/services/auth/password-reset-init.service.js"></script>
+<script src="app/services/auth/password-reset-finish.service.js"></script>
+<script src="app/services/auth/password.service.js"></script>
+<script src="app/services/auth/has-authority.directive.js"></script>
+<script src="app/services/auth/has-any-authority.directive.js"></script>
+<script src="app/services/auth/auth.session.service.js"></script>
+<script src="app/services/auth/auth.service.js"></script>
+<script src="app/services/auth/activate.service.js"></script>
+<script src="app/services/auth/account.service.js"></script>
+<script src="app/services/apps.service.js"></script>
+<script src="app/services/api.service.js"></script>
+<script src="app/services/account/use-orgs-service.js"></script>
+<script src="app/services/account/report.service.js"></script>
+<script src="app/services/account/gateway.service.js"></script>
+<script src="app/services/account/discount.service.js"></script>
+<script src="app/services/account/billing.service.js"></script>
+<script src="app/services/account/approval-line.service.js"></script>
+<script src="app/services/account/approval.service.js"></script>
+<script src="app/services/account/apiplans.service.js"></script>
+<script src="app/services/account/apiGroup.service.js"></script>
+<script src="app/services/account/agree.service.js"></script>
+<script src="app/services/account/accountPlans.service.js"></script>
+<script src="app/service-package/service-package-info/service-package-info.state.js"></script>
+<script src="app/service-package/service-package-info/service-package-info.controller.js"></script>
+<script src="app/service-package/service-package.state.js"></script>
+<script src="app/layouts/notice/notice.state.js"></script>
+<script src="app/layouts/notice/notice.controller.js"></script>
+<script src="app/layouts/navbar/navbar.controller.js"></script>
+<script src="app/layouts/navbar/active-menu.directive.js"></script>
+<script src="app/layouts/navbar/active-link.directive.js"></script>
+<script src="app/layouts/lnb/lnb.controller.js"></script>
+<script src="app/layouts/footer/footer.controller.js"></script>
+<script src="app/layouts/error/error.state.js"></script>
+<script src="app/informations/use-step-info/use-step-info.state.js"></script>
+<script src="app/informations/testbed-info/testbed-info.state.js"></script>
+<script src="app/informations/register-step-info/register-step-info.state.js"></script>
+<script src="app/informations/register-step-info/provider-user/provider-user.state.js"></script>
+<script src="app/informations/register-step-info/provider-user/provider-user.controller.js"></script>
+<script src="app/informations/register-step-info/org-user/org-user.state.js"></script>
+<script src="app/informations/register-step-info/org-user/org-user.controller.js"></script>
+<script src="app/informations/register-step-info/api-register/api-register.state.js"></script>
+<script src="app/informations/register-step-info/api-register/api-register.controller.js"></script>
+<script src="app/informations/portal-info/portal-info.state.js"></script>
+<script src="app/informations/informations.state.js"></script>
+<script src="app/informations/general-info/general-info.state.js"></script>
+<script src="app/informations/general-info/general-info.service.js"></script>
+<script src="app/informations/general-info/general-info.controller.js"></script>
+<script src="app/home/home.state.js"></script>
+<script src="app/home/home.controller.js"></script>
+<script src="app/forum/question/question-new.controller.js"></script>
+<script src="app/forum/question/question-detail.controller.js"></script>
+<script src="app/forum/question/question.state.js"></script>
+<script src="app/forum/question/question.controller.js"></script>
+<script src="app/forum/post/post-new.controller.js"></script>
+<script src="app/forum/post/post-detail.controller.js"></script>
+<script src="app/forum/post/post.state.js"></script>
+<script src="app/forum/post/post.controller.js"></script>
+<script src="app/forum/forum-community.state.js"></script>
+<script src="app/forum/forum/forum-edit.controller.js"></script>
+<script src="app/forum/forum/forum.state.js"></script>
+<script src="app/forum/forum/forum.controller.js"></script>
+<script src="app/directives/site-security-directive.js"></script>
+<script src="app/directives/resize-directive.js"></script>
+<script src="app/directives/comma-directive.js"></script>
+<script src="app/directives/approval-progress-view.directive.js"></script>
+<script src="app/components/util/truncate-words.filter.js"></script>
+<script src="app/components/util/truncate-characters.filter.js"></script>
+<script src="app/components/util/sort-by.directive.js"></script>
+<script src="app/components/util/sort.directive.js"></script>
+<script src="app/components/util/parse-links.service.js"></script>
+<script src="app/components/util/pagination-util.service.js"></script>
+<script src="app/components/util/jhi-item-count.directive.js"></script>
+<script src="app/components/util/date-util.service.js"></script>
+<script src="app/components/util/data-util.service.js"></script>
+<script src="app/components/util/capitalize.filter.js"></script>
+<script src="app/components/util/base64.service.js"></script>
+<script src="app/components/open-api/common-util.service.js"></script>
+<script src="app/components/modal/modal.controller.js"></script>
+<script src="app/components/login/login.state.js"></script>
+<script src="app/components/login/login.service.js"></script>
+<script src="app/components/login/login.controller.js"></script>
+<script src="app/components/language/language.service.js"></script>
+<script src="app/components/language/language.filter.js"></script>
+<script src="app/components/language/language.controller.js"></script>
+<script src="app/components/language/language.constants.js"></script>
+<script src="app/components/form/show-validation.directive.js"></script>
+<script src="app/components/form/pagination.constants.js"></script>
+<script src="app/components/form/minbytes.directive.js"></script>
+<script src="app/components/form/maxbytes.directive.js"></script>
+<script src="app/components/alert/alert-error.directive.js"></script>
+<script src="app/components/alert/alert.service.js"></script>
+<script src="app/components/alert/alert.directive.js"></script>
+<script src="app/blocks/interceptor/notification.interceptor.js"></script>
+<script src="app/blocks/interceptor/errorhandler.interceptor.js"></script>
+<script src="app/blocks/interceptor/auth-expired.interceptor.js"></script>
+<script src="app/blocks/handlers/translation.handler.js"></script>
+<script src="app/blocks/handlers/state.handler.js"></script>
+<script src="app/blocks/config/uib-pagination.config.js"></script>
+<script src="app/blocks/config/uib-pager.config.js"></script>
+<script src="app/blocks/config/translation-storage.provider.js"></script>
+<script src="app/blocks/config/translation.config.js"></script>
+<script src="app/blocks/config/localstorage.config.js"></script>
+<script src="app/blocks/config/http.config.js"></script>
+<script src="app/blocks/config/compile.config.js"></script>
+<script src="app/blocks/config/alert.config.js"></script>
+<script src="app/app-management/app-management.state.js"></script>
+<script src="app/app-management/app-manage/tab-directive.js"></script>
+<script src="app/app-management/app-manage/app-view.controller.js"></script>
+<script src="app/app-management/app-manage/app-manage.state.js"></script>
+<script src="app/app-management/app-manage/app-manage.controller.js"></script>
+<script src="app/app-management/app-manage/app-dialog.controller.js"></script>
+<script src="app/app.constants.js"></script>
+<script src="app/api-services/api-services.state.js"></script>
+<script src="app/api-services/api-service/api-view.controller.js"></script>
+<script src="app/api-services/api-service/api-service.state.js"></script>
+<script src="app/api-services/api-service/api-service.controller.js"></script>
+<script src="app/api-services/api-service/api-forum-dialog.js"></script>
+<script src="app/admin/users/user-manage-dialog.controller.js"></script>
+<script src="app/admin/users/admin-users.state.js"></script>
+<script src="app/admin/users/admin-users.controller.js"></script>
+<script src="app/admin/scope-management/scope-management-dialog.controller.js"></script>
+<script src="app/admin/scope-management/admin-scope-management.state.js"></script>
+<script src="app/admin/scope-management/admin-scope-management.service.js"></script>
+<script src="app/admin/scope-management/admin-scope-management.controller.js"></script>
+<script src="app/admin/roles/role-dialog.controller.js"></script>
+<script src="app/admin/roles/admin-roles.state.js"></script>
+<script src="app/admin/roles/admin-roles.controller.js"></script>
+<script src="app/admin/report/admin-report.state.js"></script>
+<script src="app/admin/report/admin-report.service.js"></script>
+<script src="app/admin/report/admin-report.controller.js"></script>
+<script src="app/admin/plan/api-plan/admin-api-plan.state.js"></script>
+<script src="app/admin/plan/api-plan/admin-api-plan.controller.js"></script>
+<script src="app/admin/plan/admin-plan-edit-dialog.controller.js"></script>
+<script src="app/admin/plan/admin-plan.state.js"></script>
+<script src="app/admin/organizations/orgManagementEdit-dialog.controller.js"></script>
+<script src="app/admin/organizations/org.service.js"></script>
+<script src="app/admin/organizations/admin-organizations.state.js"></script>
+<script src="app/admin/organizations/admin-organizations.controller.js"></script>
+<script src="app/admin/mailtemplates/select-receivers-noti.controller.js"></script>
+<script src="app/admin/mailtemplates/mail-template-popup.controller.js"></script>
+<script src="app/admin/mailtemplates/mail-template.service.js"></script>
+<script src="app/admin/mailtemplates/admin-mailtemplates.state.js"></script>
+<script src="app/admin/mailtemplates/admin-mailtemplates.controller.js"></script>
+<script src="app/admin/logs/logs.state.js"></script>
+<script src="app/admin/logs/logs.service.js"></script>
+<script src="app/admin/logs/logs.controller.js"></script>
+<script src="app/admin/gatewayclusters/gateway-dialog.controller.js"></script>
+<script src="app/admin/gatewayclusters/cluster-share.controller.js"></script>
+<script src="app/admin/gatewayclusters/admin-gatewayclusters.state.js"></script>
+<script src="app/admin/gatewayclusters/admin-gatewayclusters.controller.js"></script>
+<script src="app/admin/docs/docs.state.js"></script>
+<script src="app/admin/contents/mapping-contents.controller.js"></script>
+<script src="app/admin/contents/managing-categories.controller.js"></script>
+<script src="app/admin/contents/contents-priority.controller.js"></script>
+<script src="app/admin/contents/contents-management.state.js"></script>
+<script src="app/admin/contents/contents-management.service.js"></script>
+<script src="app/admin/contents/contents-management.controller.js"></script>
+<script src="app/admin/billing-token/admin-billing-token.state.js"></script>
+<script src="app/admin/billing-token/admin-billing-token.controller.js"></script>
+<script src="app/admin/billing/admin-billing.state.js"></script>
+<script src="app/admin/billing/admin-billing.controller.js"></script>
+<script src="app/admin/apps/app.service.js"></script>
+<script src="app/admin/apps/admin-apps.state.js"></script>
+<script src="app/admin/apps/admin-apps.controller.js"></script>
+<script src="app/admin/apis/api.service.js"></script>
+<script src="app/admin/apis/admin-apis.state.js"></script>
+<script src="app/admin/apis/admin-apis.controller.js"></script>
+<script src="app/admin/apis/admin-api-management-dialog.controller.js"></script>
+<script src="app/admin/agreement-manage/agree.service.js"></script>
+<script src="app/admin/agreement-manage/admin-agreement-manage.state.js"></script>
+<script src="app/admin/agreement-manage/admin-agreement-manage.controller.js"></script>
+<script src="app/admin/admin.state.js"></script>
+<script src="app/account/user/user-manage/user-manage-dialog.controller.js"></script>
+<script src="app/account/user/user-manage/user-manage.state.js"></script>
+<script src="app/account/user/user-manage/user-manage.controller.js"></script>
+<script src="app/account/user/user.state.js"></script>
+<script src="app/account/use-orgs/use-orgs-manage/use-orgs-popup.controller.js"></script>
+<script src="app/account/use-orgs/use-orgs-manage/use-orgs-manage-edit.controller.js"></script>
+<script src="app/account/use-orgs/use-orgs-manage/use-orgs-manage.state.js"></script>
+<script src="app/account/use-orgs/use-orgs-manage/use-orgs-manage.controller.js"></script>
+<script src="app/account/use-orgs/use-orgs.state.js"></script>
+<script src="app/account/settings/user-setting/user-setting.state.js"></script>
+<script src="app/account/settings/user-setting/user-setting.controller.js"></script>
+<script src="app/account/settings/settings.state.js"></script>
+<script src="app/account/settings/org-setting/org-setting.state.js"></script>
+<script src="app/account/settings/org-setting/org-setting.controller.js"></script>
+<script src="app/account/sessions/sessions.state.js"></script>
+<script src="app/account/sessions/sessions.controller.js"></script>
+<script src="app/account/reset/request/reset.request.state.js"></script>
+<script src="app/account/reset/request/reset.request.controller.js"></script>
+<script src="app/account/reset/find-id/find-id.state.js"></script>
+<script src="app/account/reset/find-id/find-id.controller.js"></script>
+<script src="app/account/reset/change-password/change-password.state.js"></script>
+<script src="app/account/reset/change-password/change-password.controller.js"></script>
+<script src="app/account/reports/token/report-token.state.js"></script>
+<script src="app/account/reports/token/report-token.controller.js"></script>
+<script src="app/account/reports/reports.state.js"></script>
+<script src="app/account/reports/charging/report-charging.state.js"></script>
+<script src="app/account/reports/charging/report-charging.controller.js"></script>
+<script src="app/account/reports/billing-using/report-billing-using.state.js"></script>
+<script src="app/account/reports/billing-using/report-billing-using.controller.js"></script>
+<script src="app/account/reports/billing-providing/report-billing-providing.state.js"></script>
+<script src="app/account/reports/billing-providing/report-billing-providing.controller.js"></script>
+<script src="app/account/reports/api/report-api-using.state.js"></script>
+<script src="app/account/reports/api/report-api-using.controller.js"></script>
+<script src="app/account/reports/api/report-api-providing.state.js"></script>
+<script src="app/account/reports/api/report-api-providing.controller.js"></script>
+<script src="app/account/reports/api/report-api.state.js"></script>
+<script src="app/account/reports/api/report-api.controller.js"></script>
+<script src="app/account/register/register.state.js"></script>
+<script src="app/account/register/register.controller.js"></script>
+<script src="app/account/plans/plans.state.js"></script>
+<script src="app/account/plans/planEditDialog.controller.js"></script>
+<script src="app/account/plans/globalPlan/globalPlan.state.js"></script>
+<script src="app/account/plans/globalPlan/globalPlan.controller.js"></script>
+<script src="app/account/plans/apiPlan/apiPlan.state.js"></script>
+<script src="app/account/plans/apiPlan/apiPlan.controller.js"></script>
+<script src="app/account/gateway-monitoring/gateway-monitoring.state.js"></script>
+<script src="app/account/gateway-monitoring/gateway-monitoring.controller.js"></script>
+<script src="app/account/discount/discount-manage/discount-manage.state.js"></script>
+<script src="app/account/discount/discount-manage/discount-manage.controller.js"></script>
+<script src="app/account/discount/discount-manage/discount-edit-dialog.controller.js"></script>
+<script src="app/account/discount/discount.state.js"></script>
+<script src="app/account/contents-provider/mapping-contents-provider.controller.js"></script>
+<script src="app/account/contents-provider/contents-provider.state.js"></script>
+<script src="app/account/contents-provider/contents-provider.controller.js"></script>
+<script src="app/account/charge/charge-search/charge-search.state.js"></script>
+<script src="app/account/charge/charge-search/charge-search.controller.js"></script>
+<script src="app/account/charge/charge-manage/charge-manage.state.js"></script>
+<script src="app/account/charge/charge-manage/charge-manage.controller.js"></script>
+<script src="app/account/charge/charge-adjust/charge-adjust.state.js"></script>
+<script src="app/account/charge/charge-adjust/charge-adjust.controller.js"></script>
+<script src="app/account/charge/charge-account/charge-account.state.js"></script>
+<script src="app/account/charge/charge-account/charge-account.controller.js"></script>
+<script src="app/account/charge/charge.state.js"></script>
+<script src="app/account/billing/billing-manage/billing-manage.state.js"></script>
+<script src="app/account/billing/billing-manage/billing-manage.controller.js"></script>
+<script src="app/account/billing/billing-manage/billing-edit-dialog.controller.js"></script>
+<script src="app/account/billing/billing.state.js"></script>
+<script src="app/account/approval/approvalRequest/approvalRequest.state.js"></script>
+<script src="app/account/approval/approvalRequest/approvalRequest.controller.js"></script>
+<script src="app/account/approval/approvalLine/approvalLine.state.js"></script>
+<script src="app/account/approval/approvalLine/approvalLine.controller.js"></script>
+<script src="app/account/approval/approval-manage.state.js"></script>
+<script src="app/account/approval/approval-history/approval-history.state.js"></script>
+<script src="app/account/approval/approval-history/approval-history.controller.js"></script>
+<script src="app/account/approval/approval/approval-dialog.controller.js"></script>
+<script src="app/account/approval/approval/approval.state.js"></script>
+<script src="app/account/approval/approval/approval.controller.js"></script>
+<script src="app/account/api/api-terms/api-terms.state.js"></script>
+<script src="app/account/api/api-terms/api-terms.controller.js"></script>
+<script src="app/account/api/api-manage/app-list.controller.js"></script>
+<script src="app/account/api/api-manage/api-edit-dialog.controller.js"></script>
+<script src="app/account/api/api-manage/api-csv-up.controller.js"></script>
+<script src="app/account/api/api-manage/api.state.js"></script>
+<script src="app/account/api/api-manage/api.controller.js"></script>
+<script src="app/account/api/api-group/api-group-edit.controller.js"></script>
+<script src="app/account/api/api-group/api-group-dialog.controller.js"></script>
+<script src="app/account/api/api-group/api-group.state.js"></script>
+<script src="app/account/api/api-group/api-group.controller.js"></script>
+<script src="app/account/api/api.state.js"></script>
+<script src="app/account/account.state.js"></script>
+<!-- endinject -->
+<!-- endbuild -->
+
+<!-- 타임아웃 발생 시 보여지는 modal -->
+<script type="text/ng-template" id="warning-dialog.html">
+    <div class="modal-header">
+        <h3>장기 미사용</h3>
+    </div>
+    <div idle-countdown="countdown" class="modal-body">
+        <uib-progressbar max="5" value="5" animate="false" class="progress-striped active">{{countdown}}초 후에 로그아웃 됩니다.</uib-progressbar>
+    </div>
+</script>
+
+<script type="text/ng-template" id="timedout-dialog.html">
+    <div class="modal-header">
+        <h3>사용종료</h3>
+    </div>
+    <div class="modal-body">
+        <p class="t_center">
+            <b>장시간 사용하지 않으셔서 로그아웃되었습니다.</b>
+        </p>
+    </div>
+</script>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<form name="form" novalidate>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()"></button>
+    <h4 class="modal-title">{{(vm.selectedGroup)? 'API 그룹 변경': 'API 그룹 등록'}}</h4>
+</div>
+<div id="underLoading" class="modal-body">
+    <div class="pull-right new-form-group">
+        <input ng-disabled="!!vm.selectedGroup" type="checkbox" id="setPrivate" ng-model="vm.group.isPrivate" ng-change="vm.setSearchPrivate()" >
+        <label ng-disabled="!!vm.selectedGroup" class="label" for="setPrivate">비공개</label>
+    </div>
+    <div class="form-group">
+        <label for="approvalName" class="form-label required-label">API 그룹명</label>
+        <!-- <small class="color_red" ng-if="form.approvalName.$error.required">*</small> -->
+        <small class="color_red" ng-if="form.approvalName.$error.minlength || form.approvalName.$error.maxlength">(3~30자 이내)</small>
+        <small class="color_red" ng-if="form.approvalName.$error.pattern">(잘못 입력하셨습니다.)</small>
+        <input type="text" name="approvalName" id="approvalName" class="form-control" ng-model="vm.group.name" minlength="3" maxlength="30" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required>
+    </div>
+    <div class="form-group">
+        <label for="itemDescription" class="form-label">그룹 설명</label>
+        <small class="color_red" ng-if="form.itemDescription.$error.minlength || form.itemDescription.$error.maxlength">(100자 이내)</small>
+        <small class="color_red" ng-if="form.itemDescription.$error.pattern">(잘못 입력하셨습니다.)</small>
+        <textarea id="itemDescription" name="itemDescription" class="form-control" ng-model="vm.group.description" maxlength="100" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" ></textarea>
+    </div>
+    <table class="table tableFixed">
+        <colgroup>
+            <col style="width:50%"/>
+            <col style="width:50%"/>
+        </colgroup>
+        <thead>
+            <tr>
+                <th scope="col">
+                    <span>선택가능 API목록 </span>
+                </th>
+                <th scope="col">
+                    <span>그룹 API</span>
+                </th>
+            </tr>
+            <tr>
+                <th scope="col" style="border:0">
+                    <input class="form-control input-sm pull-left" style="width:75%" type="text" placeholder="이름 검색" ng-model="vm.searchAvailableApis.name"/>
+                    <select class="form-control input-sm pull-left" style="width:22%; margin-left: 10px" ng-model="vm.searchAvailableApis.isPrivate" ng-change="vm.searchAllRange()"
+                            ng-options="range.value as range.display for range in [{display: '공개', value:false}, {display: '비공개', value:true}]" ng-disabled="vm.group.isPrivate">
+                        <option value="">- 전체 -</option>
+                    </select>
+                </th>
+                <th scope="col" style="border:0; border-left: 1px solid #ddd;">
+                    <input class="form-control input-sm pull-left" style="width:75%" type="text" placeholder="이름 검색" ng-model="vm.searchGroupApis.name"/>
+                    <select class="form-control input-sm pull-left" style="width:22%; margin-left: 10px" ng-model="vm.searchGroupApis.isPrivate" ng-change="vm.searchAllRange()"
+                            ng-options="range.value as range.display for range in [{display: '공개', value:false}, {display: '비공개', value:true}]" ng-disabled="vm.group.isPrivate">
+                        <option value="">- 전체 -</option>
+                    </select>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr style="display:block; width:200%; overflow: hidden;">
+            <td style="height:340px; overflow-y:scroll; margin:0 0 -1px -1px; float:left; width: 50.2%">
+                <div ui-sortable="vm.sortableOptions" class="apps-container" ng-model="vm.sourceList">
+                    <!-- <div ng-style="source.isPrivate && {'background-color':'#ddd'}" ng-click="vm.selectApiList($event, source)" style="text-align:left !important;" class="app dotContainer" ng-repeat="source in vm.sourceList | filter: vm.searchAvailableApis | filter: vm.apiFilter"> -->
+                    <div ng-class="{'lock' : source.isPrivate}" ng-click="vm.selectApiList($event, source)" style="text-align:left !important;" class="app dotContainer" ng-repeat="source in vm.sourceList | filter: vm.searchAvailableApis | filter: vm.apiFilter" title="{{source.name}} {{source.login?'(':''}}">
+                        <span class="sourceName">{{source.name}} {{source.login?'(':''}}{{source.grade?source.grade+", ":""}}{{source.login}}{{source.login?')':''}}</span>
+                        <!-- <i ng-if="source.isPrivate" class="glyphicon glyphicon-lock" style="color:#b3abab"></i> -->
+                        <span class="toRight"></span>
+                    </div>
+                </div>
+            </td>
+            <td style="height:340px; overflow-y:scroll; margin:0 -1px -1px; float:left; width: 50.1%">
+                <div ui-sortable="vm.sortableOptions" class="apps-container" ng-model="vm.targetList">
+                    <!-- <div ng-style="target.isPrivate && {'background-color':'#ddd'}" style="text-align:left !important;" class="app" ng-repeat="target in vm.targetList | filter: vm.searchGroupApis | filter: vm.apiFilter as resultList"> -->
+                    <div class="app left_app" ng-class="{'lock' : target.isPrivate}" ng-click="vm.removeMember(target)" title="{{target.name}} {{target.login?'(':''}}" ng-repeat="target in vm.targetList | filter: vm.searchGroupApis | filter: vm.apiFilter as resultList">
+                        <span class="toLeft"></span>
+                        <span class="sourceName">{{target.name}} {{target.login?'(':''}}{{target.grade?target.grade+", ":""}}{{target.login}}{{target.login?')':''}}</span>
+                        <!-- <i ng-if="target.isPrivate" class="glyphicon glyphicon-lock" style="color:#b3abab"></i>&nbsp; -->
+                        <!-- <i  ng-click="vm.removeMember(target)" class="glyphicon glyphicon-trash addclass"></i> -->
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn modalBtn cancel" ng-click="vm.clear()">
+        <span data-translate="entity.action.cancel">Cancel</span>
+    </button>
+    <button type="button" class="btn modalBtn" ng-disabled="form.$invalid || !vm.targetList.length" ng-click="vm.confirm()">
+        <span data-translate="entity.action.apply">Modify</span>
+    </button>
+</div>
+</form>

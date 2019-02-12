@@ -1,0 +1,36 @@
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong>G/W 모니터링</strong></h2>
+        <small class="pull-right"><span class="color_red">호출시각</span>&emsp;{{vm.currentDate | date: 'yyyy-MM-dd HH:mm:ss'}}</small>
+    </div>
+
+    <div class="col-md-12">
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:11%"/>
+                    <col style="width:45%"/>
+                    <col style="width:50%"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">기관</th>
+                    <th scope="col">최근 재기동 시각</th>
+                    <th scope="col">최근 상태체크 시각</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="result in vm.results">
+                    <td>{{result.org}}</td>
+                    <td class="t_center">{{result.uptime  | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                    <td class="t_center">{{result.statustimestamp  | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                </tr>
+                <tr ng-if="vm.results.length <= 0">
+                    <td colspan="3" class="t_center">모니터링 결과가 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

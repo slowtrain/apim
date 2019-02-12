@@ -1,0 +1,54 @@
+<form name="form" novalidate>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()"></button>
+    <h4 class="modal-title">공지 SMS (Email) 보내기</h4>
+</div>
+<div class="modal-body">
+    <table class="table tableFixed">
+        <colgroup>
+            <col/>
+        </colgroup>
+        <thead>
+            <tr>
+                <th scope="col" style="line-height:27px">
+                    <span style="float:left" class="new-form-group">
+                        <input id="allOrgs" type="checkbox" ng-model="vm.checkedAllOrgs" ng-change="vm.checkingAll()"/>
+                        <label for="allOrgs" style="font-size:14px">전체 선택</span>
+                    </span>
+                    <small class="color_red" style="margin-left:25px;float:left"> {{vm.result.length}} 명 선택 </small>
+<!--                     <input class="form-control input-sm pull-right" style="width:30%" type="text" placeholder="아이디로 찾기" ng-model="vm.searchUser.login"/> -->
+<!--                     <input class="form-control input-sm pull-right" style="width:30%" type="text" placeholder="이름으로 찾기" ng-model="vm.searchUser.fullName"/> -->
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td style="vertical-align: top !important; border-right:0">
+                <div class="col-md-4" style="padding:15px" ng-repeat="org in vm.users | filter: vm.excludeNull">
+                    <div class="sms_title">
+                        <span class="new-form-group">
+                            <input id="{{org.key}}" type="checkbox" style="vertical-align:top" ng-model="org.checked" ng-change="vm.checkingAll(org)"/>
+                            <label for="{{org.key}}">{{org.key}}</label>
+                            </span>
+                        <i ng-click="org.plus = !org.plus" ng-class="!org.plus || !!vm.searchUser.name? 'glyphicon glyphicon-minus' : 'glyphicon glyphicon-plus'" style="color:#b3abab"></i>
+                    </div>
+                    <div ng-show="!org.plus || !!vm.searchUser.name" class="hover new-form-group" style="padding:4px 10px; height:27px; border-radius:1px" ng-style="user.checked && {'background-color' : '#fbe39d'}" ng-repeat="user in org.values | filter : vm.searchUser | orderBy: 'name' as searchResult">
+                        <input id="user{{user.id}}" type="checkbox" ng-model="user.checked" ng-change="vm.checkingOneCheckBox(user)"/>
+                        <label for="user{{user.id}}" class="dotContainer">{{user.login}} ({{user.fullName}})</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-portal modalBtn" ng-disabled="!vm.result.length" ng-click="vm.save()">
+        <span>보내기</span>
+    </button>
+    <button type="button" class="btn btn-default btn-md modalBtn cancel" ng-click="vm.clear()">
+        <span data-translate="entity.action.cancel">Cancel</span>
+    </button>
+</div>
+</form>

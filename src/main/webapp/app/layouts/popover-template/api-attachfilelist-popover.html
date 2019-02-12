@@ -1,0 +1,36 @@
+<div style="width:258px">
+    <div>{{popover.title}}</div>
+    <div class="form-box" style="padding:11px;">
+        <div class="form-group" style="width:100%">
+            <label class="control-label">API 명세서</label>
+            <small>(WADL | Swagger)</small>
+            <div>
+                <p class="voffset2" ng-if="vm.selectedApi.specFile">
+                    <span class="file-list-wrap" ng-click="vm.fileDown(vm.selectedApi.specFile)">
+                        <!-- <span class="label label-info">1</span> -->
+                        <span class="file_name_info" title="{{file.fileName}}">{{vm.selectedApi.specFile.fileName}}</span>&nbsp;
+<!--                         <span class="label label-success pull-right">{{vm.fileSize(vm.selectedApi.specFile)}}</span> -->
+                    </span>
+                </p>
+                <p ng-if="!vm.selectedApi.specFile" style="padding:10px;">
+                    · 없음
+                </p>
+            </div>
+        </div>
+        <div class="form-group voffset2" style="width:100%">
+            <label class="control-label">API 설명서</label>
+            <div>
+                <p class="voffset2" ng-repeat="file in vm.selectedApi.attachFileList">
+                    <span ng-click="vm.fileDown(file)" class="file-list-wrap">
+                        <!-- <span class="label label-info">{{$index+1}}</span> -->
+                        <span class="file_name_info" title="{{file.fileName}}">{{file.fileName}}</span>&nbsp;
+<!--                         <span style="margin-top:3px; font-size:9px" class="label label-success pull-right">{{vm.fileSize(file)}}</span> -->
+                    </span>
+                </p>
+                <p ng-if="!vm.selectedApi.attachFileList.length" style="padding:10px;">
+                    · 없음
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

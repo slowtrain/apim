@@ -1,0 +1,112 @@
+<div class="wrap">
+    <div class="col-md-12">
+        <p class="searchInfo  post-btn-box" ng-style="(vm.isAdmin) && {'margin-right':'109px'}">
+        </p>
+        <div class="table-responsive voffset3" style="overflow : visible">
+            <table class="table table_write">
+                <colgroup>
+                    <col style="width:150px" />
+                    <col style="" />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>
+                            <label for="questionTitle" data-translate="question.view.title">title</label>
+                        </th>
+                        <td>
+                            {{vm.question.title}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="questionEmail" data-translate="question.view.email">email</label>
+                        </th>
+                        <td>
+                            {{vm.question.email}}
+                        </td>
+                    </tr>
+                    <tr height="250px">
+                        <th>
+                            <label for="questionContent" data-translate="question.view.content">content</label>
+                        </th>
+                        <td>
+                            <textarea class="question-board-content" disabled>{{vm.question.content}}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="no-padding">
+                            <div>
+                                <div class="replyContainer">
+                                    <div ng-if="vm.question.questionReplyList.length == 0" class="no_comment">댓글이 없습니다.</div>
+                                    <div ng-if="vm.question.questionReplyList.length > 0" ng-repeat="reply in vm.question.questionReplyList">
+                                        <ul>
+                                            <li ng-style="!$first && {'border-top': '1px dashed #e5e5e5'}">
+                                                <textarea class="question-reply-content" disabled>{{reply.content}}</textarea>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="replyBox textarea" ng-style="vm.question.questionReplyList.length > 0 && {'margin-top':'24px', 'height':'150px'}">
+                                        <div class="inLeft">
+                                            <textarea id="questionContent" name="questionContent" class="form-control" ng-model="vm.questionReply.content" style="height:150px" maxlength="3000" limit='true' ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"></textarea>
+                                        </div>
+                                        <div class="inRight">
+                                            <button type="button" ng-if="!vm.questionReply.content" disabled class="btn-type1" data-translate="question.comment.register"></button>
+                                            <button type="button" ng-if="vm.questionReply.content" ng-click="vm.save()" class="btn-type1" data-translate="question.comment.register"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tableBtnSetWrap">
+            <div class="btn_left">
+                <button class="tableBtn" ng-click="vm.clear()">목록</button>
+            </div>
+            <div class="btn_right" ng-if="vm.isAdmin">
+                <button class="tableBtn type2" ng-click="vm.delQuestion()">삭제</button>
+            </div><!-- end ngIf: vm.isAdmin || (vm.readOnly && vm.post.writer.login == vm.user.login) -->
+        </div>
+        <!-- <div class="table-responsive voffset3" style="overflow : visible">
+            <table class="table tableFixed f_left th_bb">
+                <colgroup>
+                    <col style="width:20%" />
+                    <col style="width:65%" />
+                    <col style="width:15%" />
+                </colgroup>
+                <tbody>
+                    <tr ng-repeat="questionReply in vm.question.questionReplyList" height="60px">
+                        <td ng-if="$index==0" rowspan="{{vm.question.questionReplyList.length}}">
+                            <label for="questionContent" data-translate="question.comment.content">content</label>
+                        </td>
+                        <td colspan="2">
+                            {{questionReply.content}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="questionContent" data-translate="question.comment.register">content</label>
+                        </td>
+                        <td>
+                            <textarea id="questionContent" name="questionContent" class="form-control" ng-model="vm.questionReply.content" style="height:60px" maxlength="100" limit='true' ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"></textarea>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-portal modalBtn" disabled ng-if="!vm.questionReply.content || form.$invalid">
+                                <span data-translate="entity.action.save">Save</span>
+                            </button>
+                            <button type="button" class="btn btn-portal modalBtn" ng-click="vm.save()" ng-if="!(!vm.questionReply.content || form.$invalid)">
+                                <span data-translate="entity.action.save">Save</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
+    </div>
+</div>
+
+
+
+

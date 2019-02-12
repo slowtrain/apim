@@ -1,0 +1,35 @@
+<form name="form" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" ng-click="vm.clear()"></button>
+        <h4 class="modal-title" id="myUserLabel"
+            data-translate="appManage.register.title">APP Register</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group" ng-class="{'has-error':form.appName.$dirty && form.appName.$invalid}">
+            <label class="control-label required-label" data-translate="appManage.register.name">APP name</label>
+            <small class="color_red" ng-show="form.appName.$error.minlength">(3 ~ 30자 이내)</small>
+            <small class="color_red" ng-show="form.appName.$error.maxlength">(30자 이내)</small>
+            <small class="color_red" ng-if="form.appName.$error.pattern">(잘못 입력하셨습니다.)</small>
+            <input type="text" class="form-control" name="appName" ng-model="vm.app.name" minlength="3" maxlength="30" limit='true' ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required>
+        </div>
+        <div class="form-group">
+            <label for="appDescription" class="control-label" data-translate="appManage.info.description">app description</label>
+            <small class="color_red" ng-show="form.appDescription.$error.minlength || form.appDescription.$error.maxlength">(100자 이내)</small>
+            <small class="color_red" ng-show="form.appDescription.$error.pattern">(잘못된 입력입니다.)</small>
+            <textarea id="appDescription" name="appDescription" class="form-control" ng-model="vm.app.description" rows="4" maxlength="100" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"></textarea>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-portal modalBtn" ng-if="form.$invalid" disabled>
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button type="submit" class="btn btn-portal modalBtn" ng-if="!form.$invalid" ng-click="vm.save()">
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>
+</form>
+

@@ -1,0 +1,14 @@
+<div style="width:472px">
+    <div>{{Popover.title}}
+        <button type="button" class="close" aria-hidden="true" ng-click="vm.isSqlHelpOpen=false"></button>
+    </div>
+    <dl class="">
+        <dt>DB쿼리를 수행하는 API서비스에 대하여 이 설정을 권장합니다.</dt>
+        <dd><i class="glyphicon glyphicon-play"></i>일반적으로 DB 종류에 따라 1~3을 선택할 수 있습니다.</dd>
+        <dd class="voffset2"><b>1. MS SQL Server Exploits Protection</b> (DB가 MSSQL인 경우)</dd>
+        <dd><b>2. Oracle Exploits Protection</b> (DB가 Oracle인 경우)</dd>
+        <dd><b>3. Standard SQL Injection Attack Protection</b> (그 밖의 RDB인 경우)</dd>
+        <dd class="voffset2"><i class="glyphicon glyphicon-play"></i>특별히, 엄격한 기준이 요구되는 민감한 서비스의 경우는</dd>
+        <dd><b>4. Invasive SQL Injection Attack Protection</b>을 선택할 수 있습니다.</dd>
+    </dl>
+</div>

@@ -1,0 +1,135 @@
+<jhi-alert></jhi-alert>
+<div class="row wrap">
+    <div class="col-md-12 withBtn">
+        <h2><strong data-translate="apiList.title">Api List</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <div class="searchInfo fix">
+            <div class="left_api">총 <span class="color_red">{{vm.totalItems}}</span>개의 API가 존재합니다.</div>
+            <!-- <span class="rightBtnWrap" ng-style="!vm.isCsvDown && {'margin-right': '-3px'}"> -->
+            <div class="rightBtnWrap">
+                <button has-authority="ROLE_API_CREATE" ng-click="addApi()" class="btn btn-portal btn-flag-radius">
+                    <span>API 등록</span>
+                </button>
+                <span has-authority="ROLE_API_CREATE" ng-click="uploadCsv()" class="btn btn-flag-radius2">
+                    <span>API 일괄등록</span>
+                </span>
+            </div>
+        </div>
+        <div class="searchBox">
+            <span class="form-inline">
+                <label for="apiPrivate">공개</label>
+                <select id="apiPrivate" class="form-control input-sm" ng-model="vm.isPrivate"
+                        ng-options="option.key as option.name for option in [{name: '공개', key: 'false'},{name: '비공개', key: 'true'}]">
+                    <option value="">전체</option>
+                </select>
+            </span>
+            <span class="form-inline">
+                <label for="apiStatus" data-translate="apiList.status">status</label>
+                <select id="apiStatus" class="form-control input-sm" ng-model="vm.state"
+                        ng-options="status.key as status.rename for status in vm.status | filter: vm.statusFiltering track by status.key">
+                    <option value="">전체</option>
+                </select>
+            </span>
+            <span class="form-inline">
+                <label for="apiName" data-translate="apiList.name">name</label>
+                <input type="text" class="form-control input-sm" id="apiName" name="apiName" ng-model="vm.apiName" ng-keypress="($event.charCode==13)? vm.searching() : return"/>
+            </span>
+            <span class="form-inline">
+                <label for="proxyUrl">G/W URL</label>
+                <input type="text" class="form-control input-sm" style="width:23%;" id="proxyUrl" name="proxyUrl" ng-model="vm.proxyUrl"
+                       ng-keypress="($event.charCode==13)? vm.searching() : return"/>
+            </span>
+            <span class="btnBox">
+                <button type="button" class="btn search-btn" ng-click="vm.searching()">
+                    검색
+                </button>
+            </span>
+        </div>
+
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col ng-if="vm.isCsvDown" style="width:4%"/>
+                    <col style="width:16%"/>
+                    <col/>
+                    <col style="width:7%"/>
+                    <col style="width:10%"/>
+                    <col style="width:11%"/>
+                    <col style="width:6%"/>
+                    <col style="width:18%"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th ng-if="vm.isCsvDown"><img src="/img/shinhan/csv_icon.png"></th>
+                    <th id="name" ng-mousedown="vm.sorting('name')"><span data-translate="apiList.name">Name</span><i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th id="urlPattern" ng-mousedown="vm.sorting('urlPattern')"><span>G/W URL</span><i id="urlPattern" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th id="isPrivate" ng-mousedown="vm.sorting('isPrivate')"><span>공개</span><i id="isPrivate" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th id="status" data-translate="apiList.status">Status</th>
+<!--                     <th id="lastModifiedDate" ng-mousedown="vm.sorting('lastModifiedDate')"><span data-translate="apiList.updateDate">UpdateDate</span><i id="lastModifiedDate" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th> -->
+                    <th id="creatorName" ng-mousedown="vm.sorting('creator.fullName', 'creatorName')"><span>등록자</span><i id="creatorName" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th>사용앱</th>
+                    <th data-translate="apiList.actions">Etc</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="api in vm.apis">
+                    <td ng-if="vm.isCsvDown"><input style="vertical-align:-3px; margin:0px 5px;" type="checkbox" ng-click="vm.checkingOne(api)" ng-model="api.checkedCsv"></td>
+                    <td class="hover" title="{{api.name}}" ng-click="vm.showApi(api)">{{api.name}}</td>
+                    <td>{{api.urlPattern}}</td>
+                    <td class="t_center">{{api.isPrivate?"비공개":"공개"}}</td>
+                    <td class="t_center">
+                        <button has-authority="ROLE_API_MODIFY" class="btn btn-default btn-xs" ng-click="changeStatus(api, 'suspend')" ng-show="api.status == 'RUNNING'">
+                            {{api.status}}
+                        </button>
+                        <button has-authority="ROLE_API_MODIFY" class="btn btn-danger btn-xs" ng-click="changeStatus(api, 'resume')" ng-show="api.status == 'SUSPEND'">
+                            {{api.status}}
+                        </button>
+                        <span class="font_12" ng-show="api.status != 'SUSPEND' && api.status != 'RUNNING'">{{api.status=='UNUSED'? 'DELETED' : api.status}}
+                            <span ng-show="api.status == 'RESERVED'"><br/>{{api.reservedTime | date: 'yyyy-MM-dd HH:mm'}}</span>
+                        </span>
+                    </td>
+
+<!--                     <td scope="row" class="t_center">{{api.lastModifiedDate | date: 'yyyy-MM-dd HH:mm'}}</td> -->
+                    <td class="t_center">{{api.creator.fullName}}</td>
+                    <td class="t_center">
+                        <button has-authority="ROLE_API_MODIFY" ng-disabled="api.status == 'UNUSED'" class="btn btn-info btn-xs" ng-click="showAppUsed(api)">사용앱</button>
+                    </td>
+                    <td class="t_center">
+                        <button has-authority="ROLE_API_MODIFY" class="btn btn-danger btn-xs" ng-click="reqApproval(api)" ng-show="api.status == 'READY' || api.status == 'UPDATING'">
+                            승인요청
+                        </button>
+                        <!-- <button has-authority="ROLE_API_MODIFY" ng-hide="vm.inProduction || api.status != 'RUNNING' || !api.specFile"
+                                class="btn btn-default btn-xs" ng-click="testApi(api)">TEST
+                        </button> -->
+                        <button has-authority="ROLE_API_MODIFY" ng-disabled="api.status == 'SUSPEND' || api.status == 'ERROR' || api.status == 'RESERVED' || api.status == 'APPROVING' || api.status == 'UNUSED'" class="btn btn-default btn-xs" ng-click="addApi(api)">수정</button>
+                        <button has-authority="ROLE_API_DELETE" ng-if="!(api.status == 'READY' || api.status == 'UPLOAD' || api.status == 'RESERVED' || api.status == 'APPROVING' || api.status == 'UNUSED')" class="btn btn-default btn-xs" ng-click="unuseApi(api, 'unuse')">삭제요청</button>
+                        <button has-authority="ROLE_API_DELETE" ng-if="api.status == 'READY' || api.status == 'UPLOAD'" class="btn btn-default btn-xs" ng-click="delApi(api, 'delete')">삭제</button>
+                        <button has-authority="ROLE_API_MODIFY" class="btn btn-danger btn-xs" ng-click="redeploy(api)" ng-if="api.status == 'ERROR'">재처리</button>
+                    </td>
+                </tr>
+                <tr ng-if="vm.apis.length <= 0">
+                    <td ng-if="!vm.isCsvDown" colspan="7" class="t_center">API가 존재하지 않습니다.</td>
+                    <td ng-if="vm.isCsvDown" colspan="8" class="t_center">API가 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- <button class="btn btn-default btn-xs pull-right with-paging refresh" ng-click="vm.loadAll()">새로고침</button> -->
+            <div class="text-center voffset3">
+                <span class="btn btn-exceldown" ng-click="vm.initCsvDown();vm.isCsvDown = !vm.isCsvDown;">EXCEL</span>
+                <div class="btn-csv-group" ng-if="vm.isCsvDown">
+                    <small ng-if="vm.isCsvDown">선택 {{vm.checkedSize}} 개</small>
+                    <div ng-if="vm.isCsvDown" class="btn btn-default btn-xs">
+                        <span ng-click="vm.checkingAllCsv(true)">전체선택</span>
+                        <input type="checkbox" id="checkboxAll" ng-model="vm.checkedAll" ng-change="vm.checkingAllCsv()">
+                    </div>
+                    <button ng-if="vm.isCsvDown" ng-disabled="vm.checkedSize==0" class="btn btn-info btn-xs" ng-click="vm.downloadCsv()">다운시작</button>
+                </div>
+            </div>
+            <div class="text-center voffset6">
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,116 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()"></button>
+    <h4 class="modal-title">
+        <span>{{(vm.selections.apps)? '사용앱 목록': '계약사항'}}</span>
+        <span style="font-size:.8em; color:#ddd"> : {{vm.selections.useOrg.organization.name}}</span>
+    </h4>
+</div>
+<div class="modal-body" style="padding:28px">
+    <div ng-if="!vm.selections.apps">
+        <p>총 <span class="color_red">{{vm.totalItems}}</span>건의 계약사항이 존재합니다.</p>
+        <div class="searchBox input_1 voffset2" style="overflow:hidden">
+            <span class="form-inline">
+                <input class="form-control"
+                   type="text" placeholder="내용 검색하기" ng-keypress="($event.charCode==13)? vm.searching() : return" ng-model="vm.searchingText"/>
+           </span>
+           <div class="btnBox">
+                <button class="btn search-btn" ng-click="vm.searching()">
+                    <span data-translate="entity.action.search">Search</span>
+                </button>
+            </div>
+        </div>
+        <!-- <div>
+            <input class="form-control pull-left" style="width:40%" ng-keypress="($event.charCode==13)? vm.searching() : return"
+                   type="text" placeholder="내용 검색하기" ng-model="vm.searchingText"/>
+            <button style="margin-left:6px;" class="btn btn-default pull-left" ng-click="vm.searching()">
+                <span class="glyphicon glyphicon-search"></span>&nbsp;<span data-translate="entity.action.search">Search</span>
+            </button>
+        </div> -->
+
+        <div class="table-responsive voffset1">
+            <table class="table">
+                <colgroup>
+                    <col style="width:5%"/>
+                    <col/>
+                    <col style="width:15%"/>
+                    <col style="width:50px"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">계약내용</th>
+                    <th scope="col">등록자</th>
+                    <th scope="col">비고</th>
+                </tr>
+                </thead>
+                <tbody ng-if="vm.comments.length <= 0">
+                <tr>
+                    <td class="t_center" colspan="4">계약사항이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+                <tbody ng-if="vm.comments.length > 0">
+                    <tr ng-repeat="comment in vm.comments">
+                        <td class="t_center">{{vm.totalItems - $index - (vm.currentPage-1) * vm.size}}</td>
+                        <td class="t_left">{{comment.detailComment}}</td>
+                        <td class="t_left">{{comment.register.fullName}}</td>
+                        <td>
+                            <button class="btn btn-default btn-xs" ng-click="vm.delComment(comment)">삭제</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <form name="form" novalidate>
+            <div class="replyBox textarea type2">
+                <div class="inLeft">
+                    <textarea type="text" name="commentContent" ng-model="vm.commentContent" maxlength="100" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" class="form-control" placeholder="계약내용 추가 입력..."></textarea>
+                </div>
+                <div class="inRight">
+                    <button ng-disabled="!vm.commentContent.trim()" class="btn-type1" ng-click="vm.saveComment()" ng-style="check_ie && {'line-height': '6px'}">등록</button>
+                </div>
+            </div>
+            <small class="color_red" ng-if="form.commentContent.$error.minlength || form.commentContent.$error.maxlength">(100자 이내)</small>
+            <small class="color_red" ng-if="form.commentContent.$error.pattern">(잘못 입력하셨습니다.)</small>
+
+        </form>
+        <div class="text-center" style="height:39px">
+            <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+        </div>
+
+    </div>
+
+    <div ng-if="vm.selections.apps" class="table-responsive">
+        <table class="table tableFixed">
+            <colgroup>
+                <col style="width:42px"/>
+                <col style="width:40%"/>
+                <col style="width:60%"/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">앱 이름</th>
+                <th scope="col">앱 설명</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="app in vm.selections.apps | orderBy : 'name'">
+                    <td class="t_center">{{$index + 1}}</td>
+                    <td class="t_left">{{app.name}}<button class="btn btn-default btn-xs pull-right" ng-click="vm.showDetail(app)">상세보기</button></td>
+                    <td class="t_left">{{app.description | limitTo:50}}</td>
+                </tr>
+                <tr ng-if="vm.selections.apps.length == 0">
+                    <td colspan="3" class="t_center">현재 사용앱이 존재하지 않습니다.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div ng-if="vm.selections.apps" class="modal-footer">
+    <button type="button" class="btn btn-default modalBtn" data-dismiss="modal" ng-click="vm.clear()">
+        <span>{{vm.selections.apps? '확인' : '닫기'}}</span>
+    </button>
+</div>

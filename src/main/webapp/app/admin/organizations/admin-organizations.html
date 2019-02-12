@@ -1,0 +1,100 @@
+<!-- <jhi-alert></jhi-alert> -->
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong>기관 목록</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <p class="searchInfo type3">
+            <button class="btn btn-portal btn-flag-radius pull-right" ng-click="orgManageModal()">기관 등록</button>
+        </p>
+        <div class="searchBox">
+            <form name="form" novalidate>
+                <span class="form-inline">
+                    <label for="searchingOrg">기관검색</label>
+                    <select class="form-control input-sm" id="searchingOrg" name="org" ng-model="vm.searchingOrgType"
+                            ng-options="type.name as type.ko for type in vm.orgTypes track by type.name">
+                        <option value="">기관구분 선택</option>
+                    </select>
+                </span>
+                <span class="form-inline">
+                    <label for="searchingColumn">필드검색</label>
+                    <select class="form-control input-sm" id="searchingColumn" name="org" ng-model="vm.searchingColumn" ng-change="vm.searchingText=null"
+                            ng-options="column.name as column.ko for column in vm.searchColumns track by column.name">
+                        <option value="">필드명 선택</option>
+                    </select>
+                    <input ng-if="vm.searchingColumn != 'licenseNumber'" class="form-control input-sm" type="text" placeholder="필드에서 검색하기" ng-model="vm.searchingText" ng-disabled="!vm.searchingColumn"
+                           ng-keypress="($event.charCode==13)? vm.searching() : return"/>
+
+                    <input ng-if="vm.searchingColumn == 'licenseNumber'" class="form-control input-sm" type="text" placeholder="10개의 숫자를 입력하세요." ng-model="vm.searchingText" ng-disabled="!vm.searchingColumn"
+                           name="licenseNumber" mask="999-99-99999" restrict="reject" limit="true" ng-keypress="($event.charCode==13)? vm.searching() : return"/>
+                    <small ng-if="vm.searchingColumn == 'licenseNumber'" class="color_red">(-)는 자동기입</small>
+                </span>
+                <span class="btnBox">
+                    <button type="button" class="btn search-btn" ng-click="vm.searching()">
+                        검색
+                    </button>
+                </span>
+            </form>
+        </div>
+
+        <p class="searchInfo type2">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 기관이 존재합니다.</span>
+        </p>
+
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:5%"/>
+                    <col style="width:20%"/>
+                    <col style="width:8%"/>
+                    <col style="width:10%"/>
+                    <col style="width:13%"/>
+                    <col/>
+                    <col style="width:93px"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th id="name" ng-mousedown="vm.sorting('name')">기관 이름<i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th id="type" ng-mousedown="vm.sorting('type')">구분<i id="type" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th id="state" ng-mousedown="vm.sorting('state')">상태<i id="state" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th id="licenseNumber" ng-mousedown="vm.sorting('licenseNumber')">사업자등록번호<i id="licenseNumber" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th>
+                    <th scope="col">기관 설명</th>
+                    <th scope="col">비&emsp;고</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="org in vm.Orgs">
+                    <td class="t_center">{{vm.totalItems - $index - (vm.condition.page*vm.size)}}</td>
+                    <td class="hover" ng-click="vm.detailView(org)">{{org.name}}</td>
+                    <td ng-if="!org.type || org.type == 'PARTNER'" scope="row" class="t_center">이용기관</td>
+                    <td ng-if="org.type == 'PROVIDER'" scope="row" class="t_center">제공기관</td>
+                    <td scope="row" class="t_center">
+                        <span ng-if="!(org.state=='INACTIVE' || org.state=='ACTIVE')">{{org.state}}</span>
+                        <i ng-if="org.state=='INACTIVE'" ng-click="vm.activate(org)" class="glyphicon glyphicon-ban-circle color_darkRed" title="비활성"></i>
+                        <i ng-if="org.state=='ACTIVE'" ng-click="vm.activate(org)" class="glyphicon glyphicon-ok-circle color_success" title="활성"></i>
+                    </td>
+                    <td scope="row" class="t_center">{{org.licenseNumber}}</td>
+                    <td scope="row"><span class="dotContainer" style="width:95%">{{org.description}}</span></td>
+                    <td scope="row" class="t_center">
+                        <button class="btn btn-default btn-xs" ng-disabled="org.state=='APPROVING' || org.state=='UPDATING'" ng-click="orgManageModal(org)">수정</button>
+                        <button class="btn btn-default btn-xs" ng-click="orgDeleteModal(org, 'delete')">삭제</button>
+                    </td>
+                </tr>
+                <tr ng-if="vm.Orgs.length == 0">
+                    <td class="t_center" colspan="7">기관이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- <p>
+                <button type="button" class="btn btn-success btn-sm pull-right voffset2" ng-click="vm.downloadExcel()"><i class="glyphicon glyphicon-file"></i> Excel</button>
+            </p> -->
+        </div>
+        <div class="text-center voffset3">
+            <button type="button" class="btn btn-default btn-sm btn-exceldown" ng-click="vm.downloadExcel()">EXCEL</button>
+            <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+        </div>
+    </div>
+</div>
+

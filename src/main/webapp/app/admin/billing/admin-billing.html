@@ -1,0 +1,142 @@
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong>API 사용 리스트</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <div class="searchField type2 typeNew">
+            <div class="dateContainer">
+                <dl class="datePickerField">
+                    <dd class="form-inline" style="width:500px">
+                        <label class="control" for="approvalRequester">요청일자</label>
+                        <span class="input-group">
+                            <input type="text" class="form-control"
+                                   id="approvalRequester" readonly
+                                   uib-datepicker-popup="yyyy-MM-dd"
+                                   ng-model="vm.condition.fromTime"
+                                   is-open="vm.fromDateOpen"
+                                   popup-placement="bottom-left"
+                                   on-open-focus="false"
+                                   close-text="닫기"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openFromDatePicker($event)"
+                                        uib-is-class="'btn-info' for selectedDt, 'active' for activeDt on dt"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </span><span style="vertical-align:middle"> ~ </span>
+                        <span class="input-group">
+                            <input type="text" class="form-control" readonly
+                                   uib-datepicker-popup="yyyy-MM-dd"
+                                   ng-model="vm.condition.toTime"
+                                   is-open="vm.toDateOpen"
+                                   popup-placement="bottom-left"
+                                   on-open-focus="false"
+                                   close-text="닫기"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openToDatePicker($event)"
+                                        uib-is-class="'btn-info' for selectedDt, 'active' for activeDt on dt">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                        </span>
+                    </dd>
+                </dl>
+                <button type="button" ng-hide="vm.isAutoMode" class="btn search-btn"ng-click="vm.clickSearchButton(true)">검색</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-center voffset3" ng-show="!vm.success">
+        <div class="searchField2" style="padding:23px; border:0px">{{ vm.alertMessage }}</div>
+    </div>
+    <div class="col-md-12 voffset3" ng-show="vm.success">
+        <div class="col-md-3 voffset1" style="padding-left: 0;margin-bottom: 5px;">
+            <select class="form-control" ng-options="o.name for o in vm.organizationList track by o.id" ng-change="vm.selectingOrg()" ng-model="vm.selectedOrganization">
+                <option value="">기관 선택</option>
+            </select>
+        </div>
+        <!-- <div class="col-md-12 voffset1" style="padding: 0;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style="width:200px">앱</th>
+                    <th>API</th>
+                    <th style="width:79px">수행횟수</th>
+                    <th style="width:150px">과금정책</th>
+                    <th style="width:115px">총요금</th>
+                    <th style="width:115px">최종요금(할인)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="m in vm.metricsList">
+                    <td class="text-center">{{ m.appName }}</td>
+                    <td class="text-center">[{{ m.providerName }}] {{ m.apiName }}</td>
+                    <td class="text-right">
+                        <button ng-click="vm.showApiTrend(m)" class="btn btn-default btn-xs">{{ m.completedCount }}</button>
+                    </td>
+                    <td class="text-center">
+                        <button uib-popover-template="vm.billingPolicyPopover.templateUrl"
+                                popover-title="과금정책 상세보기"
+                                popover-is-open="m.tooltipOpen"
+                                popover-trigger="outsideClick"
+                                popover-placement="bottom"
+                                ng-click="vm.tooltipControl(m)"
+                                type="button"
+                                class="btn btn-default btn-xs"
+                                style="width:99%">
+                            <span class="dotContainer" style="width:98%; vertical-align: -4px;">{{ m.billingPolicyName }}</span>
+                        </button>
+                    </td>
+                    <td class="text-right">{{ m.amount | number}}</td>
+                    <td class="text-right">{{ m.finalAmount | number}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center voffset3">
+                <button type="button" class="btn btn-exceldown btn-sm voffset2" ng-click="vm.downloadExcel()">EXCEL</button>
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+         -->
+        <div class="voffset1" style="padding: 0;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style="width:200px">앱</th>
+                    <th>API</th>
+                    <th style="width:100px">호출건수</th>
+                    <th style="width:100px">인증건수</th>
+                    <th style="width:100px">완료건수</th>
+                    <th style="width:150px">과금정책</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="m in vm.metricsList">
+                    <td class="text-center">{{ m.appName }}</td>
+                    <td class="text-center">[{{ m.providerName }}] {{ m.apiName }}</td>
+                    <td class="text-right">{{ m.attemptedCount }}</td>
+                    <td class="text-right">{{ m.authorizedCount }}</td>
+                    <td class="text-right">
+                        <button ng-click="vm.showApiTrend(m)" class="btn btn-default btn-xs">{{ m.completedCount }}</button>
+                    </td>
+                    <td class="text-center">
+                        <button uib-popover-template="vm.billingPolicyPopover.templateUrl"
+                                popover-title="과금정책 상세보기"
+                                popover-is-open="m.tooltipOpen"
+                                popover-trigger="outsideClick"
+                                popover-placement="bottom"
+                                ng-click="vm.tooltipControl(m)"
+                                type="button"
+                                class="btn btn-default btn-xs"
+                                style="width:99%">
+                            <span class="dotContainer" style="width:98%; vertical-align: -4px;">{{ m.billingPolicyName }}</span>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center voffset3">
+                <button type="button" class="btn btn-exceldown btn-sm voffset2" ng-click="vm.downloadExcel()">EXCEL</button>
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+    </div>
+    <!--<button ng-click="vm.showApiTrend({orgId: 1, appId: 2, apiId: 3})">test</button>-->
+</div>

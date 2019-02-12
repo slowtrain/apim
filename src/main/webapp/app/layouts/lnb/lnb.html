@@ -1,0 +1,58 @@
+<div class="lnb">
+    <h3>
+        <strong ng-if="vm.parent.parent == 'app'" data-translate="global.menu.{{vm.parent.name}}.main"></strong>
+        <!-- 홈, 오픈API플랫폼, API서비스, 포럼 -->
+        <strong ng-if="vm.parent.parent != 'app' && !vm.isServiceCategory" data-translate="global.menu.{{vm.parent.parent}}.main"></strong>
+        <!-- 서비스 패키지 -->
+        <strong ng-if="vm.isServiceCategory" data-translate="global.menu.service-package-open.main">서비스
+<!--             <button class="btn btn-xs btn-info pull-right" style="border-top-right-radius: 4px; border-bottom-left-radius: 5px;">추천조회</button> -->
+        </strong>
+    </h3>
+    <ul>
+        <li ng-repeat="menu in vm.menus | filter : vm.authorityFilter">
+
+            <a href=""
+               ng-if="vm.parent.parent == 'account'"
+               ng-click="vm.gotoContents(menu);"
+               ng-class="vm.current.parent == menu.name && menu.hasSubs? 'active sub-down' : vm.current.parent != menu.name && menu.hasSubs? 'sub-down' : vm.current.parent == menu.name? 'active' : null"
+               data-translate="global.menu.{{vm.parent.parent}}.sub.{{menu.name}}.title"></a>
+            <a
+               ng-if="vm.parent.parent == 'admin'" href=""
+               ng-click="vm.gotoContents(menu);"
+               ng-class="vm.current.parent == menu.name && menu.hasSubs? 'active sub-down' : vm.current.parent != menu.name && menu.hasSubs? 'sub-down' : vm.current.parent == menu.name? 'active' : null"
+               data-translate="global.menu.{{vm.parent.parent}}.sub.{{menu.name}}.title"></a>
+
+            <!-- 홈, API서비스, 포럼 -->
+            <a
+               ng-if="vm.parent.parent == 'app'" href=""
+               ng-click="vm.gotoContents(menu);"
+               ng-class="vm.current.name == menu.name && menu.hasSubs? 'active sub-down' : vm.current.name != menu.name && menu.hasSubs? 'sub-down' : vm.current.name == menu.name? 'active' : null"
+               data-translate="global.menu.{{vm.parent.name}}.sub.{{menu.name}}.title"></a>
+
+           <!-- 오픈API플랫폼 -->
+           <a
+               ng-if="vm.parent.parent == 'informations'" href=""
+               ng-click="vm.gotoContents(menu);"
+               ng-class="vm.parent.name == menu.name && menu.hasSubs? 'active sub-down' : vm.parent.name != menu.name && menu.hasSubs? 'sub-down' : vm.parent.name == menu.name? 'active' : null"
+               data-translate="global.menu.{{vm.parent.parent}}.sub.{{menu.name}}.title"></a>
+
+           <!-- 서비스 패키지 -->
+           <a
+               ng-if="vm.isServiceCategory" href=""
+               ng-click="vm.gotoContents(menu);"
+               ng-class="vm.$rootScope.contentId == menu.id && menu.hasSubs? 'active sub-down' : vm.$rootScope.contentId != menu.id && menu.hasSubs? 'sub-down' : vm.$rootScope.contentId == menu.id? 'active' : null">
+               <span>{{menu.title}}</span></a>
+
+            <!-- <i ng-if="vm.isActive(menu)" class="glyphicon glyphicon-triangle-right pull-right lnb-arrow-menu"></i> -->
+            <div ng-if="vm.isActive(menu)" class="lnb-active-backdrop"></div>
+            <ul ng-if="menu.subs">
+                <li has-authority="{{subMenu.authority}}" class="sub-menu" ng-repeat="subMenu in menu.subs | filter: vm.exclude">
+                    <a ui-sref="{{subMenu.url}}" ui-sref-opts="{reload:true}" ng-class="{'on': vm.$state.current.name == subMenu.name}">
+                         <span data-translate="global.menu.{{vm.parent.parent}}.sub.{{menu.name}}.sub.{{subMenu.name}}"></span>
+                     </a>
+                    <i ng-if="vm.$state.current.name == subMenu.name" class="glyphicon glyphicon-triangle-right pull-right lnb-arrow-sub"></i>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

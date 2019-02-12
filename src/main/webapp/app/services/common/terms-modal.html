@@ -1,0 +1,48 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.close()"></button>
+    <h4 class="modal-title" data-translate="entity.action.content">내용보기</h4>
+</div>
+<div class="modal-body">
+    <div class="view_cont">
+        <div class="cont_top">
+            <label>{{vm.item.name}}</label>
+            <div ng-if="vm.item.type=='contentsManagement'" class="pull-right">· {{vm.item.useYn}}&emsp;{{vm.item.showYn? "· "+vm.item.showYn : ""}}</div>
+        </div>
+        <div class="cont_bot" ng-if="vm.item.kind=='service-package' || vm.item.kind=='news-stand'">
+            <div class="inLeft" id="termsIcon"></div>
+            <div class="inRight" >
+                <p ng-if="$index < 3" class="t_center" ng-repeat="sentence in vm.item.sentences track by $index">{{sentence}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" ng-if="vm.item.kind !='news-stand'">
+        <div class="form-control ql-editor" id="termsContent" style="overflow-y:auto; word-wrap: break-word; min-height:350px; display:inherit;"></div>
+<!--         <textarea ng-if="!vm.flagOfPortalTerms" id="content" class="form-control" rows="10" ng-model="vm.item.content" readonly></textarea> -->
+    </div>
+    <div ng-if="!vm.noFile && (vm.item.attachFileList.length > 0)">
+        <label class="label-addfile">첨부파일</label>
+        <button uib-popover-template="vm.iePdfviewHelpPopover.templateUrl"
+                popover-title="도움말"
+                popover-is-open="vm.isOpen"
+                popover-trigger="outsideClick"
+                popover-placement="right"
+                ng-click = "vm.isOpen = !vm.isOpen"
+                type="button"
+                class="no-open-file btn btn-default">
+            <i class="glyphicon glyphicon-question-sign"></i> 파일이 열리지 않을 때
+        </button>
+        </label>
+        <div class="mt_5">
+            <span ng-click="vm.fileDown(file)" class="file-list-wrap" ng-repeat="file in vm.item.attachFileList">
+                <span class="file_name_info">{{file.fileName.split('\\').pop()}}</span>
+                <span class="file_size">{{vm.fileSize(file)}}</span>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default btn-md modalBtn cancel" data-dismiss="modal" ng-click="vm.close()">
+        <span data-translate="entity.action.close">Close</span>
+    </button>
+</div>

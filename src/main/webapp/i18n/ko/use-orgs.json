@@ -1,0 +1,17 @@
+{
+    "useOrgsManage": {
+        "list":{
+            "title": "사용기관 할인 목록"
+        },
+        "register":{
+            "title":"과금정책 등록/수정",
+            "name": "과금정책명",
+            "chargePerHit": "건당요금 (원)",
+            "intervalBilling": "구간과금",
+            "threshold": "임계치"
+        },
+        "popup":{
+            "title": "사용앱 목록"
+        }
+    }
+}

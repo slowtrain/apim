@@ -1,0 +1,60 @@
+<jhi-alert></jhi-alert>
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong data-translate="approvalLine.title1">Approval-Line Create</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <p class="searchInfo">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 기관 승인라인이 존재합니다.</span>
+            <button has-authority="ROLE_APPROVAL_CREATE" class="btn btn-portal btn-flag-radius pull-right"  ng-click="vm.addApprovalLine('', false)">기관 승인라인 등록</button>
+        </p>
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:5%"/>
+                    <col style="width:20%"/>
+                    <col style="width:55%"/>
+                    <col ng-if="vm.flag" style="width:10%"/>
+                    <col style="width:170px"/>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col" id="name" ng-mousedown="vm.sorting('name')"><span>승인라인 이름</span><i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                        <th scope="col">승인자 목록</th>
+<!--                         <th scope="col" id="users" ng-mousedown="vm.sorting('approverList.user.fullName','users')"><span>승인자 목록</span><i id="users"></i></th> -->
+                        <th ng-if="vm.flag" scope="col" id="forApp" ng-mousedown="vm.sorting('forApp')"><span>앱승인</span><i id="forApp" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                        <th scope="col">비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="line in vm.clickedlineList">
+                        <td scope="row" class="t_center">{{(vm.totalItems - (vm.condition.page)*(vm.stateParams.size))-$index}}</td>
+                        <td>{{line.name}}</td>
+                        <td>
+                            <span ng-repeat="user in line.users">
+                                {{user.fullName}} ({{user.grade?user.grade+", ":""}}{{user.login}})
+                                <i ng-class="{'glyphicon-arrow-right': $index < (line.users.length-1), 'glyphicon-ok': $index >= (line.users.length-1) }" class="glyphicon"></i>
+                            </span>
+                        </td>
+                        <td ng-if="vm.flag" class="t_center">
+                            <i ng-class="{'glyphicon-ok': line.forApp }" class="glyphicon"></i>
+                            <button ng-hide="line.forApp" class="btn btn-default btn-xs" ng-click="vm.setForApp(line)">앱승인</button>
+                        </td>
+                        <td class="t_center">
+                            <button has-authority="ROLE_APPROVAL_MODIFY" class="btn btn-default btn-xs" ng-click="vm.addApprovalLine(line, false)">변경</button>
+                            <button has-authority="ROLE_APPROVAL_DELETE" class="btn btn-default btn-xs" ng-click="vm.removeLine(line, 'delete')">삭제</button>
+                        </td>
+                    </tr>
+                    <tr ng-if="vm.clickedlineList.length <= 0">
+                        <td ng-if="vm.flag" colspan="5" class="t_center">등록하신 기관 승인라인이 존재하지 않습니다.</td>
+                        <td ng-if="!vm.flag" colspan="4" class="t_center">등록하신 기관 승인라인이 존재하지 않습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="text-center">
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+    </div>
+</div>

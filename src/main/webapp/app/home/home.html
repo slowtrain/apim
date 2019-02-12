@@ -1,0 +1,252 @@
+<div ng-cloak class="mainWrap">
+    <div class="swiper-container wheel-section">
+        <div class="swiper-wrapper" style="background-color:#f6f6f6;">
+            <div class="swiper-slide">
+                <div class="slide1" style="width:100%; height:660px">
+                    <div class="innerWrap">
+                        <!-- <p class="swiperTitle1">신한금융그룹<br/>Open API Market</p>
+                        <p class="swiperTitle2">Open API Market</p> -->
+
+                        <p class="swiperTitle1 s1" style="">신한금융그룹<p>
+                        <p class="swiperTitle1 s2" style="">Open API Market</p>
+                        <p class="swiperTitle2 s1" style="">당신이 경험하는 모든 것이 새로운 비즈니스의 시작입니다</p>
+                    </div>
+                </div>
+                <!-- <div style="width:1240px; height:397px">
+                    <button ui-sref="register" ng-click="vm.scrollTop()" class="swiper-inline-btn"><span>회원가입</span></button>
+                    <button ng-click="vm.goForum({forumOwner: null, forumId: vm.businessForumId, forumTitle:'비즈니스 제안', isWritable: !!account, idForviewAll: 1, link:'home', url:'post'}); vm.scrollTop()" class="swiper-inline-btn" style="left:73px; color:#008485"><span>비즈니스 제안하기</span></button>
+                </div> -->
+            </div>
+            <div class="swiper-slide">
+                <div class="slide2" style="width:100%; height:660px">
+                    <div class="innerWrap">
+                        <p class="swiperTitle1 s1">신한금융그룹의 핵심서비스를<p>
+                        <p class="swiperTitle1 s2">한곳에서! 간편하게!</p>
+                        <p class="swiperTitle2 s1">개발할 수 있도록 금융서비스 API를 제공합니다</p>
+                        <div class="innerWrap2">
+                            <p><img src="/img/shinhan/shinhan_main2_icon.png" alt=""></p>
+                            <span>&nbsp;</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div style="width:1240px; height:397px">
+                    <button ng-click="vm.gotoContents({id:vm.cyberId})" class="swiper-inline-btn" style="top:233px;"><span>사이버환전 소개</span></button>
+                </div> -->
+            </div>
+            <div class="swiper-slide">
+                <div class="slide3" style="width:100%; height:660px">
+                    <div class="innerWrap">
+                        <!-- <p class="swiperTitle1 s1" style=""><p> -->
+                        <p class="swiperTitle1 s2" style="">디지털 자산을<br>서비스로</p>
+                        <p class="swiperTitle2 s1" style="">최첨단의 맞춤형 플랫폼으로 성공적인 비즈니스 모델에 힘을 실어줍니다</p>
+                    </div>
+                </div>
+                <!-- <div style="width:1240px; height:397px">
+                    <button ui-sref="testbed-info" ng-click="vm.scrollTop()" class="swiper-inline-btn"><span>테스트베드 소개</span></button>
+                </div> -->
+            </div>
+        </div>
+
+        <div class="swiper-pagination"></div>
+        <div class="glyphicon-wrap">
+            <i class="glyphicon glyphicon-pause swiper-pause-play" ng-click="vm.swiperAutoplay()"></i>
+            <i class="glyphicon glyphicon-play swiper-pause-play" style="display:none" ng-click="vm.swiperAutoplay(true)"></i>
+        </div>
+
+        <!-- <div class="swiper-button-next"><i class="glyphicon glyphicon-menu-right"></i></div>
+        <div class="swiper-button-prev"><i class="glyphicon glyphicon-menu-left"></i></div> -->
+    </div>
+
+    <div class="info-contents-container servicePack wheel-section">
+        <div class="info-container category-container">
+            <div class="servicePackage">
+                <div class="packageInfo">
+                    <div class="packageTitle">
+                        <img src="/img/shinhan/service_package.png">
+                    </div>
+                    <div class="packageText">
+                        <p class="title1">
+                            신한금융그룹 <br>
+                            Open API Market에서 <br>
+                            제공하는 서비스 입니다.
+                        </p>
+                    </div>
+                    <div class="packageRecommand">
+                        <a href="" class="rec on">추천</a>
+                        <a href="" class="new">신규</a>
+                    </div>
+                    <ul class="apiArrow">
+                        <li class="prev">
+                            <a href="" class="swiper-button-prev api-prev">
+                                <!-- PREV -->
+                            </a>
+                        </li>
+                        <li class="next">
+                            <a href="" class="on swiper-button-next api-next">
+                                <!-- NEXT -->
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="swiper apiListWrap">
+                    <div class="swiper-container2">
+                        <ul class="swiper-wrapper apiList">
+                            <li class="swiper-slide" ng-repeat="service in vm.apiServiceList | orderBy : 'showPriority'">
+                                <a href="" ng-click="vm.gotoContents(service)">
+                                    <span class="serviceNum">{{("0" + ($index + 1)).substr(-2,2)}}</span>
+                                    <i class="apiImg" id="serviceIcon{{service.id}}" ng-bind-html="service.contentsIcon"></i>
+                                    <p class="serviceTitle">{{service.title}}</p>
+                                    <div class="serviceSentence-container">
+                                        <p ng-if="$index < 3" class="serviceSentence" ng-repeat="s in service.splitSentences">{{s.sentence}}</p>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="blueBackground">
+        <div class="rightBg"></div>
+    </div> -->
+
+    <div class="info-contents-container platform wheel-section">
+        <div class="info-container">
+            <span class="leftBg"></span>
+            <div class="openPlatform">
+                <p class="openPlatform_title">
+                    <img src="/img/shinhan/open_platform.jpg">
+                </p>
+                <ul>
+                    <li class="openPlat">
+                        <a ui-sref="portal-info" ng-click="vm.scrollTop()">
+                            <img src="/img/shinhan/platform_img1.jpg">
+                            <p class="openPlatTitle">Open API Market 이란?</p>
+                            <p class="openPlatTitle2">Open API Market을 소개해 드립니다.</p>
+                            <p class="openPlatTitle3">more</p>
+                            <span class="nemo_block"></span>
+                        </a>
+                    </li>
+                    <li class="servicePack">
+                        <a ui-sref="use-step-info" ng-click="vm.scrollTop()">
+                            <img src="/img/shinhan/platform_img2.jpg">
+                            <p class="openPlatTitle">이용절차 안내</p>
+                            <p class="openPlatTitle2">Market 이용절차를 안내해 드립니다.</p>
+                            <p class="openPlatTitle3">more</p>
+                            <span class="nemo_block"></span>
+                        </a>
+                    </li>
+                    <li class="useInfo">
+                        <a ui-sref="orgUser" ng-click="vm.scrollTop()">
+                            <img src="/img/shinhan/platform_img3.jpg">
+                            <p class="openPlatTitle">가입절차 안내</p>
+                            <p class="openPlatTitle2">Market 가입절차를 안내해 드립니다.</p>
+                            <p class="openPlatTitle3">more</p>
+                            <span class="nemo_block"></span>
+                        </a>
+                    </li>
+                    <!-- <li><a  href="" ng-click="vm.goForum({forumOwner: null, forumId: vm.businessForumId, forumTitle:'비즈니스 제안', isWritable: !!account, idForviewAll: 1, link:'home', url:'post'}); vm.scrollTop()"><span>API 제안</span></a></li>
+                 --></ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="newsStandWrap wheel-section">
+        <div class="news-container">
+            <div class="newsStand swiper-container3">
+                <div class="news-title1">
+                    <img src="/img/shinhan/news.jpg" alt="">
+                </div>
+                <div class="newsBtnWrap">
+                    <a class="goLeft" href="";></a>
+                    <a class="goRight" href="";></a>
+                </div>
+                <ul class="swiper-wrapper">
+                    <li class="swiper-slide" ng-repeat="news in vm.newsStandList | orderBy:'createdDate':true">
+                        <a href="" ng-class="{'no_img' : !news.contentsIcon}" ng-click="vm.goForum({forumOwner: null, forumId: vm.newsStand.id, forumTitle:'뉴스 스탠드', isWritable: false, idForviewAll:vm.newsStand.id, postId: news.postId, page:0, sort:'id,desc', link:'home', url:'post.detail'}); vm.scrollTop()">
+                            <i class="newsImg" ng-if="news.contentsIcon" id="newsIcon{{news.id}}" ng-bind-html="news.contentsIcon"></i>
+                            <div class="newsTitleWrap">
+                                <p class="newsTitle1">{{news.title}}</p>
+                                <div class="newsSentence-container">
+                                    <p class="newsTitle2" ng-repeat="s in news.splitSentences">{{s.sentence}}</p>
+                                </div>
+                                <p class="newsDate">{{news.createdDate | date: 'yyyy.MM.dd'}}</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="notice-container wheel-section">
+        <div class="info-container">
+            <div class="noticeArea" ng-repeat="forum in vm.mainForums">
+                <div class="noticeCont">
+                    <h2>{{forum.title}}</h2>
+                    <a href="" ng-click="vm.goForum({forumOwner: null, forumId: forum.posts[0].forum.id, forumTitle:forum.title, isWritable: forum.posts[0].forum.isWritable, idForviewAll:forum.posts[0].forum.id, link:'home', url:'post'}); vm.scrollTop()" class="moreLink">more</a>
+                    <span class="nemo_block"></span>
+                    <ul>
+                        <li ng-repeat="post in forum.posts">
+                            <a href="" ng-click="vm.goForum({forumOwner: null, forumId: post.forum.id, forumTitle:forum.title, isWritable: post.forum.isWritable, idForviewAll:post.forum.id, postId: post.id, page:0, sort:'id,desc', link:'home', url:'post.detail'}); vm.scrollTop()">
+                                <span class="dotContainer"><strong>{{post.title}}</strong></span>
+                                <span class="date">{{post.createdDate | date: 'yyyy.MM.dd'}}</span>
+                                <!-- <span class="dotContainer" style="width: 52%; text-align: left; vertical-align: -2px; line-height: 18px;">&ensp; {{vm.htmlToPlainText(post.content)}}</span> -->
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- <div class="faqArea">
+                <div class="noticeCont">
+                    <h2 style="width:auto">FAQ</h2>
+                    <a href="" ng-click="vm.goForum({forumOwner: null, forumId: vm.faqs[0].forum.id, forumTitle:'FAQ', isWritable: 'false', idForviewAll:vm.faqs[0].forum.id, link:'home', url:'post'}); vm.scrollTop()" class="moreLink">more</a>
+                    <span class="nemo_block"></span>
+                    <ul>
+                        <li ng-repeat="faq in vm.faqs">
+                            <a href="" ng-click="vm.goForum({forumOwner: null, forumId: faq.forum.id, forumTitle:faq.forum.title, isWritable: faq.forum.isWritable, idForviewAll:faq.forum.id, postId: faq.id, page:0, sort:'id,desc', link:'home', url:'post.detail'}); vm.scrollTop()">
+                                <span class="dotContainer"><strong>{{faq.title}}</strong></span>
+                                <span class="date">{{faq.createdDate | date: 'yyyy-MM-dd'}}</span>
+                                <span class="dotContainer" style="width: 52%; text-align: left; vertical-align: -2px; line-height: 18px;">&ensp; {{vm.htmlToPlainText(faq.content)}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div> -->
+
+            <!-- <div class="qnaArea">
+                <div class="noticeCont">
+                    <h2 style="width:auto">QNA</h2>
+                    <a href="" class="moreLink">more</a>
+                    <span class="nemo_block"></span>
+                    <ul>
+                        <li ng-repeat="qna in vm.qnas">
+                            <a href="" ng-click="vm.goForum({forumOwner: null, forumId: notice.forum.id, forumTitle:notice.forum.title, isWritable: notice.forum.isWritable, idForviewAll:notice.forum.id, postId: notice.id, page:0, sort:'id,desc', link:'home', url:'post.detail'}); vm.scrollTop()">
+                                <span class="dotContainer"><strong>{{qna.title}}</strong></span>
+                                <span class="date">{{qna.createdDate | date: 'yyyy-MM-dd'}}</span>
+                                <span class="dotContainer" style="width: 52%; text-align: left; vertical-align: -2px; line-height: 18px;">&ensp; {{vm.htmlToPlainText(qna.content)}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div> -->
+
+
+                <!-- <p class="voffset5"><h2 style="margin-bottom: 20px"><strong>공지사항</strong></h2></p>
+                <ol ng-repeat="notice in vm.notices" style="margin-top:0px">
+                    <li class="dotContainer" style="width: 100%; text-align: left">
+                        <a ng-click="vm.goForum({forumOwner: null, forumId: notice.forum.id, forumTitle:notice.forum.title, isWritable: notice.forum.isWritable, idForviewAll:notice.forum.id, postId: notice.id, page:0, sort:'id,desc', link:'home', url:'post.detail'}); vm.scrollTop()">
+                            <span class="color_gray t_size_18">{{notice.createdDate | date}}</span>
+                            <span><strong class="color_green t_size_18">{{notice.title}}</strong></span>
+                            <span>{{vm.htmlToPlainText(notice.content)}}</span>
+                        </a>
+                    </li>
+                </ol> -->
+            </div>
+        </div>
+    </div>
+</div>

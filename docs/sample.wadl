@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://wadl.dev.java.net/2009/02">
+  <doc xml:lang="en" title="P2P Lending"/>
+  <resources base="http://ap.jbfg.openbank.com:8181/api/bankingservice/p2plending">
+    <resource id="applyP2pLending" path="/applyP2pLending" queryType="application/json">
+      <doc xml:lang="en" title="P2P Lending 등록"/>
+      <method name="POST" id="applyP2pLending">
+        <doc xml:lang="en" title="P2P Lending 등록"/>
+        <request> 
+          <param name="obpCustNo" style="plain" type="xsd:string" required="true" desc="OBP 고객번호"/>
+          <param name="loanPurposeCode" style="plain" type="xsd:string" required="true" desc="대출목적코드">
+            <option value="01" desc="기존대출전환"/>
+            <option value="02" desc="전월세보증금"/>
+            <option value="03" desc="주택구입"/>
+            <option value="04" desc="차량구입"/>
+            <option value="05" desc="생활비"/>
+            <option value="06" desc="투자"/>
+            <option value="07" desc="부업자금"/>
+            <option value="99" desc="기타"/>
+          </param>
+          <param name="loanApplicationAmount" style="plain" type="xsd:number" required="true" desc="대출신청금액"/>
+          <param name="repaymentMethodCode" style="plain" type="xsd:string" required="true" desc="상환방식코드">
+            <option value="01" desc="원리금균등"/>
+            <option value="02" desc="원금균등"/>
+            <option value="03" desc="만기일시상환"/>
+          </param>
+          <param name="repaymentTermMonthsCount" style="plain" type="xsd:number" required="true" desc="상환기간개월수"/>
+          <param name="yicmAmount" style="plain" type="xsd:number" required="true" desc="연소득금액"/>
+          <param name="loanApplicantName" style="plain" type="xsd:string" required="true" desc="대출신청인명"/>
+          <param name="loanApplicantBirthday" style="plain" type="xsd:string" required="true" desc="대출신청인생년월일"/>
+          <param name="loanProvisionBankcd" style="plain" type="xsd:string" required="true" desc="대출지급은행코드"/>
+          <param name="loanProvisionAccountNo" style="plain" type="xsd:string" required="true" desc="대출 지급 계좌번호"/>
+          <param name="loanCreditGradeCode" style="plain" type="xsd:string" required="true" desc="대출신용등급코드"/>
+          <param name="kcbCreditGradeCode" style="plain" type="xsd:string" required="true" desc="KCB신용등급코드"/>
+          <param name="niceCreditGradeCode" style="plain" type="xsd:string" required="true" desc="NICE신용등급코드"/>
+          <param name="decisionLoanTheRateOfInterest" style="plain" type="xsd:number" required="true" desc="결정대출이율"/>
+          <param name="monthRepaymentAmount" style="plain" type="xsd:number" required="true" desc="월상환금액"/>
+          <param name="loanApplicationDate" style="plain" type="xsd:string" required="true" desc="대출신청일자"/>
+          <param name="linkedBankApprovalYesOrNo" style="plain" type="xsd:string" required="true" desc="연계은행승인여부"/>
+          <param name="loanStatusCode" style="plain" type="xsd:string" required="true" desc="대출상태코드">
+            <option value="01" desc="대출신청"/>
+            <option value="02" desc="대출승인"/>
+            <option value="03" desc="집행대기"/>
+            <option value="04" desc="대출완료"/>
+            <option value="99" desc="기타"/>
+          </param>
+          
+          <param name="applicationNo" style="plain" type="xsd:string" desc="신청번호"/>
+          <param name="virtualAccountNo" style="plain" type="xsd:string" desc="가상계좌번호"/>
+        </request>
+        <response>
+          <representation mediaType="application/json">
+          <doc title="Loan"/>
+          <param name="state" style="plain" type="xsd:string" desc="대출 상태코드"/>
+          <param name="applyAmount" style="plain" type="xsd:number" desc="대출 금액"/>
+          <param name="rateOfInterest" style="plain" type="xsd:number" desc="대출 이율"/>
+          <param name="monthCountOfPeriod" style="plain" type="xsd:number" desc="대출 기간 개월수"/>
+          <param name="expiredOn" style="plain" type="xsd:string" desc="대출 만기 일자"/>
+          <param name="accountNoPayable" style="plain" type="xsd:string" desc="대출 지급 계좌번호"/>
+          <param name="paybackAccountNo" style="plain" type="xsd:string" desc="대출 상환 계좌 번호"/>
+          <param name="paybackOn" style="plain" type="xsd:number" desc="대출 상환 일자"/>
+          <param name="bankOfPayback" style="plain" type="xsd:string" desc="대출 상환 은행코드"/>
+          <param name="investorCollectionStartedOn" style="plain" type="xsd:string" desc="투자자 모집 시작 일시"/>
+          <param name="investorCollectionEndedOn" style="plain" type="xsd:string" desc="투자자 모집 종료 일시"/>
+          <param name="linkedBankApproved" style="plain" type="xsd:string" desc="연계은행 승인 여부"/>
+          <param name="linkedBankApprovedOn" style="plain" type="xsd:string" desc="연계 은행 승인 일자"/>
+          <param name="approvedAmount" style="plain" type="xsd:number" desc="대출 승인 금액"/>
+          <param name="approvedRateOfInterest" style="plain" type="xsd:number" desc="대출 승인 이율"/>
+          <param name="monthlyPaybackAmount" style="plain" type="xsd:string" desc="월 상환 금액"/>
+          <param name="bankOfAccountPayable" style="plain" type="xsd:string" desc="대출 지급 은행코드"/>
+          <param name="payedOn" style="plain" type="xsd:string" desc="대출 지급 일자"/>
+          <param name="usageDivision" style="plain" type="xsd:string" desc="대출 용도 구분코드"/>
+          <param name="repaymentMethodDivision" style="plain" type="xsd:string" desc="상환 방법 구분코드"/>
+          <param name="investigationResult" style="plain" type="xsd:string" desc="대출 심사 결과 코드"/>
+          <param name="totalAdjustmentRateOfInterest" style="plain" type="xsd:number" desc="총 정산 이율"/>
+          <param name="bankAdjustmentRateOfInterest" style="plain" type="xsd:number" desc="은행 정산 이율"/>
+          <param name="applicantWorkSiteName" style="plain" type="xsd:string" desc="대출 신청인 직장 명"/>
+          <param name="applicationNo" style="plain" type="xsd:string" desc="대출 신청 번호"/>
+          <param name="counselNo" style="plain" type="xsd:string" desc="대출 상담 번호"/>
+          <param name="ciNo" style="plain" type="xsd:string" desc="CI 번호"/>
+          </representation>
+        </response>
+      </method>
+    </resource> 
+    
+    <resource id="preRegistP2pLending" path="/preRegistP2pLending" queryType="application/json">
+      <doc xml:lang="en" title="P2P Lending 사전등록"/>
+      <method name="POST" id="preRegistP2pLending">
+        <doc xml:lang="en" title="P2P Lending 사전등록"/>
+        <request> 
+          <param name="obpCustNo" style="plain" type="xsd:string" required="true" desc="OBP 고객번호"/>
+          <param name="loanPurposeCode" style="plain" type="xsd:string" required="true" desc="대출목적코드">
+            <option value="01" desc="기존대출전환"/>
+            <option value="02" desc="전월세보증금"/>
+            <option value="03" desc="주택구입"/>
+            <option value="04" desc="차량구입"/>
+            <option value="05" desc="생활비"/>
+            <option value="06" desc="투자"/>
+            <option value="07" desc="부업자금"/>
+            <option value="99" desc="기타"/>
+          </param>
+          <param name="loanApplicationAmount" style="plain" type="xsd:number" required="true" desc="대출신청금액"/>
+          <param name="repaymentMethodCode" style="plain" type="xsd:string" required="true" desc="상환방식코드">
+            <option value="01" desc="원리금균등"/>
+            <option value="02" desc="원금균등"/>
+            <option value="03" desc="만기일시상환"/>
+          </param>
+          <param name="loanStatusCode" style="plain" type="xsd:string" required="true" desc="대출상태코드">
+            <option value="01" desc="대출신청"/>
+            <option value="02" desc="대출승인"/>
+            <option value="03" desc="집행대기"/>
+            <option value="04" desc="대출완료"/>
+            <option value="99" desc="기타"/>
+          </param>
+          
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    
+    <resource id="getP2pLendingListWithDigitalAccountId" path="/getP2pLendingListWithDigitalAccountId/{digitalAccountId}" >
+      <doc xml:lang="en" title="P2P Lending 목록조회"/>
+      <method name="GET" id="getP2pLendingListWithDigitalAccountId">
+        <doc xml:lang="en" title="P2P Lending 목록조회"/>
+        <request> 
+          <param name="digitalAccountId" style="template" type="xsd:string" required="true" desc="디지털계정ID" default="001-20160821-124852-0000028"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    
+    <resource id="callbackP2PLendingExecution" path="/callbackP2PLendingExecution" queryType="application/json">
+      <doc xml:lang="en" title="P2P Lending 실행요청"/>
+      <method name="POST" id="callbackP2PLendingExecution">
+        <doc xml:lang="en" title="P2P Lending 실행요청"/>
+        <request> 
+          <param name="applicationNo" style="plain" type="xsd:string" required="true" desc="대출신청고유번호"/>
+          <param name="counselNo" style="plain" type="xsd:string" required="true" desc="대출상담번호"/>
+          <param name="pledgeOfferAmount" style="plain" type="xsd:number" required="true" desc="담보제공희망금액"/>
+          <param name="pledgeOfferApplyOn" style="plain" type="xsd:string" required="true" desc="담보제공신청일자"/>
+          <param name="monthCountOfPeriod" style="plain" type="xsd:number" required="true" desc="P2P상환개월수"/>
+          <param name="p2PAmount" style="plain" type="xsd:number" required="true" desc="P2P원금"/>
+          <param name="pledgeOfferFee" style="plain" type="xsd:number" required="true" desc="담보제공수수료"/>
+          <param name="pledgeFee" style="plain" type="xsd:number" required="true" desc="담보수수료"/>
+          <param name="adjustFee" style="plain" type="xsd:number" required="true" desc="정산수수료"/>
+          <param name="adjustAmountAfterTax" style="plain" type="xsd:number" required="true" desc="투자자정산금액"/>
+          <param name="adjustAmount" style="plain" type="xsd:number" required="true" desc="세전투자정산금액"/>
+          <param name="incomeTax" style="plain" type="xsd:number" required="true" desc="소득세액"/>
+          <param name="residenceTax" style="plain" type="xsd:number" required="true" desc="주민세액"/>
+          <param name="rateOfOverdue" style="plain" type="xsd:number" required="true" desc="투자자수익연체비율"/>
+          <param name="executionResult" style="plain" type="xsd:string" required="true" desc="대출실행결과코드"/>
+          <param name="executionOn" style="plain" type="xsd:string" required="true" desc="대출실행일자"/>
+          <param name="p2PLendingAccount" style="plain" type="xsd:string" required="true" desc="P2P대출계좌번호"/>
+          <param name="totInvestorCount" style="plain" type="xsd:number" required="true" desc="총투자자수"/>
+          <param name="continuityYN" style="plain" type="xsd:string" required="true" desc="정보연속여부"/>
+          <param name="investorCount" style="plain" type="xsd:number" required="true" desc="전문투자자수"/>
+          <param name="pledges" style="plain" type="xsd:string" required="true" desc="담보정보"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    
+  </resources>
+</application>

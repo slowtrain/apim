@@ -1,0 +1,10 @@
+    <div>{{tooltipPopover.title}}</div>
+    <div class="form-group">
+    	<span ng-repeat="approver in vm.approvers">
+            {{approver.fullName}} ({{approver.grade?approver.grade+", ":""}}{{approver.login}})
+            <i ng-class="{'glyphicon-arrow-right': $index < (vm.approvers.length-1), 'glyphicon-ok': $index >= (vm.approvers.length-1) }" class="glyphicon"></i>
+        </span>
+    	<span ng-if="vm.errorText">
+    		<textarea id="errorText" class="form-control" style="width:600px" rows="5" ng-model="vm.errorText" ng-disabled="true"></textarea>
+        </span>
+    </div>

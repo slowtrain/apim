@@ -1,0 +1,18 @@
+{
+    "admin-billing": {
+        "title": "API 사용 통계"
+    },
+    "admin-billing-token": {
+        "title": "토큰 발행 통계"
+    },
+    "tracker": {
+        "title": "실시간 사용자 활동",
+        "table": {
+            "userlogin": "사용자",
+            "ipaddress": "IP 주소",
+            "userAgent": "User agent",
+            "page": "현재 페이지",
+            "time": "시간"
+        }
+    }
+}

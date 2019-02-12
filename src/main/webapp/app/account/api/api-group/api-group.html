@@ -1,0 +1,81 @@
+<jhi-alert></jhi-alert>
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong data-translate="apiGroup.title">Api Group List</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <p class="searchInfo type3">
+            <button has-authority="ROLE_API_CREATE" ng-click="vm.addGroup()" class="btn btn-portal btn-flag-radius pull-right">
+                <span>API 그룹 등록</span>
+            </button>
+        </p>
+        <div class="searchBox">
+            <span class="form-inline">
+                <label for="apiGroupPrivate">그룹 공개</label>
+                <select id="apiGroupPrivate" class="form-control input-sm" ng-model="vm.apiGroupPrivate"
+                        ng-options="option.key as option.name for option in [{name: '공개', key: 'false'},{name: '비공개', key: 'true'}]">
+                    <option value="">전체</option>
+                </select>
+            </span>
+            <span class="form-inline">
+                <label for="apiListGroup">그룹 이름</label>
+                <input type="text" class="form-control input-sm" name="apiGroupName" ng-model="vm.apiGroupName" ng-keypress="($event.charCode==13)? vm.searching() : return" />
+            </span>
+            <span class="form-inline">
+                <label for="apiName">API 이름</label>
+                <input type="text" class="form-control input-sm" style="width:30%" name="apiName" ng-model="vm.apiName" ng-keypress="($event.charCode==13)? vm.searching() : return" />
+            </span>
+            <span class="btnBox">
+                <button type="button" class="btn search-btn" data-dismiss="modal" ng-click="vm.searching()">
+                    검색
+                </button>
+            </span>
+        </div>
+        <p class="searchInfo type2">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 API그룹이 존재합니다.</span>
+        </p>
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed bt_bold">
+                <colgroup>
+                    <col style="width:5%"/>
+                    <col style="width:25%"/>
+                    <col/>
+                    <col style="width:86px"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th id="name" ng-mousedown="vm.sorting('name')"><span data-translate="apiGroup.name">Name</span><i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <!-- <th id="isPrivate" ng-mousedown="vm.sorting('isPrivate')"><span>공개</span><i id="isPrivate" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th> -->
+<!--                     <th id="description" ng-mousedown="vm.sorting('description')"><span data-translate="apiGroup.description">description</span><i id="description" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th> -->
+                    <th data-translate="apiGroup.apiList">apiList</th>
+                    <th scope="col" data-translate="apiList.actions">Etc</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="group in vm.groups">
+                    <td scope="row" class="t_center">{{(vm.totalItems - (vm.condition.page)*(vm.stateParams.size))-$index}}</td>
+                    <td><span class="va_m">{{group.name}}</span><i ng-if="group.isPrivate" class="forum_lock ml_5 pull-right"></i></td>
+                    <!-- <td class="t_center"><i ng-if="group.isPrivate" style="font-size:10px" class="glyphicon glyphicon-lock"></i></td> -->
+                    <td class="td-btn2">
+                        <button class="table_title_btn type3 private" title="{{api.name}}" ng-class="api.isPrivate? 'private' : 'un_private'" ng-repeat="api in group.apis" ng-click="vm.showDetailApi(api)">
+                            <span class="" tooltip-placement="top" uib-tooltip="{{api.description}}">{{api.name}}</span>
+                        </button>
+                    </td>
+                    <td class="t_center">
+                        <button has-authority="ROLE_API_MODIFY" class="btn btn-default btn-xs" ng-click="vm.addGroup(group)">수정</button>
+                        <button has-authority="ROLE_API_DELETE" class="btn btn-default btn-xs" ng-click="vm.delGroup(group)">삭제</button>
+                    </td>
+                </tr>
+                <tr ng-if="vm.groups <= 0">
+                    <td colspan="4" class="t_center">등록하신 API 그룹이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center">
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+

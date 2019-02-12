@@ -1,0 +1,75 @@
+<form name="form" role="form" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" ng-click="vm.clear()"></button>
+        <h4 class="modal-title" id="myUserLabel" data-translate="billing.{{vm.mode}}.title">과금정책 등록</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="control-label required-label" data-translate="billing.form.name">과금정책명</label>
+            <small class="color_red" ng-if="form.billingName.$error.minlength || form.billingName.$error.maxlength">(3~30자 이내)</small>
+            <small class="color_red" ng-if="form.billingName.$error.pattern">(잘못 입력하셨습니다.)</small>
+            <input type="text" class="form-control" name="billingName" ng-model="vm.billing.name" minlength="3" maxlength="30" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required>
+        </div>
+        <div class="form-group">
+            <label class="control-label required-label" data-translate="billing.form.chargePerHit">기본요금 (원/건)</label>
+            <input type="text" id="chargeNumber" class="form-control t_right" style="ime-mode: disabled" maxlength="14" ng-model="vm.billing.chargePerHit" name="chargePerHit" placeholder="0" limit="99999999999" no-point=true decimal>
+        </div>
+        <div class="form-group">
+            <label class="control-label required-label">최소과금 (원)</label>
+            <!-- <small class="color_red" ng-if="form.leastAmount.$error.required">*</small> -->
+            <input type="text" class="form-control t_right" style="ime-mode: disabled" maxlength="14" ng-model="vm.billing.leastAmount" name="leastAmount" placeholder="0" limit="99999999999" no-point=true decimal>
+        </div>
+        <div class="table-responsive">
+            <div>
+                <label class="control-label" data-translate="billing.form.intervalBilling" style="vertical-align: -4px;">billing intervalBilling</label>
+                <button type="button" ng-if="vm.billing.segments.length > 0" ng-click="vm.addBilling()" class="btn btn-xs btn-default f_right">추가</button>
+                <button type="button" ng-if="!vm.billing.segments.length" ng-click="vm.addBilling()" class="btn btn-xs btn-default f_right">설정하기</button>
+            </div>
+            <table class="table">
+                <colgroup>
+                    <col style="width:45%">
+                    <col style="width:45%">
+                    <col style="width:60px"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th data-translate="billing.form.threshold">임계치 (건)</th>
+                    <th data-translate="billing.form.segChargePerHit">구간요금 (원/건)</th>
+                    <th data-translate="billing.form.delete">제거</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-if="vm.billing.segments.length > 0" ng-repeat="segment in vm.billing.segments">
+                    <td ng-class="{'has-error' : segment.thresholdError}">
+                        <input name="threshold{{$index}}"
+                                type = "text" class="form-control t_right"
+                                limit = "9000000000000000000" maxlength="25"
+                                ng-model="segment.threshold"
+                                ng-change="vm.thresholdCheck(vm.billing.segments)"
+                                placeholder="0" comma/>
+                    </td>
+                    <td>
+                        <input type="text" name="chargePerHit{{$index}}" class="form-control t_right" limit="99999999999"
+                                style="ime-mode:disabled" maxlength="14" ng-model="segment.chargePerHit" placeholder="0" no-point=true decimal/>
+                    </td>
+                    <td class="t_center">
+                        <button class="btn btn-danger file-btn" ng-click="vm.delSegments($index)"><i class="glyphicon glyphicon-minus"></i></button>
+                    </td>
+                </tr>
+                <tr ng-if="!vm.billing.segments.length">
+                    <td class="t_center" colspan="3">설정 구간이 없습니다.</td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-portal modalBtn" ng-click="vm.save()" ng-disabled="form.$invalid">
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>
+</form>
+

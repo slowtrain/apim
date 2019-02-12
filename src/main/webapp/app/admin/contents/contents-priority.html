@@ -1,0 +1,37 @@
+<form name="form" novalidate>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()"></button>
+    <h4 class="modal-title">컨텐츠 공개순서 설정 <small class="color_white">&nbsp; : &nbsp;공개용으로 설정된 컨텐츠의 순서만 결정됩니다</small></h4>
+</div>
+<div class="modal-body">
+    <uib-tabset active="active">
+        <uib-tab index="0" heading="추천 순서" ng-click="vm.show2 = false">
+            <div class="voffset4" style="margin-left:20px"></div>
+        </uib-tab>
+        <uib-tab index="1" heading="메뉴 순서" ng-click="vm.show2 = true">
+            <div class="voffset4" style="margin-left:20px"></div>
+        </uib-tab>
+    </uib-tabset>
+    <div ng-if="!vm.show2" ui-sortable="vm.sortableOptions" class="apps-container sort-type1" ng-model="vm.showList">
+        <div class="app dotContainer" ng-repeat="source in vm.showList">
+            <div class="dotContainer"><span class="sub">[{{source.organizationName || '공통'}}]</span> <span class="title1">{{source.title}}</span></div>
+
+        </div>
+    </div>
+    <div ng-if="vm.show2" ui-sortable="vm.sortableOptions" class="apps-container sort-type1" ng-model="vm.useList">
+        <div class="app dotContainer" ng-repeat="source in vm.useList">
+            <div class="dotContainer"><span>[{{source.organizationName || '공통'}}]</span> <span class="title1">{{source.title}}</span></div>
+
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-portal modalBtn" ng-click="vm.confirm()">
+        <span data-translate="entity.action.apply">Modify</span>
+    </button>
+    <button type="button" class="btn btn-default btn-md modalBtn cancel" ng-click="vm.clear()">
+        <span data-translate="entity.action.cancel">Cancel</span>
+    </button>
+</div>
+</form>

@@ -1,0 +1,58 @@
+{
+   "post": {
+    	"title": "글목록",
+    	"register": {
+    		"title": "새글 작성하기",
+    		"menu": "새글 등록"
+    	},
+    	"action": {
+    		"update": "수정",
+    		"delete": "삭제",
+    		"reset": "리셋",
+    		"comment": "댓글쓰기",
+    		"title": "Title",
+    		"writer": "Writer",
+    		"regdate": "RegDate",
+    		"like": "Hit Likes",
+    		"view": "Hit views",
+    		"secret": "비밀글"
+    	},
+    	"list": {
+    		"menu": "목록",
+    		"bno": "번호",
+    		"title": "제목",
+    		"writer": "등록자",
+    		"regdate": "등록일",
+    		"like": "좋아요",
+    		"view": "조회수"
+    	},
+    	"view": {
+    		"badge": "내용보기",
+    		"menu": "목록",
+    		"bno": "번호",
+    		"title": "제목",
+    		"content": "내용",
+    		"writer": "등록자",
+    		"regdate": "등록일",
+    		"like": "좋아요",
+    		"view": "조회수"
+    	},
+    	"comment": {
+    	    "reply": {
+    	       "register": "답글 등록",
+                "modify": "답글 수정"
+    	    },
+    		"register": "댓글 등록",
+    		"modify": "댓글 수정",
+    		"content": "댓글 내용",
+    		"writer": "Writer",
+    		"regdate": "RegDate",
+    		"like": "Hit Likes",
+    		"view": "Hit views"
+    	},
+    	"forum": {
+            "title": "포럼",
+            "goList": "포럼 목록"
+        }
+    }
+}

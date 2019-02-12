@@ -1,0 +1,74 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true" ng-click="vm.clear()"></button>
+    <h4 class="modal-title">{{(vm.user)? 'USER 상세보기': '기관 상세보기'}}</h4>
+</div>
+<div class="modal-body" sc>
+    <div class="table-responsive">
+        <table ng-if="vm.user" class="table table_read2">
+            <colgroup>
+                <col style="width:30%;">
+                <col style="width:70%;">
+            </colgroup>
+            <tr>
+                <th><span>닉네임</span></th>
+                <td><span>{{vm.user.fullName}}</span></td>
+            </tr>
+            <tr>
+                <th><span>로그인 아이디</span></th>
+                <td>{{vm.user.login}}</td>
+            </tr>
+            <tr>
+                <th><span>이메일</span></th>
+                <td>{{vm.user.email}}</td>
+            </tr>
+            <tr>
+                <th><span>역할</span></th>
+                <td>{{vm.user.role.name}}</td>
+            </tr>
+            <tr>
+                <th><span>상태</span></th>
+                <td>{{vm.displayActivated(vm.user)}}</td>
+            </tr>
+        </table>
+        <table ng-if="vm.partner" class="table tableFixed th_bb">
+            <colgroup>
+                <col style="width:30%"/>
+                <col style="width:70%"/>
+            </colgroup>
+            <tr>
+                <th><span>기관명</span></th>
+                <td><span>{{vm.partner.name}}</span></td>
+            </tr>
+            <tr>
+                <th><span>법인 등록번호</span></th>
+                <td>{{vm.partner.corpRegNumber}}</td>
+            </tr>
+            <tr>
+                <th><span>사업자 등록번호</span></th>
+                <td>{{vm.partner.licenseNumber}}</td>
+            </tr>
+            <tr>
+                <th><span>회사 전화</span></th>
+                <td>{{vm.partner.mainPhone}}</td>
+            </tr>
+            <tr>
+                <th><span>첨부파일</span></th>
+                <td>
+                    <p ng-repeat="file in vm.partner.attachFileList">
+                        <span ng-click="vm.fileDown(file)">
+                            <span class="label label-info">{{$index+1}}</span>
+                            <span class="dotContainer" style="width:73%; font-size:.85em; vertical-align:-6px">{{file.fileName.split('\\').pop()}}</span>
+                            <span style="line-height:14px" class="label label-success pull-right">{{vm.fileSize(file)}}</span>
+                        </span>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+        <span data-translate="entity.action.close">Close</span>
+    </button>
+</div>

@@ -1,0 +1,97 @@
+<form name="form" novalidate>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()"></button>
+    <h4 class="modal-title">
+        <span>{{vm.templateName}}</span>
+    </h4>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+        <label class="control-label required-label">템플릿 이름</label>
+        <small class="color_red" ng-if="form.name.$error.minlength || form.name.$error.maxlength">(3~80자 이내)</small>
+        <small class="color_red" ng-if="form.name.$error.pattern">(잘못 입력하셨습니다.)</small>
+        <input type="text" class="form-control" name="name" ng-model="vm.selections.template.name" minlength="3" maxlength="80" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label required-label">템플릿 설명</label>
+        <small class="color_red" ng-if="form.description.$error.minlength || form.description.$error.maxlength">(3~80자 이내)</small>
+        <small class="color_red" ng-if="form.description.$error.pattern">(잘못 입력하셨습니다.)</small>
+        <input type="text" class="form-control" name="description" ng-model="vm.selections.template.description" minlength="3" maxlength="80" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required>
+    </div>
+    <div class="form-group col-md-6" style="margin-top:10px; padding-left:0; padding-right:184px">
+        <label class="control-label">전송 방식</label>
+        <span class="radio_set_type1">
+            <span class="radio_form">
+                <input type="radio" name="sendKind" id="SMS" value="SMS"
+                    ng-model="vm.selections.template.sendKind">
+                <label for="SMS">SMS</label>
+            </span>
+            <span class="radio_form">
+                <input type="radio" name="sendKind" id="EMAIL" value="EMAIL"
+                    ng-model="vm.selections.template.sendKind">
+                <label for="EMAIL">EMAIL</label>
+            </span>
+        </span>
+    </div>
+    <div class="form-group col-md-6" style="margin-top:10px; padding-left:0; padding-right:184px">
+        <label class="control-label">전송 허용</label>
+        <span class="radio_set_type1">
+            <span class="radio_form">
+                <input type="radio" name="useYn" id="true" value="Y"
+                    ng-model="vm.selections.template.useYn">
+                <label for="true">YES</label>
+            </span>
+            <span class="radio_form">
+                <input type="radio" name="useYn" id="false" value="N"
+                    ng-model="vm.selections.template.useYn">
+                <label for="false">NO</label>
+            </span>
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label required-label">SMS 제목</label>
+        <small class="color_red" ng-if="form.title.$error.minlength || form.title.$error.maxlength">(3~80자 이내)</small>
+        <small class="color_red" ng-if="form.title.$error.pattern">(잘못 입력하셨습니다.)</small>
+        <input type="text" class="form-control" name="title" ng-model="vm.selections.template.title" minlength="3" maxlength="80" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" required>
+    </div>
+    <div class="form-group">
+        <label class="control-label">SMS 내용</label><small class="color_red"> (코드 제외 길이 : 40자 이내)</small>
+        <small class="color_red" ng-if="form.smsContents.$error.minlength || form.smsContents.$error.maxlength">(40자 이내)</small>
+        <small class="color_red" ng-if="form.smsContents.$error.pattern">(잘못 입력하셨습니다.)</small>
+        <textarea name="smsContents" class="form-control" ng-model="vm.selections.template.smsContents" maxlength="51" limit='true'  ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"></textarea>
+    </div>
+            <p class="form-group">
+                <label for="sender" class="control-label required-label">발신자</label>
+                <small class="color_red" ng-if="form.sender.$error.minlength || form.sender.$error.maxlength">(2~30자 이내)</small>
+                <small class="color_red" ng-if="form.sender.$error.pattern">(잘못 입력하셨습니다.)</small>
+                <input type="text" class="form-control" id="sender" name="sender" ng-model="vm.selections.template.sender" minlength="2" maxlength="30" limit='true' ng-pattern="/^[-가-힣A-Za-z0-9._ ]+$/" required>
+            </p>
+            <div class="form-group">
+                <label for="senderId" class="control-label required-label">발신메일</label>
+                <small class="color_red" ng-if="form.senderId.$error.minlength || form.senderId.$error.maxlength">(3~15자 이내)</small>
+                <small class="color_red" ng-if="form.senderId.$error.pattern">(잘못 입력하셨습니다.)</small>
+                <p class="form-inline">
+                    <input id="senderId" name="senderId" type="text" style="width: 61%;" class="form-control" minlength="3" maxlength="15" limit='true' ng-pattern="/^[-A-Za-z0-9._]+$/" ng-model="vm.email" required> @
+                    <input type="text" class="form-control" value="shinhan.com" ng-disabled="true" />
+                </p>
+            </div>
+            <div class="form-group">
+                <label class="control-label required-label">메일 내용</label>
+                <div>
+                    <small ng-if="check_ie9" class="ie9-inform"><i class="glyphicon glyphicon-triangle-right"></i> IE 10이상과 크롬에서 이미지추가기능이 가능합니다.</small>
+                    <summernote config="vm.summernoteToolbar" height="300" ng-model="vm.selections.template.contents"></summernote>
+                </div>
+            </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-portal modalBtn" ng-disabled="!vm.selections.template.contents || form.$invalid" ng-click="vm.save()">
+        <span data-translate="entity.action.save">Save</span>
+    </button>
+    <button type="button" class="btn btn-default btn-md modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()" aria-hidden="true">취소
+    </button>
+</div>
+</form>

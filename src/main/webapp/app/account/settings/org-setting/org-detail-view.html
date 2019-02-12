@@ -1,0 +1,156 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true" ng-click="vm.clear()"></button>
+    <h4 class="modal-title">기관 상세보기</h4>
+</div>
+<div class="modal-body">
+    <div class="table-responsive">
+        <table ng-if="vm.changeSets.length > 0" class="table tableFixed f_left th_bb">
+            <colgroup>
+                <col style="width:23%"/>
+                <col/>
+                <col/>
+            </colgroup>
+            <thead>
+            <th>변경 항목</th>
+            <th style="background-color:#f6f6f6; text-align: center">원본 내용</th>
+            <th style="text-align: center">변경 내용</th>
+            </thead>
+            <tbody>
+            <tr ng-if="changeSet.name.indexOf('계좌') < 0" ng-repeat="changeSet in vm.changeSets">
+                <th>{{changeSet.name}}</th>
+                <td>{{changeSet.from}}</td>
+                <td>{{changeSet.to}}</td>
+            </tr>
+            <tr ng-if="changeSet.name.indexOf('계좌') >= 0" ng-repeat="changeSet in vm.changeSets">
+                <th>{{changeSet.name}}</th>
+                <td>{{changeSet.from.split('+=')[0]}}
+                    <button
+                        ng-if ="changeSet.from.split('+=')[1]"
+                        uib-popover-template="vm.accountNumberPopover.templateUrl"
+                        popover-title="계좌번호 조회"
+                        popover-is-open="changeSet.isOpenAtChangeFrom"
+                        popover-trigger="outsideClick"
+                        type="button"
+                        ng-click="vm.accountNumberSearch({id: changeSet.from.split('+=')[1]})"
+                        class="btn btn-default btn-xs pull-right">계좌번호 조회
+                    </button>
+                </td>
+                <td>{{changeSet.to.split('+=')[0]}}
+                    <button
+                        ng-if ="changeSet.to.split('+=')[1]"
+                        uib-popover-template="vm.accountNumberPopover.templateUrl"
+                        popover-title="계좌번호 조회"
+                        popover-is-open="changeSet.isOpenAtChangeTo"
+                        popover-trigger="outsideClick"
+                        type="button"
+                        ng-click="vm.accountNumberSearch({id: changeSet.to.split('+=')[1], history: changeSet.from !='삭제'})"
+                        class="btn btn-default btn-xs pull-right">계좌번호 조회
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="table f_left th_bb table_read">
+            <colgroup>
+                <col style="width:30%" />
+                <col style="width:70%" />
+            </colgroup>
+            <tbody>
+            <tr>
+                <th>기관 이름</th>
+                <td>{{vm.Org.name}}</td>
+            </tr>
+            <tr>
+                <th>기관 설명</th>
+                <td>{{vm.Org.description}}</td>
+            </tr>
+            <tr>
+                <th>기관 구분</th>
+                <td>{{vm.Org.type}}</td>
+            </tr>
+            <tr>
+                <th>사업자 등록번호</th>
+                <td>{{vm.Org.licenseNumber}}</td>
+            </tr>
+            <tr>
+                <th>법인 등록번호</th>
+                <td>{{vm.Org.corpRegNumber}}</td>
+            </tr>
+            <tr>
+                <th>전화 번호</th>
+                <td>{{vm.Org.mainPhone}}</td>
+            </tr>
+            <tr>
+                <th>대표자 이름</th>
+                <td>{{vm.Org.ceoName}}</td>
+            </tr>
+            <tr>
+                <th>업태명</th>
+                <td>{{vm.Org.sectors}}</td>
+            </tr>
+            <tr>
+                <th>사업장 소재지</th>
+                <td>{{vm.Org.address}}</td>
+            </tr>
+            <tr>
+                <th>홈페이지 주소</th>
+                <td>{{vm.Org.homepageUrl}}</td>
+            </tr>
+            <tr ng-hide="!vm.Org.orgWithdrawals.length">
+                <th>출금계좌 정보</th>
+                <td>
+                    <p class="form-inline" ng-repeat="withdrawal in vm.Org.orgWithdrawals" ng-style="!$last && {'margin-bottom':'2px'}">
+                        <span class="label label-info file va_m"></span>
+                        <span class="account-number">{{withdrawal.accountAlias}} [{{withdrawal.bankName}}]</span>
+                        <button uib-popover-template="vm.accountNumberPopover.templateUrl"
+                            popover-title="계좌번호 조회"
+                            popover-is-open="withdrawal.isOpenAtDetail"
+                            popover-trigger="outsideClick"
+                            type="button"
+                            ng-click="vm.accountNumberSearch(withdrawal)"
+                            class="btn btn-default btn-xs">계좌번호 조회
+                        </button>
+                        <label ng-if="withdrawal.isDefault" class="label label-info pull-right" style="line-height:16px; cursor:default">기본계좌</label>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <th>활용예정 API 제공기관</th>
+                <td>
+                    <p ng-repeat="provider in vm.Org.reservedProviders" ng-style="!$last && {'margin-bottom': '5px'}" class="">
+                        <span class="file_name_info">{{provider.name}}</span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <th>첨부파일</th>
+                <td>
+                    <p ng-repeat="file in vm.Org.attachFileList" ng-style="!$last && {'margin-bottom': '5px'}">
+                        <span ng-click="vm.fileDown(file)" class="file-list-wrap">
+                            <span class="file_name_info">{{file.fileName.split('\\').pop()}}</span>
+                            <span style="" class="file_size">{{vm.fileSize(file)}}</span>
+                        </span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <th>기관소속 사용자</th>
+                <td>
+                    <p ng-repeat="user in vm.Org.users" class="" ng-style="!$last && {'margin-bottom': '5px'}">
+                        <span class="file_name_info">{{user.fullName}}</span>
+                        <small class="color_red">({{user.role.name}})</small>
+                        <label ng-show="user.isManager" class="label label-info pull-right" style="line-height:16px; cursor:default">관리자</label>
+                    </p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+        <span data-translate="entity.action.close">Close</span>
+    </button>
+</div>
+

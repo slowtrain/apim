@@ -1,0 +1,63 @@
+<jhi-alert></jhi-alert>
+<form name="form" role="form" ng-submit="vm.save()" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" ng-click="vm.clear()"></button>
+        <h4 class="modal-title" id="myUserLabel"
+            data-translate="{{vm.ApiName}}.{{vm.mode}}.title">Title</h4>
+    </div>
+    <div class="modal-body">
+        <div ng-if="vm.ApiName=='gateway.cluster'">
+            <div class="form-group">
+                <label class="control-label required-label" data-translate="gateway.cluster.register.name">name</label>
+                <small class="color_red" ng-if="form.clusterName.$error.minlength || form.clusterName.$error.maxlength">(3~30자 이내)</small>
+                <small class="color_red" ng-if="form.clusterName.$error.pattern">(잘못 입력하셨습니다.)</small>
+                <input type="text" name="clusterName" class="form-control" ng-model="vm.cluster.name" minlength="3" maxlength="30" limit='true' ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="apiDescription" class="control-label" data-translate="gateway.cluster.description">설명</label>
+                <small class="color_red" ng-if="form.apiDescription.$error.minlength || form.apiDescription.$error.maxlength">(100자 이내)</small>
+                <small class="color_red" ng-if="form.apiDescription.$error.pattern">(잘못 입력하셨습니다.)</small>
+                <textarea id="apiDescription" name="apiDescription" class="form-control" ng-model="vm.cluster.description" maxlength="100" limit='true'
+                          ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"></textarea>
+            </div>
+        </div>
+        <div ng-if="vm.ApiName !='gateway.cluster'">
+            <div class="form-group">
+                <label class="required-label" data-translate="gateway.register.name">name</label>
+                <small class="color_red" ng-if="form.gatewayName.$error.minlength || form.gatewayName.$error.maxlength">(3~30자 이내)</small>
+                <small class="color_red" ng-if="form.gatewayName.$error.pattern">(잘못 입력하셨습니다.)</small>
+                <input type="text" name="gatewayName" class="form-control" ng-model="vm.gateway.name" minlength="3" maxlength="30" limit='true' ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/"
+                       required>
+            </div>
+            <div class="form-group">
+                <label class="required-label">URL (기입예: https://10.10.10.10:8443)</label>
+                <small class="color_red" ng-if="form.gatewayUrl.$error.pattern">(잘못 입력하셨습니다.)</small>
+                <input type="text" name="gatewayUrl" class="form-control" ng-model="vm.gateway.url" ng-pattern="/^((http(s?))\:\/\/)([0-9a-zA-Z]+[0-9a-zA-Z\-\.]+(\:[0-9]+)?([0-9a-zA-Z-.?&=]*))*[^.:]$/" required>
+            </div>
+            <div class="form-group">
+                <label class="control-label required-label" data-translate="gateway.register.username">Username</label>
+                <small class="color_red" ng-if="form.userName.$error.minlength || form.userName.$error.maxlength">(2~30자 이내)</small>
+                <small class="color_red" ng-if="form.userName.$error.pattern">(잘못 입력하셨습니다.)</small>
+                <input type="text" name="userName" class="form-control" ng-model="vm.gateway.username" minlength="2" maxlength="30" limit='true'
+                       ng-pattern="/^[-가-힣A-Za-z0-9._ ]+$/" required>
+            </div>
+            <div class="form-group">
+                <label class="control-label required-label" data-translate="gateway.register.password">password</label>
+                <small class="color_red" ng-if="form.password.$error.minlength || form.password.$error.maxlength">(4~20자 이내)</small>
+                <input autocomplete="off" type="password" name="password" class="form-control" ng-model="vm.gateway.gatewayPassword" minlength="4" maxlength="20" limit="true" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit"
+                class="btn btn-portal modalBtn" ng-disabled="form.$invalid">
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>
+</form>

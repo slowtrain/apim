@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()"></button>
+    <h4 class="modal-title" id="myUserLabel" data-translate="apiList.appList.title">APP Request Approval</h4>
+</div>
+<div class="modal-body">
+	<div>
+	   	<div class="table-responsive voffset3">
+	       	<table class="table tableFixed">
+	           	<colgroup>
+		            <col style="width:9%"/>
+		            <col style="width:30%"/>
+		            <col/>
+		            <col style="width:123px"/>
+		        </colgroup>
+		        <tr>
+	               <th>No</th>
+	               <th data-translate="appManage.organization">organization</th>
+	               <th data-translate="appManage.name">Name</th>
+	               <th data-translate="appManage.status">status</th>
+	           </tr>
+                <tr ng-repeat="app in vm.apps">
+                    <td scope="row" class="t_center">{{vm.apps.length - $index}}</td>
+                    <td>{{app.organization.name}}</td>
+                    <td>{{app.name}}</td>
+                    <td>{{app.status}}</td>
+                </tr>
+                <tr ng-if="vm.apps.length <= 0">
+                    <td colspan="4" class="t_center">사용 앱이 존재하지 않습니다.</td>
+                </tr>
+	       </table>
+   		</div>
+   	</div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+        <span data-translate="entity.action.close">Cancel</span>
+    </button>
+</div>

@@ -1,0 +1,145 @@
+<!-- <jhi-alert></jhi-alert> -->
+<div class="row wrap" sc>
+    <div class="col-md-12">
+        <h2><strong>사용자 목록</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <p class="searchInfo type3">
+            <button has-any-authority="ROLE_ADMIN, ROLE_USER_CREATE" class="btn btn-portal btn-flag-radius pull-right" ng-click="vm.editUser()">사용자 등록</button>
+        </p>
+        <div class="searchField type2 typeNew">
+            <div class="dateContainer">
+                <div class="datePickerField">
+                    <span class="form-inline">
+                        <label for="searchingRole">역할검색</label>
+                        <select class="form-control input-sm" name="org" id="searchingRole" ng-model="vm.searchingRoleCode"
+                                ng-options="role.code as role.name for role in vm.roles track by role.code">
+                            <option value="">역할 선택</option>
+                        </select>
+                    </span>
+                    <span class="form-inline">
+                        <label for="searchingState">사용자상태 검색</label>
+                        <select class="form-control input-sm" name="org" id="searchingState" ng-model="vm.searchingState"
+                                ng-options="kind.value as kind.ko for kind in vm.states track by kind.value">
+                            <option value="">상태 선택</option>
+                        </select>
+                    </span>
+                    <span class="form-inline">
+                        <label for="searchingColumn">필드검색</label>
+                        <select class="form-control input-sm" id="searchingColumn" name="org" ng-model="vm.searchingColumn" ng-change="vm.searchingText = null"
+                                ng-options="column.name as column.ko for column in vm.searchColumns track by column.name">
+                            <option value="">필드명 선택</option>
+                        </select>
+                        <input class="form-control input-sm" type="text" placeholder="필드에서 검색" disabled ng-value="vm.searchingText" ng-if="!vm.searchingColumn"/>
+                        <input class="form-control input-sm" type="text" placeholder="필드에서 검색" ng-model="vm.searchingText" ng-if="vm.searchingColumn" ng-keypress="($event.charCode==13)? vm.searching() : return"/>
+                    </span>
+                </div>
+            </div>
+            <span class="btnBox">
+                <button class="btn search-btn" ng-click="vm.searching()">
+                    검색
+                </button>
+            </span>
+        </div>
+        <p class="searchInfo type2">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>명의 사용자가 존재합니다.</span>
+        </p>
+        <div class="table-responsive voffset3">
+            <table class="table">
+                <colgroup>
+                    <col style="width:5%"/>
+                    <col style="width:13%"/>
+                    <col style="width:13%"/>
+                    <col style="width:19%"/>
+                    <col style="width:7%"/>
+<!--                     <col style="width:8%"/> -->
+                    <col style="width:7%"/>
+                    <col/>
+                    <col style="width:10%"/>
+                    <col style="width:68px"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th class="t_center">No</th>
+                    <th id="login" ng-click="vm.sorting('login')">
+                        <span data-translate="userManagement.login">Login</span>
+                        <i id="login" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th>
+                    <th id="fullName" ng-mousedown="vm.sorting('fullName')">
+                        <span data-translate="userManagement.fullName">Full name</span>
+                        <i id="fullName" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th>
+                    <th id="email" ng-mousedown="vm.sorting('email')">
+                        <span data-translate="userManagement.email">Email</span>
+                        <i id="email" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th>
+                    <th id="state" ng-mousedown="vm.sorting('state')">
+                        상태
+                        <i id="state" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th>
+                    <!-- <th id="isGatewayAlertReceive" ng-mousedown="vm.sorting('isGatewayAlertReceive')">
+                        GW알림
+                        <i id="isGatewayAlertReceive" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th> -->
+                    <th id="orgType" ng-mousedown="vm.sorting('organization.type', 'orgType')">
+                        구분
+                        <i id="orgType" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th>
+                    <th id="orgName" ng-mousedown="vm.sorting('organization.name', 'orgName')">
+                        <span data-translate="userManagement.org">Organization</span>
+                        <i id="orgName" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    <th id="roleName" ng-mousedown="vm.sorting('role.name', 'roleName')">
+                        <span data-translate="userManagement.roles">Roles</span>
+                        <i id="roleName" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th>
+                    <th>비고</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr ng-repeat="user in vm.users">
+                    <td class="t_center">{{vm.totalItems - (vm.condition.page*vm.size) - $index}}</td>
+                    <td class="hover" ng-click="vm.showDetail(user)">{{user.login}}
+                        <i ng-if="vm.userFlagOfAdmin(user)" style="top:3px" class="glyphicon glyphicon-king color_red" title="운영자"></i>
+                    </td>
+                    <td>{{user.fullName}}</td>
+                    <td>{{user.maskingEmail}}</td>
+                    <td ng-if="user.login != 'admin'" class="t_center">
+                        <i ng-if="(!(vm.isModifier || vm.isAdmin) || account.login == user.login) && (user.state=='INACTIVE')" class="glyphicon glyphicon-ban-circle color_darkRed" title="비활성"></i>
+                        <i ng-if="(!(vm.isModifier || vm.isAdmin) || account.login == user.login) && (user.state=='ACTIVE')" class="glyphicon glyphicon-ok-circle color_success" title="활성"></i>
+                        <i ng-if="((vm.isModifier || vm.isAdmin) && account.login != user.login) && (user.state=='INACTIVE')" class="glyphicon glyphicon-ban-circle color_darkRed" ng-click="vm.setActive(user)" title="비활성"></i>
+                        <i ng-if="((vm.isModifier || vm.isAdmin) && account.login != user.login) && (user.state=='ACTIVE')" class="glyphicon glyphicon-ok-circle color_success" ng-click="vm.setActive(user)" title="활성"></i>
+                        <i ng-if="user.state=='WITHDRAWING'" class="glyphicon glyphicon-log-out color-darkRed" title="탈퇴진행중"></i>
+                        <i ng-if="user.state=='REGISTERING'" class="glyphicon glyphicon-log-in color_success" title="등록진행중"></i>
+                    </td>
+                    <td ng-if="user.login == 'admin'" class="t_center">
+                        <i class="glyphicon glyphicon-ok-circle color_success" title="활성"></i>
+                    </td>
+                    <!-- <td class="t_center">
+                        <i ng-if="!(vm.isModifier || vm.isAdmin) && !user.gatewayAlertReceive" class="glyphicon glyphicon-ban-circle color_darkRed" title="알림 비허용"></i>
+                        <i ng-if="!(vm.isModifier || vm.isAdmin) && user.gatewayAlertReceive" class="glyphicon glyphicon-ok-circle color_success" title="알림 허용"></i>
+                        <i ng-if="(vm.isModifier || vm.isAdmin) && !user.gatewayAlertReceive" class="glyphicon glyphicon-ban-circle color_darkRed" title="알림 비허용" ng-click="vm.setGAReceive(user)"></i>
+                        <i ng-if="(vm.isModifier || vm.isAdmin) && user.gatewayAlertReceive" class="glyphicon glyphicon-ok-circle color_success" title="알림 허용" ng-click="vm.setGAReceive(user)"></i>
+
+                    </td> -->
+                    <td>{{vm.checkOrgType(user.organization.type)}}</td>
+                    <td>{{user.organization.name}}</td>
+                    <td class="t_center"><span class="label label-default">{{user.role.name}}</span></td>
+                    <td class="t_center edit_set no-padding">
+                        <button has-any-authority="ROLE_ADMIN, ROLE_USER_MODIFY" ng-click="vm.editUser(user)" class="btn btn-default btn-xs">수정</button>
+                        <button has-any-authority="ROLE_ADMIN, ROLE_USER_DELETE" ng-click="vm.editUser(user)" ng-if="!(account.login == user.login)" ng-click="vm.delUser(user)" class="btn btn-default btn-xs">삭제</button>
+                    </td>
+                </tr>
+                <tr ng-if="vm.users.length == 0">
+                    <td class="t_center" colspan="9">사용자가 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center voffset3">
+<!--             <button type="button" class="btn btn-exceldown btn-sm voffset2" ng-click="vm.downloadExcel()">EXCEL</button> -->
+            <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+        </div>
+    </div>
+</div>
+

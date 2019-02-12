@@ -1,0 +1,18 @@
+{
+    "api": {
+        "title": "API List",
+        "register":{
+        	"title": "Register"
+        },
+        "id": "API ID",
+        "name": "API name",
+        "version": "API version",
+        "request": "Request Approval",
+        "title2": "Approval Line Update",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
+        }
+    }
+}

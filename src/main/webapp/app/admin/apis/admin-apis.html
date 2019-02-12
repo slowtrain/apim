@@ -1,0 +1,115 @@
+<jhi-alert></jhi-alert>
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong data-translate="apiList.title">Api management</strong></h2>
+        <div class="searchField type2 typeNew">
+            <div class="dateContainer">
+                <span class="form-inline">
+                    <label for="organization" data-translate="apiList.organization">organizationName</label>
+                    <select id="organization" class="form-control input-sm" style="width:20%" ng-model="vm.organization"
+                            ng-options="organization.name for organization in vm.organizations track by organization.name">
+                        <option value="">전체</option>
+                    </select>
+                </span>
+                <span class="form-inline">
+                    <label for="state" data-translate="apiList.status">status</label>
+                    <select id="state" class="form-control input-sm" style="width:20%" ng-model="vm.state"
+                            ng-options="status.key as status.rename for status in vm.status | filter: vm.statusFiltering track by status.key">
+                        <option value="">전체</option>
+                    </select>
+                </span>
+                <span class="form-inline">
+                    <label for="apiPrivate">공개</label>
+                    <select id="apiPrivate" class="form-control input-sm" ng-model="vm.isPrivate"
+                            ng-options="option.key as option.name for option in [{name: '공개', key: 'false'},{name: '비공개', key: 'true'}]">
+                        <option value="">전체</option>
+                    </select>
+                </span>
+            </div>
+            <div class="dateContainer2">
+                <span class="form-inline">
+                    <label for="apiName" data-translate="apiList.name">name</label>
+                    <input type="text" class="form-control input-sm" style="width:35%" id="apiName" name="apiName" ng-model="vm.apiName" ng-keypress="($event.charCode==13)? vm.searching() : return">
+                </span>
+                <span class="form-inline">
+                    <label for="proxyUrl">G/W URL</label>
+                    <input type="text" style="width:42%;" class="form-control input-sm" id="proxyUrl" name="proxyUrl" ng-model="vm.proxyUrl"
+                           ng-keypress="($event.charCode==13)? vm.searching() : return">
+                </span>
+                <span class="btnBox">
+                    <button type="button" class="btn search-btn" ng-click="vm.searching()">
+                        검색
+                    </button>
+                </span>
+            </div>
+        </div>
+        <p class="searchInfo type2">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 API가 존재합니다.</span>
+        </p>
+
+
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col/>
+                    <col style="width:121px"/>
+                    <col style="width:20%"/>
+                    <col style="width:9%"/>
+                    <col style="width:131px"/>
+                    <col style="width:135px"/>
+                    <col style="width:105px"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th id="name" ng-mousedown="vm.sorting('name')"><span data-translate="apiList.name">Name</span><i id="name"></th>
+                    <th id="organization" ng-mousedown="vm.sorting('organization')"><span data-translate="apiList.organization">organization</span><i id="organization" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th>
+                    <th id="urlPattern" ng-mousedown="vm.sorting('urlPattern')"><span>G/W URL</span><i id="urlPattern" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th>
+                    <th id="isPrivate" ng-mousedown="vm.sorting('isPrivate')"><span data-translate="apiList.isPrivate">isPrivate</span><i id="isPrivate" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th>
+                    <th id="status" data-translate="apiList.status">Status</th>
+                    <th id="lastModifiedDate" ng-mousedown="vm.sorting('lastModifiedDate')"><span data-translate="apiList.updateDate">UpdateDate</span><i id="lastModifiedDate" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                    </th>
+                    <th data-translate="apiList.actions">Etc</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="api in vm.list">
+                    <td class="hover" ng-click="showApi(api)">{{api.name}}</td>
+                    <td>{{api.organization.name}}</td>
+                    <td>{{api.urlPattern}}</td>
+                    <td class="t_center">{{api.private?"비공개":"공개"}}</td>
+                    <td class="t_center" ng-mouseover="vm.showApiStatusPopover(api)" ng-mouseleave="vm.hideApiStatusPopover(api)">
+                        <span uib-popover-template="vm.tooltipPopover.templateUrl"
+                              popover-title="상태오류메시지"
+                              popover-is-open="api.isApiStatusOpen"
+                              popover-enable="api.isApiStatusOpen"
+                              popover-trigger="outsideClick"
+                              popover-placement="bottom-left">
+                            {{api.status=='UNUSED'? 'DELETED' : api.status}}
+                            <span ng-show="api.status == 'RESERVED'"><br/>{{api.reservedTime | date: 'yyyy-MM-dd HH:mm'}}</span>
+                        </span>
+                    </td>
+                    <td scope="row">{{api.lastModifiedDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+                    <td>
+                        <!--<button class="btn btn-default btn-xs" ng-click="showApi(api)">상세보기</button>-->
+                        <button class="btn btn-info btn-xs" ng-click="showAppUsed(api)">사용앱</button>
+                        <button class="btn btn-default btn-xs" ng-click="delApi(api, 'delete')">삭제</button>
+                    </td>
+                </tr>
+                <tr ng-if="vm.list.length <= 0">
+                    <td class="t_center" colspan="7">등록하신 API가 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- <p>
+                <button type="button" class="btn btn-success btn-sm pull-right voffset2" ng-click="vm.downloadExcel()"><i class="glyphicon glyphicon-file"></i> Excel</button>
+            </p> -->
+            <div class="text-center voffset3">
+                <button type="button" class="btn btn-default btn-sm btn-exceldown" ng-click="vm.downloadExcel()">EXCEL</button>
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+    </div>
+</div>

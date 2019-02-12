@@ -1,0 +1,292 @@
+<form name="form" role="form" novalidate >
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()"></button>
+        <h4 class="modal-title" id="myUserLabel" data-translate="userManagement.home.{{vm.mode}}">
+            Create or edit a User</h4>
+    </div>
+    <div class="modal-body" sc>
+<!--         <jhi-alert-error></jhi-alert-error> -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group" ng-class="{'has-error' : form.login.$error.pattern}">
+                    <label class="control-label required-label" data-translate="userManagement.login">login</label>
+                    <small class="color_red" ng-if="form.login.$error.minlength || form.login.$error.maxlength">(3~15자 이내)</small>
+                    <small class="color_red" ng-if="form.login.$error.pattern">(잘못 입력하셨습니다.)</small>
+                    <input type="text" class="form-control" name="login" ng-disabled="!vm.flagOfRegister"
+                           ng-model="vm.user.login" required minlength="3" maxlength="15" limit='true'  ng-pattern="/^[-A-Za-z0-9._]+$/" >
+                </div>
+                <div class="form-group" ng-class="{'has-error' : form.fullName.$error.pattern}">
+                    <label class="required-label" data-translate="userManagement.fullName">full name</label>
+                    <small class="color_red" ng-if="form.fullName.$error.minlength || form.fullName.$error.maxlength">(2~30자 이내)</small>
+                    <small class="color_red" ng-if="form.fullName.$error.pattern">(잘못 입력하셨습니다.)</small>
+                    <input type="text" class="form-control" name="fullName"
+                           ng-model="vm.user.fullName" minlength="2" maxlength="30" limit='true' ng-pattern="/^[-가-힣A-Za-z0-9._ ]+$/" required/>
+                </div>
+                <!-- <div class="form-group">
+                    <label class="control-label">직위</label>
+                    <small class="color_red" ng-if="form.grade.$error.pattern">(잘못 입력하셨습니다.)</small>
+                    <input type="text" class="form-control" name="grade" ng-model="vm.user.grade" ng-pattern="/^[^ㄱ-ㅎㅏ-ㅣ]*$/" >
+                </div> -->
+                <div class="form-group" ng-class="{'has-error' : form.email.$error.pattern}">
+                    <div>
+                        <label class="control-label required-label">이메일</label>
+                        <small class="color_red" ng-if="form.email.$error.pattern">(잘못된 이메일입니다.)</small>
+                        <!-- <button ng-if="!vm.flagOfRegister" class="btn btn-xs pull-right" style="position:relative; bottom:3px;" ng-class="{'btn-portal': !vm.modifyEmail, 'btn-default': vm.modifyEmail}" ng-click="vm.modifyEmail = !vm.modifyEmail"> -->
+                        <button type="button" ng-if="!vm.flagOfRegister" class="btn btn-xs pull-right btn-default" ng-click="vm.modifyEmail = !vm.modifyEmail">
+                            {{(vm.modifyEmail)? '취소' : '수정'}}
+                        </button>
+                    </div>
+                    <input ng-if="vm.flagOfRegister" type="email" class="form-control" name="email"
+                           ng-model="vm.email" ng-pattern="/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/" required/>
+                    <div ng-if="!vm.flagOfRegister">
+                        <input ng-if="vm.modifyEmail" type="email" class="form-control" name="email"
+                               ng-model="vm.email" ng-pattern="/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/" required/>
+                        <input ng-if="!vm.modifyEmail" class="form-control" ng-value="vm.user.maskingEmail" readonly/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" style="padding-left:0;">
+                <div class="form-group form-inline">
+                    <div>
+                        <label>전화번호</label>
+                        <!-- <button ng-if="!vm.flagOfRegister" class="btn btn-xs pull-right" style="position:relative; bottom:3px;" ng-class="{'btn-portal': !vm.modifyMainPhone, 'btn-default': vm.modifyMainPhone}" ng-click="vm.modifyMainPhone = !vm.modifyMainPhone"> -->
+                        <button type="button" ng-if="!vm.flagOfRegister" class="btn btn-xs pull-right btn-default" ng-click="vm.modifyMainPhone = !vm.modifyMainPhone">
+                            <!-- <i ng-class="{'glyphicon-pencil': !vm.modifyMainPhone, 'glyphicon-remove': vm.modifyMainPhone}" class="glyphicon"></i>  {{(vm.modifyMainPhone)? '취소' : '수정'}} -->
+                            {{(vm.modifyMainPhone)? '취소' : '수정'}}
+                        </button>
+                    </div>
+                    <div ng-if="vm.flagOfRegister" class="phone_set">
+                        <select class="form-control" name="mainPhone1" ng-model="vm.mainPhone[0]" ng-options="num for num in vm.districtNums track by num">
+                            <option value="">선택</option>
+                        </select>
+                        <input type="text" class="form-control center" name="mainPhone2" ng-model="vm.mainPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false'>
+                        <input type="text" class="form-control" name="mainPhone3" ng-model="vm.mainPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' >
+                    </div>
+                    <div ng-if="!vm.flagOfRegister">
+                        <div ng-if="vm.modifyMainPhone" class="phone_set">
+                            <select class="form-control" name="mainPhone1" ng-model="vm.mainPhone[0]" ng-options="num for num in vm.districtNums track by num">
+                                <option value="">선택</option>
+                            </select>
+                            <input type="text" class="form-control center" name="mainPhone2" ng-model="vm.mainPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false'>
+                            <input type="text" class="form-control" name="mainPhone3" ng-model="vm.mainPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' >
+                        </div>
+                        <input ng-if="!vm.modifyMainPhone" type="text" style="width:100%;" class="form-control" ng-value="vm.user.maskingMainPhone" readonly/>
+                    </div>
+                </div>
+                <div class="form-group form-inline" ng-class="{'has-error' : form.cellPhone2.$error.minlength || form.cellPhone3.$error.minlength}">
+                    <div>
+                        <label class="required-label">휴대폰번호</label>
+                        <!-- <button ng-if="!vm.flagOfRegister" class="btn btn-xs pull-right" style="position:relative; bottom:3px;" ng-class="{'btn-portal': !vm.modifyCellPhone, 'btn-default': vm.modifyCellPhone}" ng-click="vm.modifyCellPhone = !vm.modifyCellPhone"> -->
+                        <button type="button" ng-if="!vm.flagOfRegister" class="btn btn-xs pull-right btn-default" ng-click="vm.modifyCellPhone = !vm.modifyCellPhone">
+                            <!-- <i ng-class="{'glyphicon-pencil': !vm.modifyCellPhone, 'glyphicon-remove': vm.modifyCellPhone}" class="glyphicon"></i> {{(vm.modifyCellPhone)? '취소' : '수정'}} -->
+                            {{(vm.modifyCellPhone)? '취소' : '수정'}}
+                        </button>
+                        <p>
+                            <small class="color_red" ng-if="!vm.cellPhone[0] && vm.cellPhone[1] || !vm.cellPhone[0] && vm.cellPhone[2]">(통신사 번호를 선택바랍니다.)</small>
+                            <small class="color_red" ng-if="form.cellPhone2.$error.minlength">(앞번호 3자이상 입력바랍니다.)</small>
+                            <small class="color_red" ng-if="form.cellPhone3.$error.minlength">(뒷번호 4자리 입력바랍니다.)</small>
+                        </p>
+                    </div>
+                    <div ng-if="vm.flagOfRegister" class="phone_set">
+                        <select class="form-control" name="cellPhone1" ng-model="vm.cellPhone[0]" ng-options="num for num in vm.cellIdentifyingNums track by num" ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required>
+                            <option value="">선택</option>
+                        </select>
+                        <input type="text" class="form-control center" name="cellPhone2" ng-model="vm.cellPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required>
+                        <input type="text" class="form-control" name="cellPhone3" ng-model="vm.cellPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required>
+                    </div>
+                    <div ng-if="!vm.flagOfRegister">
+                        <div ng-if="vm.modifyCellPhone" class="phone_set">
+                            <select class="form-control" name="cellPhone1" ng-model="vm.cellPhone[0]" ng-options="num for num in vm.cellIdentifyingNums track by num" ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required>
+                                <option value="">선택</option>
+                            </select>
+                            <input type="text" class="form-control center" name="cellPhone2" ng-model="vm.cellPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required>
+                            <input type="text" class="form-control" name="cellPhone3" ng-model="vm.cellPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true' ng-change="vm.lengthCheck('cellPhone', vm.cellPhone)" required>
+                        </div>
+                        <input ng-if="!vm.modifyCellPhone" style="width:100%" type="text" class="form-control" ng-value="vm.user.maskingCellPhone" readonly/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="required-label" data-translate="userManagement.org">Org</label>
+                    <select class="form-control" name="org" ng-model="vm.user.organization" ng-change="vm.findRolesByOrgType()"
+                            ng-options="organization.name for organization in vm.orgs track by organization.name" ng-disabled="vm.flagOfOrg && !vm.isAdmin" required>
+                        <option value="">* 선택하세요 *</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="required-label" data-translate="userManagement.roles">Roles</label>
+                    <select class="form-control" name="role" id="role" ng-model="vm.user.role"
+                            ng-options="role.name for role in vm.roles track by role.name" required>
+                        <option value="">* 선택하세요 *</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group type2">
+                    <span class="new-form-group">
+                        <input ng-disabled="vm.user.login == account.login || vm.user.login=='admin'" type="checkbox" id="active" name="active" ng-model="vm.user.active">
+                        <label for="active" ng-if="!vm.flagOfRegister" ng-disabled="vm.user.login == account.login || vm.user.login=='admin'" style="margin-right:10px;">
+                            <span data-translate="userManagement.active">active</span>
+                        </label>
+                    </span>
+                    <!-- <label for="GAReceive" style="margin-right:10px;">
+                        <input type="checkbox" id="GAReceive" name="GAReceive" ng-model="vm.user.gatewayAlertReceive">
+                        <span style="vertical-align:2px">G/W 알림수신</span>
+                    </label> -->
+                    <span class="new-form-group">
+                        <input type="checkbox" id="setAdmin" name="setAdmin" ng-model="vm.flagOfAdmin" ng-disabled="vm.user.login == account.login || !vm.user.active || vm.user.organization.type == 'PARTNER' || vm.user.role.code != 'ROLE_OFFER_MANAGER'">
+                        <label for="setAdmin" ng-if="!vm.flagOfRegister" ng-disabled="vm.user.login == account.login || !vm.user.active || vm.user.organization.type == 'PARTNER' || vm.user.role.code != 'ROLE_OFFER_MANAGER'">
+                            <span style="vertical-align:2px">운영자 지정</span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--<dl style="width:47%; display:inline-table;">
+            <dd >
+                <div class="form-group">
+                    <label class="control-label" data-translate="userManagement.login">Login</label>
+                    <span class="color_red" ng-if="form.login.$error.required">(필수)</span>
+                    <span class="color_red" ng-if="form.login.$error.pattern">(잘못 입력하셨습니다.)</span>
+                    <input type="text" class="form-control" name="login"
+                           ng-model="vm.user.login" ng-required="vm.user.id == null" ng-pattern="/^[-a-z0-9._ ]{3,15}$/" >
+                </div>
+                <div class="form-group">
+                    <label data-translate="userManagement.fullName">Full Name</label>
+                    <span class="color_red" ng-if="form.fullName.$error.required">(필수)</span>
+                    <span class="color_red" ng-if="form.fullName.$error.pattern">(잘못 입력하셨습니다.)</span>
+                    <input type="text" class="form-control" name="fullName"
+                           ng-model="vm.user.fullName" ng-pattern="/^[-가-힣A-Za-z0-9._]{1,15}$/" required/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">이메일</label>
+                    <span class="color_red" ng-if="form.email.$error.required">(필수)</span>
+                    <span class="color_red" ng-if="form.email.$error.pattern">(잘못된 이메일입니다.)</span>
+                    <input ng-if="vm.flagOfRegister" type="email" class="form-control" name="email"
+                           ng-model="vm.email" ng-pattern="/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/" required/>
+                    <div ng-if="!vm.flagOfRegister" class="input-group">
+                        <input ng-if="vm.modifyEmail" type="email" class="form-control" name="email"
+                               ng-model="vm.email" ng-pattern="/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/" required/>
+                        <input ng-if="!vm.modifyEmail" class="form-control" ng-value="vm.user.maskingEmail" readonly/>
+                        <span class="input-group-btn">
+                            <button style="margin-left:5px; padding:7px 12px" class="btn btn-xs" ng-class="{'btn-portal': !vm.modifyEmail, 'btn-default': vm.modifyEmail}" ng-click="vm.modifyEmail = !vm.modifyEmail">{{(vm.modifyEmail)? '취소' : '수정'}}</button>
+                        </span>
+                    </div>
+                </div>
+            </dd>
+        </dl>
+        <dl style="margin-left:47px; width:47%; display:inline-table;">
+            <dd >
+                <div style="display:table" class="form-group">
+                    <label>전화번호</label>
+                    <div ng-if="vm.flagOfRegister">
+                        <select style="width:74px; font-size:15px; padding:0px 10px" class="form-control pull-left" name="mainPhone" ng-model="vm.mainPhone[0]" ng-options="num for num in vm.districtNums track by num">
+                            <option value="">선택</option>
+                        </select>
+                        <i style="line-height:30px" class="glyphicon glyphicon-minus pull-left"></i>
+                        <input type="text" style="width:100px; font-size:17px; text-align:center" class="form-control pull-left" name="mainPhone" ng-model="vm.mainPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false'>
+                        <i style="line-height:30px" class="glyphicon glyphicon-minus pull-left"></i>
+                        <input type="text" style="width:100px; font-size:17px; text-align:center" class="form-control pull-left" name="mainPhone" ng-model="vm.mainPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true'>
+                    </div>
+                    <div ng-if="!vm.flagOfRegister">
+                        <div ng-if="vm.modifyMainPhone" class="input-group">
+                            <select style="width:74px; font-size:15px; padding:0px 10px" class="form-control pull-left" name="mainPhone" ng-model="vm.mainPhone[0]" ng-options="num for num in vm.districtNums track by num">
+                                <option value="">선택</option>
+                            </select>
+                            <i style="line-height:30px" class="glyphicon glyphicon-minus pull-left"></i>
+                            <input type="text" style="width:100px; font-size:17px; text-align:center" class="form-control pull-left" name="mainPhone" ng-model="vm.mainPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false'>
+                            <i style="line-height:30px" class="glyphicon glyphicon-minus pull-left"></i>
+                            <input type="text" style="width:100px; font-size:17px; text-align:center" class="form-control pull-left" name="mainPhone" ng-model="vm.mainPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true'>
+                            <span class="input-group-btn">
+                                <button style="margin-left:5px; padding:7px 12px" class="btn btn-default btn-xs" ng-click="vm.modifyMainPhone = !vm.modifyMainPhone">취소</button>
+                            </span>
+                        </div>
+                        <div ng-if="!vm.modifyMainPhone" class="input-group">
+                            <input type="text" style="width:302px; text-align:center" class="form-control pull-left" ng-value="vm.user.maskingMainPhone" readonly/>
+                            <span class="input-group-btn">
+                                <button style="margin-left:5px; padding:7px 12px" class="btn btn-default btn-xs" ng-click="vm.modifyMainPhone = !vm.modifyMainPhone">수정</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:table" class="form-group">
+                    <label>휴대폰번호</label>
+                    <div ng-if="vm.flagOfRegister">
+                        <select style="width:74px" class="form-control pull-left" name="cellPhone" ng-model="vm.cellPhone[0]" ng-options="num for num in vm.cellIdentifyingNums track by num">
+                            <option value="">선택</option>
+                        </select>
+                        <i style="line-height:30px" class="glyphicon glyphicon-minus pull-left"></i>
+                        <input type="text" style="width:100px; font-size:17px; text-align:center" class="form-control pull-left" name="cellPhone" ng-model="vm.cellPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false'>
+                        <i style="line-height:30px" class="glyphicon glyphicon-minus pull-left"></i>
+                        <input type="text" style="width:100px; font-size:17px; text-align:center" class="form-control pull-left" name="cellPhone" ng-model="vm.cellPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true'>
+                    </div>
+                    <div ng-if="!vm.flagOfRegister">
+                        <div ng-if="vm.modifyCellPhone" class="input-group">
+                            <select style="width:74px; font-size:15px; padding:0px 10px" class="form-control pull-left" name="cellPhone" ng-model="vm.cellPhone[0]" ng-options="num for num in vm.cellIdentifyingNums track by num">
+                                <option value="">선택</option>
+                            </select>
+                            <i style="line-height:30px" class="glyphicon glyphicon-minus pull-left"></i>
+                            <input type="text" style="width:100px; font-size:17px; text-align:center" class="form-control pull-left" name="cellPhone" ng-model="vm.cellPhone[1]" minlength='3' mask="9999" restrict='reject' limit='true' validate='false'>
+                            <i style="line-height:30px" class="glyphicon glyphicon-minus pull-left"></i>
+                            <input type="text" style="width:100px; font-size:17px; text-align:center" class="form-control pull-left" name="cellPhone" ng-model="vm.cellPhone[2]" minlength='4' mask="9999" restrict='reject' limit='true'>
+                            <span class="input-group-btn">
+                                <button style="margin-left:5px; padding:7px 12px" class="btn btn-default btn-xs" ng-click="vm.modifyCellPhone = !vm.modifyCellPhone">취소</button>
+                            </span>
+                        </div>
+                        <div ng-if="!vm.modifyCellPhone" class="input-group">
+                            <input type="text" style="width:302px; text-align:center" class="form-control pull-left" ng-value="vm.user.maskingCellPhone" readonly/>
+                            <span class="input-group-btn">
+                                <button style="margin-left:5px; padding:7px 12px" class="btn btn-default btn-xs" ng-click="vm.modifyCellPhone = !vm.modifyCellPhone">수정</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">직위</label>
+                    <span uib-tooltip="잘못 입력하셨습니다." tooltip-is-open="form.grade.$error.pattern" tooltip-popup-close-delay='100'
+                        tooltip-placement="right" style="margin-left:1px;"></span>
+                    <input type="text" class="form-control" name="grade" ng-model="vm.user.grade" ng-pattern="/^[-가-힣A-Za-z0-9._]{1,15}$/">
+                </div>
+            </dd>
+        </dl>-->
+        <!--<div ng-if="vm.user.id" class="form-group">
+            <label for="active">
+                <input type="checkbox" id="active" name="active" ng-model="vm.user.active">
+                <span style="vertical-align:2px" data-translate="userManagement.active">active</span>
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="GAReceive">
+                <input type="checkbox" id="GAReceive" name="GAReceive" ng-model="vm.user.isGatewayAlertReceive">
+                <span style="vertical-align:2px">Gateway 알림수신</span>
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label data-translate="userManagement.org">Org</label>
+            <select class="form-control" name="org" ng-model="vm.user.organization"
+                    ng-options="organization.name for organization in vm.orgs track by organization.name" ng-disabled="vm.flagOfOrg && !vm.isAdmin">
+                    <option value="">* 필수 선택 *</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label data-translate="userManagement.roles">Roles</label>
+            <select class="form-control" id="role" ng-model="vm.user.role"
+                    ng-options="role.name for role in vm.roles track by role.name">
+                    <option value="">* 필수 선택 *</option>
+            </select>
+        </div>-->
+    </div>
+    <div class="modal-footer">
+        <button type="button" ng-click="(vm.isAdmin)? vm.setAdmin(): vm.save()" ng-disabled="form.$invalid || vm.lengthChecked || !vm.user.role || !vm.user.organization || (!vm.flagOfRegister? (!vm.modifyCellPhone && !vm.user.maskingCellPhone || !vm.modifyEmail && !vm.user.maskingEmail) : false)" class="btn btn-portal modalBtn">
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button type="button" class="btn btn-default modalBtn cancel" data-dismiss="modal" ng-click="vm.clear()">
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>
+</form>

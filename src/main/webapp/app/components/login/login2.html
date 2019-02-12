@@ -1,0 +1,51 @@
+<form class="form" name="form" ng-submit="vm.login($event)">
+    <div class="row wrap">
+        <div class="col-md-10">
+            <h2><strong data-translate="login.title">로그인</strong></h2>
+        </div>
+        <div class="col-md-10">
+            <div class="col-md-8 col-md-offset-2">
+                <!--<div class="alert alert-danger" ng-show="vm.authenticationError" data-translate="login.messages.error.authentication">-->
+                <div class="alert alert-danger" ng-show="vm.authenticationError" data-translate="{{vm.authenticationErrorMessage}}">
+                    <strong>Failed to sign in!</strong> Please check your credentials and try again.
+                    <strong>인증 오류!</strong> 아이디나 비밀번호가 잘못 되었습니다.<br/>
+                    상태가 지속될 경우 운영자에게 문의하세요.
+                </div>
+            </div>
+            <div class="col-md-8 col-md-offset-2">
+                <div class="form-group" style="margin-top: 20px">
+                    <label for="userId">아이디</label>
+                    <input ng-readonly="vm.isSecondAuthRequested" type="text" class="form-control" id="userId" placeholder="{{'global.form.userId.placeholder' | translate}}"
+                           ng-model="vm.userId" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" data-translate="login.form.password">Password</label>
+                    <input ng-readonly="vm.isSecondAuthRequested" type="password" class="form-control" id="password" placeholder="{{'login.form.password.placeholder' | translate}}"
+                           ng-model="vm.password" required>
+                </div>
+                <div class="form-group" style="margin-top: 43px">
+                    <!-- <label for="rememberMe">
+                        <input type="checkbox" id="rememberMe" ng-model="vm.rememberMe" checked>
+                        <span data-translate="login.form.rememberme">Remember me</span>
+                    </label> -->
+                    <span class="btn-group pull-left">
+                        <button type="button" ui-sref="findId" class="btn btn-xs btn-bebe btn-group-style" >ID 찾기</button>
+                        <button type="button" ng-click="vm.requestResetPassword()" class="btn btn-xs btn-b2b2 btn-group-style">비밀번호 초기화</button>
+                        <button type="button" ng-click="vm.register()" class="btn btn-xs btn-portal btn-eee btn-group-style">회원가입</button>
+                    </span>
+                    <button style="border-radius:3px; width: 80px" type="submit" class="btn btn-portal pull-right" ng-disabled="form.$invalid">로그인</button>
+                </div>
+
+
+                <!--<p></p>
+                <div class="alert alert-warning">
+                    <a class="alert-link" href="" ng-click="vm.requestResetPassword()" data-translate="login.password.forgot">Did you forget your password?</a>
+                </div>
+                <div class="alert alert-warning" data-translate="global.messages.info.register" translate-compile>
+                    You don't have an account yet? <a class="alert-link" href="" ng-click="vm.register()">Register a new account</a>
+                </div>-->
+
+            </div>
+        </div>
+    </div>
+</form>

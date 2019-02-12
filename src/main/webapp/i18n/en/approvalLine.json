@@ -1,0 +1,12 @@
+{
+    "approvalLine": {
+        "title1": "Approval Line Create",
+        "title2": "Approval Line Update",
+        "title3": "Approval Line Select",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
+        }
+    }
+}

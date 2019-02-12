@@ -1,0 +1,106 @@
+<jhi-alert></jhi-alert>
+<div class="row wrap">
+    <div class="col-md-12">
+        <div>
+            <h2><strong data-translate="appAllManagement.title">App List</strong></h2>
+            <div class="searchBox">
+                 <span class="form-inline">
+                    <label for="organization">기관</label>
+                    <select id="organization" style="width:150px" class="form-control input-sm" ng-model="vm.organization"
+                            ng-options="organization.name for organization in vm.organizations track by organization.name">
+                        <option value="">전체</option>
+                    </select>
+                </span>
+                <span class="form-inline">
+                    <label for="statusList" data-translate="appManage.status">status</label>
+                    <select id="statusList" class="form-control input-sm" ng-model="vm.status"
+                            ng-options="appStatus.key as appStatus.key for appStatus in vm.appStatus | filter: vm.statusFiltering track by appStatus.key">
+                        <option value="">전체</option>
+                    </select>
+                </span>
+                <span class="form-inline">
+                    <label for="appName" data-translate="appManage.name">name</label>
+                    <input type="text" style="width:34%" class="form-control input-sm" id="appName" name="appName"
+                           ng-model="vm.appName" ng-keypress="($event.charCode==13)? vm.searching() : return"/>
+                </span>
+                <span class="btnBox">
+                    <button type="button" class="btn search-btn" ng-click="vm.searching()">
+                        검색
+                    </button>
+                </span>
+            </div>
+            <p class="searchInfo type2">
+                <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 앱이 존재합니다.</span>
+            </p>
+            <div class="table-responsive voffset3">
+                <table class="table tableFixed">
+                    <colgroup>
+                        <col style="width:5%"/>
+                        <col/>
+                        <col style="width:32%"/>
+                        <col style="width:15%"/>
+                        <col style="width:124px;"/>
+                        <col style="width:105px;"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col" id="name" ng-mousedown="vm.sorting('name')"><span data-translate="appManage.name">APP이름</span><i id="name"
+                                                                                                                                         class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                        </th>
+                        <th scope="col" id="description" ng-mousedown="vm.sorting('description')"><span data-translate="appManage.description">APP설명</span><i id="description"
+                                                                                                                                                              class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                        </th>
+                        <th id="orgName" ng-mousedown="vm.sorting('organization.name', 'orgName')">
+                            <span>등록 기관</span>
+                            <i id="orgName" class="sort-position glyphicon glyphicon-triangle-bottom"></i>
+                        </th>
+                        <th scope="col" id="status" data-translate="appManage.status">상태</th>
+                        <th scope="col">비고</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="app in vm.list">
+                        <td scope="row" class="t_center">{{(vm.totalItems - (vm.condition.page)*(vm.stateParams.size))-$index}}</td>
+                        <td class="hover" ng-click="vm.show(app)"><span class="dotContainer" title="{{app.name}}" style="width:70%; vertical-align:-5px">{{app.name}}</span>
+                            <!-- <button ng-if="app.isUpdated" class="btn btn-default btn-xs pull-right whitehover">변경됨</button> -->
+                        </td>
+                        <td><span class="dotContainer" title="{{app.description}}" style="width:99%; vertical-align:-5px">{{app.description}}</span></td>
+                        <td>{{app.organization.name}}</td>
+                        <td class="t_center">
+                            <button ng-show="app.status=='DELETE_FAIL' || app.status=='REGIST_FAIL' || app.status=='UPDATE_FAIL'" class="btn btn-danger btn-xs"
+                                    uib-popover-template="vm.appDeployStatus.templateUrl"
+                                    popover-title="G/W 처리실패 기관목록"
+                                    popover-placement="bottom"
+                                    popover-is-open="app.openDeployStatus"
+                                    popover-trigger="outsideClick"
+                                    ng-click="vm.getDeployFailList(app);">{{app.status}}
+                            </button>
+                            <span ng-show="!(app.status=='DELETE_FAIL' || app.status=='REGIST_FAIL' || app.status=='UPDATE_FAIL')">{{app.status}}
+                                <span ng-show="app.status == 'RESERVED_REGIST' || app.status == 'RESERVED_MODIFY'">
+                                    <br/>{{app.reservedTime | date: 'yyyy-MM-dd HH:mm'}}
+                                </span>
+                            </span>
+                        </td>
+                        <td class="t_center">
+                            <button class="btn btn-default btn-xs" ng-click="vm.redeploy(app)" ng-if="app.status=='DELETE_FAIL' || app.status=='REGIST_FAIL' || app.status=='UPDATE_FAIL' ">재처리</button>
+                            <!--<button class="btn btn-default btn-xs" ng-click="vm.show(app)">상세보기</button>-->
+                            <button ng-disabled="app.status =='DELETING' || app.status =='DELETE_FAIL'" class="btn btn-default btn-xs" ng-click="delApp(app, 'delete')">삭제</button>
+                        </td>
+                    </tr>
+                    <tr ng-if="vm.list.length <= 0">
+                        <td colspan="6" class="t_center">등록하신 앱이 존재하지 않습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- <p>
+                <button type="button" class="btn btn-success btn-sm pull-right voffset2" ng-click="vm.downloadExcel()"><i class="glyphicon glyphicon-file"></i> Excel</button>
+            </p> -->
+            <div class="text-center voffset3">
+                <button type="button" class="btn btn-default btn-sm btn-exceldown" ng-click="vm.downloadExcel()">EXCEL</button>
+                <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.stateParams.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+<div class="row wrap">
+    <div class="col-md-12">
+        <h2><strong data-translate="apiPlans.title">Api Plans</strong></h2>
+    </div>
+    <div class="col-md-12">
+        <p class="searchInfo">
+            <span>총 <span class="color_red">{{vm.totalItems}}</span>개의 일반 API사용정책이 존재합니다.</span>
+            <button has-authority="ROLE_PLAN_CREATE" type="submit" ng-click="addPlan(false)" class="btn btn-portal btn-flag-radius pull-right">API 사용정책 등록</button>
+            <button uib-popover-template="vm.apiplanhelpPopover.templateUrl"
+                    popover-title="API사용정책"
+                    popover-is-open="vm.isapiplanHelpOpen1"
+                    popover-trigger="outsideClick"
+                    popover-placement="bottom-right"
+                    type="button"
+                    style="margin-right: 5px;"
+                    ng-click = "vm.isapiplanHelpOpen1= true"
+                    class="btn btn-flag-radius2 pull-right help" data-translate="entity.action.help">Help
+            </button>
+        </p>
+        <div class="table-responsive voffset3">
+            <table class="table tableFixed">
+                <colgroup>
+                    <col style="width:5%"/>
+                    <col/>
+                    <col style="width:15%" />
+<!--                     <col style="width:14%" /> -->
+                    <col style="width:16%" />
+                    <col style="width:10%" />
+<!--                     <col style="width:5%"/> -->
+                    <col style="width:15%"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th id="name" ng-mousedown="vm.sorting('name')">API 사용정책<i id="name" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+                    <th id="quotaValue" ng-mousedown="vm.sorting('quotaValue')">할당량<i id="quotaValue" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th>
+<!--                     <th id="maxRequestRate" ng-mousedown="vm.sorting('maxRequestRate')">초당 처리량<i id="maxRequestRate" class="sort-position glyphicon glyphicon-triangle-bottom"></i></th> -->
+                    <th>시간제한</th>
+                    <th>요일제한</th>
+                    <th>비고</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="plan in vm.plans">
+                    <td scope="row" class="t_center">{{(vm.totalItems - (vm.condition.page)*(vm.size))-$index}}</td>
+                    <td>{{plan.name}} <span tooltip-placement="{{plan.description}}" uib-tooltip="{{plan.description}}" class="glyphicon glyphicon-question-sign"></span></td>
+                    <td ng-if="plan.quotaValue > 0" style="text-align:right">
+                        <span>{{plan.quotaValue | number}}건 / {{vm.filter(plan.quotaTimeUnit, 1)}}</span>
+                    </td>
+                    <td ng-if="plan.quotaValue <= 0" style="text-align:center">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </td>
+                    <!-- <td ng-if="plan.maxRequestRate > 0" style="text-align:right">
+                        <span> {{plan.maxRequestRate | number}}건</span>
+                    </td>
+                    <td ng-if="plan.maxRequestRate <= 0" style="text-align:center">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </td> -->
+                    <td class="t_center">
+                        <span ng-if="plan.controlTime">{{plan.startTime}} ~ {{plan.endTime}}</span>
+                        <i ng-if="!plan.controlTime" class="glyphicon glyphicon-remove"></i>
+                    </td>
+                    <td class="t_center">
+                        <span ng-if="plan.controlDay">{{vm.filter(plan.startDayOfWeek)}} ~ {{vm.filter(plan.endDayOfWeek)}}</span>
+                        <i ng-if="!plan.controlDay" class="glyphicon glyphicon-remove"></i>
+                    </td>
+<!--                     <td><i ng-class="{'glyphicon-ok': plan.defaultPlan}" class="glyphicon"></i></td> -->
+                    <td class="t_center">
+<!--                         <button ng-show="plan.organization && !plan.defaultPlan" class="btn btn-default btn-xs" ng-click="setDefault(plan)">기본설정</button> -->
+                        <button has-authority="ROLE_PLAN_MODIFY" class="btn btn-default btn-xs" ng-click="addPlan(false, plan)">수정</button>
+                        <button has-authority="ROLE_PLAN_DELETE" ng-hide="plan.organization && plan.defaultPlan" class="btn btn-default btn-xs" ng-click="deletePlan(plan, 'delete')">삭제</button>
+                    </td>
+                    <!-- <td ng-if="!plan.organization">
+                        <span>[공유]&emsp;</span>
+                        <button has-authority="ROLE_ADMIN" class="btn btn-default btn-xs" ng-click="addPlan(false, plan)">수정</button>
+                        <button has-authority="ROLE_ADMIN" class="btn btn-default btn-xs" ng-click="deletePlan(plan, 'delete')">삭제</button>
+                    </td> -->
+                </tr>
+                <tr ng-if="vm.plans.length <= 0">
+                    <td class="t_center" colspan="6">등록된 API 사용정책이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="text-center">
+        <ul uib-pagination total-items="vm.totalItems" items-per-page="vm.size" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></ul>
+    </div>
+</div>
+
+

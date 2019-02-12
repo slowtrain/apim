@@ -1,0 +1,33 @@
+<!-- <div class="siteMap">
+    <ul>
+        <li ng-if="!$first" style="width:14.75%" ng-repeat="menu in vm.menus" has-authority="{{menu.authority}}" ng-click="vm.scrollTop()"><a ui-sref="{{menu.url}}" data-translate="global.menu.{{menu.name}}.main"></a>
+            <ul ng-if="menu.secondDepth">
+                <li ng-hide="menu.name=='informations' && $index > 1" ng-repeat="second in menu.secondDepth" has-authority="{{second.authority}}"><a ui-sref="{{second.url}}" data-translate="global.menu.{{menu.name}}.sub.{{second.name}}.title"></a></li>
+            </ul>
+            <ul ng-if="menu.contents">
+                <li ng-repeat="content in menu.contents">
+                    <a id="{{content.id}}" ng-click="vm.gotoContents(menu, content)">{{content.title}}</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div> -->
+<div class="copyright">
+    <div>
+<!--         <img src="/img/portal/hana-logo-copyright.png" style="width:90px; height:18px; float:left; margin-right: 9px; margin-top: -1px"/> -->
+        <ul class="copyList">
+            <li>
+                <a ui-sref="portal-terms" ng-click="vm.scrollTop()">Open API Market 이용안내</a>
+            </li>
+            <li>
+                <a class="font-highlight" ui-sref="privacy-policy" ng-click="vm.scrollTop()">개인정보 처리방침</a>
+            </li>
+        </ul>
+        <div class="familySite">
+            <select class="btn select-custom" ng-model="site" ng-options="site.name for site in vm.familySites track by site.name" ng-change="vm.gotoSite(site)" >
+                    <option value="">Family Site</option>
+                </select>
+        </div>
+        <p class="copyrightText">COPYRIGHT 2018. SHINHAN CORP. ALL RIGHTS RESERVED.</p>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+<div class="wrap lnbParent">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="forum-title">
+                <h3><strong data-translate="forum.title">Forum Community List</strong></h3>
+            </div>
+            <div class="col-md-10 forum-title2"">
+                <h2>
+                    <strong> {{paramUrl.forumId == 'all'? '포럼 전체' : paramUrl.forumTitle}}</strong>
+                    <span ng-if="paramUrl.forumTitle == '서비스 Q&A'" class="sub-title">
+                        신한금융그룹의 서비스에 대한 문의를 하는 포럼입니다.
+                    </span>
+                    <span ng-if="paramUrl.forumTitle == '기술 Q&A'" class="sub-title">
+                        신한금융그룹의 API에 대한 기술문의를 하는 포럼입니다.
+                    </span>
+                    <span class="sub-title" ng-if="paramUrl.forumTitle == '서비스 제안'">
+                        신한금융그룹에 제안하고 싶은 서비스를 등록하는 포럼입니다.
+                    </span>
+                </h2>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 forum_bottom">
+        <div class="row">
+            <div id="underLoading" class="provider-container">
+                <ul class="lnb2">
+                    <li ng-repeat="provider in vm.providers | orderBy : 'id'" class="accordion">
+                        <p ng-if="false" ng-disabled="provider.child.length == 0" ng-click="vm.accordionUI(provider)">{{provider.title}}
+                            <i ng-if="provider.child.length > 0" class="glyphicon pull-right"
+                               ng-class="{'glyphicon-plus': provider.originalId != vm.selectId || !provider.accordion, 'glyphicon-minus': provider.originalId == vm.selectId && provider.accordion}"></i>
+                        </p>
+                        <ul ng-if="provider.originalId == vm.selectId && provider.accordion" ng-class="{'selectOn': api.id == paramUrl.forumId}">
+                            <li ng-repeat="api in provider.child | orderBy : 'id'" ng-class="{'selectOn': api.id == paramUrl.forumId, 'admin': vm.isAdmin}">
+                             <!--    <i ng-if="api.id == paramUrl.forumId" class="glyphicon glyphicon-triangle-right pull-right lnb-arrow-forum"></i> -->
+                                <a ng-class="{'admin': vm.isAdmin}" href="" ng-click="vm.accordionUI2(api)">{{api.title}}
+                                    <i ng-if="api.child.length > 0" class="glyphicon pull-right"
+                                       ng-class="{'glyphicon-plus': api.id != paramUrl.forumId || !api.accordion, 'glyphicon-minus': api.id == paramUrl.forumId && api.accordion}"></i>
+                                    <span ng-if="!api.child || api.child.length == 0" class="pull-right">
+                                        <i ng-if="api.isPrivate" class="color_red glyphicon glyphicon-lock"></i>
+                                        &nbsp;<!-- <i ng-if="api.isConfigurable" class="glyphicon glyphicon-pencil" ng-click="vm.edit(api)"></i> -->
+                                        <span ng-if="api.isConfigurable" class="forum_pencil_icon" ng-click="vm.edit(api)"></span>
+                                        &nbsp;<!-- <i ng-if="(vm.isAdmin || account.organization.id==provider.originalId) && api.title !='공통'" class="glyphicon glyphicon-trash" ng-click="vm.remove(api)"></i> -->
+                                        <span class="forum_trash_icon" ng-if="(vm.isAdmin || account.organization.id==provider.originalId) && api.title !='공통' && api.id !=999" ng-click="vm.remove(api)"></span>
+                                    </span>
+                                </a>
+                                <ul ng-if="api.id == paramUrl.forumId && api.accordion">
+                                    <li ng-repeat="forum in api.child" ng-click="vm.forumView(forum)">
+                                        <p style="overflow:hidden; padding-left:15px;">{{forum.title}}
+                                            <span class="pull-right">
+                                                <i ng-if="forum.isPrivate" class="color_red glyphicon glyphicon-lock"></i>
+                                                &nbsp;<i ng-if="forum.isConfigurable" class="glyphicon glyphicon-pencil" ng-click="vm.edit(forum)"></i>
+                                                &nbsp;<i ng-if="vm.isAdmin || account.organization.id==provider.originalId" has-any-authority="ROLE_ADMIN" class="glyphicon glyphicon-trash" ng-click="vm.remove(forum)"></i>
+                                            </span>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div style="position:relative; width:81.9%; float:right">
+                <div ui-view="forumView"></div>
+            </div>
+        </div>
+    </div>
+</div>
