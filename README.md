@@ -44,9 +44,18 @@
 
  ```
  gulp
+ 
  ```
 
 This application was generated using JHipster 3.10.0, you can find documentation and help at [https://jhipster.github.io/documentation-archive/v3.10.0](https://jhipster.github.io/documentation-archive/v3.10.0).
+
+기본 사용자 계정 정보
+
+admin/admin  -> 2차 인증 1111
+
+p1manager / !qaz2wsx
+
+
 
 ## Development
 
